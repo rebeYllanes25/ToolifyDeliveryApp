@@ -1,0 +1,53 @@
+# 1. Directorios de Build y Temporales
+######################################
+.gradle
+local.properties
+/.idea/workspace.xml
+/.idea/tasks.xml
+/.idea/libraries/
+.DS_Store
+build/
+**/*.iml
+.out/
+.dart_tool/ # Para Flutter
+
+# 2. Archivos de Configuracion de Android Studio / IDEs
+#######################################################
+# Android Studio / IntelliJ:
+.idea/
+.vscode/
+
+# Build files
+.cxx/
+*.cxx
+*.apk
+*.aab
+*.aar
+/captures
+
+# 3. Dependencias
+##################
+# Gradle wrapper:
+!gradle-wrapper.jar
+
+# 4. ARCHIVOS DE SEGURIDAD Y CREDENCIALES
+##################################################
+# Archivos que contienen claves API, tokens o credenciales.
+# EJEMPLO: Si usas Google Maps, Firebase, o credenciales de la API.
+**/google-services.json
+**/fabric.properties
+**/secrets.properties
+**/keys.properties
+**/api_keys.xml
+**/mapbox_access_token
+**/signing/debug.keystore
+
+# 5. Archivos especificos de Sistemas Operativos
+################################################
+# macOS
+.DS_Store
+.Trashes
+ehthumbs.db
+
+# Windows
+Thumbs.db
