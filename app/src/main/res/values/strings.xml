@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">ProyectoDAMI</string>
+
+    <string name="repartidor_title">Toolify Delivery</string>
+    <string name="login_subtitle">Gestión eficiente de entregas</string>
+    <string name="login_email_hint">Correo:</string>
+    <string name="login_password_hint">Contraseña:</string>
+    <string name="login_button_text">Iniciar Sesión</string>
+    <string name="login_forgot_password_link">¿Olvidaste tu contraseña?</string>
+    <string name="login_version">\@2025 Toolify Delivery</string>
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+
+    <string name="main_nav_disponibles">Disponibles</string>
+    <string name="main_nav_activos">Activo</string>
+    <string name="main_nav_estadisticas">Estadísticas</string>
+    <string name="last_update">Ultima actualización: Ahora mismo</string>
+    <string name="reload">Recargar</string>
+    <string name="filter_options">Filtro y Opciones</string>
+    <string name="order_value">Ordenar por Valor</string>
+    <string name="order_distance">Ordenar por Distancia</string>
+    <string name="update_list">Actualizar Lista</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

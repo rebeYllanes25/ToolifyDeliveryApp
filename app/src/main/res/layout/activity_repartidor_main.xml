@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/white"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    >
+
+                    <TextView
+                        android:id="@+id/toolbar_title"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/repartidor_title"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"
+                        android:textSize="26sp" />
+                    <ImageButton
+                        android:id="@+id/btn_reload"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:paddingEnd="10dp"
+                        android:paddingStart="0dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_recargar"
+                        app:tint="@color/primary_repartidor_index"
+                        android:contentDescription="@string/reload" />
+                </LinearLayout>
+            </androidx.appcompat.widget.Toolbar>
+            <TextView
+                android:id="@+id/toolbar_subtitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:paddingStart="16dp"
+                android:paddingEnd="0dp"
+                android:text="@string/last_update"
+                android:textColor="@color/gris_oscuro_leve"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            app:tabIconTint="@animator/item_selector_color"
+            app:tabTextColor="@color/gris"
+            app:tabInlineLabel="true"
+            app:tabSelectedTextColor="@color/primary_repartidor_index"
+            app:tabIndicatorColor="@color/primary_repartidor_index"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/opcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_menu"
+        app:backgroundTint="@color/primary_repartidor_index"
+        app:tint="@android:color/white"
+        app:cornerRadius="10dp"
+        android:contentDescription="@string/filter_options"
+        />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

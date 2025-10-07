@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary_repartidor">#576EAA</color>
+    <color name="primary_repartidor_index">#FF703C</color>
+    <color name="gris">#DADEE1</color>
+    <color name="gris_oscuro_leve">#AFB7BD</color>
 </resources>
