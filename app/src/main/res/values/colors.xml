@@ -2,4 +2,8 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="colorPrinciapl">#2B63EB</color>
+    <color name="subtitulos">#828282</color>
+    <color name="blanco_humo_txt">#E2E0D7</color>
 </resources>

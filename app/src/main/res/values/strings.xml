@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">ProyectoDAMI</string>
+
+
+    <!--KEYS Cliente Inicio-->
+    <string name="sub_titulo_1">Rastrea tus pedidos en tiempo real</string>
+
+    <string name="title_navbar_inicio">Inicio</string>
+    <string name="title_navbar_seguimiento">Seguimiento</string>
+    <string name="title_navbar_historial">Historial</string>
+    <string name="title_navbar_calificacion">Calificación</string>
+    <string name="title_navbar_notificaciones">Notificaciones</string>
+
+    <string name="seguimiento_titulo">Seguimiento en tiempo real</string>
+    <string name="seguimiento_titulo_card">Tiempo estimado de entrega</string>
+    <string name="seguimiento_subtitulo_card">Mantente atento a las actualizaciones</string>
+
+    <string name="seguimiento_resumen">Resumen del Pedido</string>
+
+    <string name="btn_nuevo_pedido"> + Nuevo pedido</string>
+    <string name="btn_rastrear_pedido">Rastrear</string>
+    <string name="btn_generar_qr">Generar QR</string>
+
 </resources>
