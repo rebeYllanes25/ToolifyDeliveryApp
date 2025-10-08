@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         tools:context=".SeguimientoActivity">
 
         <TextView
@@ -149,7 +149,7 @@
                         android:layout_marginStart="15dp"
                         android:backgroundTint="@android:color/tab_indicator_text"
                         android:scaleType="centerCrop"
-                        app:shapeAppearanceOverlay="@style/radius"
+                        app:shapeAppearanceOverlay="@style/radius25dp"
                         app:srcCompat="@drawable/ic_launcher_background" />
 
                     <LinearLayout
@@ -303,7 +303,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="260dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="end"
                         android:orientation="vertical">
@@ -312,6 +312,7 @@
                             android:id="@+id/textView21"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
                             android:text="@string/seguimiento_campo_subtotal"
                             android:textColor="@color/subtitulos" />
 
@@ -319,6 +320,7 @@
                             android:id="@+id/textView22"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
                             android:text="@string/seguimiento_campo_coste"
                             android:textColor="@color/subtitulos" />
 
@@ -326,6 +328,7 @@
                             android:id="@+id/textView23"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
                             android:text="@string/seguimiento_campo_propina"
                             android:textColor="@color/subtitulos" />
 
@@ -333,6 +336,7 @@
                             android:id="@+id/textView24"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_margin="5dp"
                             android:text="@string/seguimiento_campo_total"
                             android:textColor="@color/black"
                             android:textStyle="bold" />
@@ -346,28 +350,28 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/textView29"
+                            android:id="@+id/tvSubtotal"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView" />
+                            android:layout_margin="5dp" />
 
                         <TextView
-                            android:id="@+id/textView26"
+                            android:id="@+id/tvCosteEnvio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView" />
+                            android:layout_margin="5dp" />
 
                         <TextView
-                            android:id="@+id/textView28"
+                            android:id="@+id/tvPropina"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView" />
+                            android:layout_margin="5dp" />
 
                         <TextView
-                            android:id="@+id/textView27"
+                            android:id="@+id/tvTotalPagar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="TextView"
+                            android:layout_margin="5dp"
                             android:textColor="@color/colorPrinciapl" />
 
                     </LinearLayout>
