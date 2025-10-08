@@ -36,7 +36,6 @@ build/
 # EJEMPLO: Si usas Google Maps, Firebase, o credenciales de la API.
 **/google-services.json
 **/fabric.properties
-**/secrets.properties
 **/keys.properties
 **/api_keys.xml
 **/mapbox_access_token
