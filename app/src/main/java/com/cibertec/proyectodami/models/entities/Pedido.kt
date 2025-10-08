@@ -7,7 +7,7 @@ data class Pedido(
     val idVenta: Int,
 
     val numPedido: String,
-    val fecha: LocalDateTime,
+    val fecha: LocalDateTime?,
     val direccion: String,
     var latitud: Double,
     var longitud: Double,

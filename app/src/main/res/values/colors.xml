@@ -6,4 +6,10 @@
     <color name="primary_repartidor_index">#FF703C</color>
     <color name="gris">#DADEE1</color>
     <color name="gris_oscuro_leve">#AFB7BD</color>
+    <color name="green">#54D58B</color>
+    <color name="green_light">#E4F5ED</color>
+    <color name="orange">#F39D16</color>
+    <color name="orange_light">#F8F0E3</color>
+    <color name="orange_strong">#FF6B35</color>
+    <color name="orange_light_alt">#F9EBE6</color>
 </resources>

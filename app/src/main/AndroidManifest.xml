@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ProyectoDAMI"
         tools:targetApi="31">
         <activity
-            android:name=".RepartidorMainActivity"
+            android:name=".ui.repartidor.RepartidorMainActivity"
             android:exported="true" >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
