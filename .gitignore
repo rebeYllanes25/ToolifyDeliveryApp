@@ -50,3 +50,7 @@ ehthumbs.db
 
 # Windows
 Thumbs.db
+
+#######################################################
+6. Ignore Archive Secrets
+/secrets.properties
