@@ -21,5 +21,18 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, SeguimientoActivity::class.java)
             startActivity(intent)
         }
+
+        binding.btnSeguimiento.setOnClickListener{
+
+            val intent = Intent(this, SeguimientoActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.btnCalifiacion.setOnClickListener{
+
+            val intent = Intent(this, CalificacionActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 }

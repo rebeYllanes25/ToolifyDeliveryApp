@@ -31,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tvTitutoMain" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
         android:layout_width="385dp"
         android:layout_height="538dp"
         android:layout_marginStart="15dp"
@@ -54,5 +55,24 @@
         app:cornerRadius="12dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/btnCalifiacion"
+        android:layout_width="117dp"
+        android:layout_height="58dp"
+        android:layout_marginTop="33dp"
+        android:text="VistaCalificacion"
+        app:layout_constraintEnd_toStartOf="@+id/btnNuevoPedido"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
+
+    <Button
+        android:id="@+id/btnSeguimiento"
+        android:layout_width="112dp"
+        android:layout_height="68dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="4dp"
+        android:text="Vista Seguimiento"
+        app:layout_constraintEnd_toStartOf="@+id/btnCalifiacion"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

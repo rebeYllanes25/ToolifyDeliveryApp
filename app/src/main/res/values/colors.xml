@@ -7,4 +7,5 @@
     <color name="subtitulos">#828282</color>
     <color name="blanco_humo_txt">#E2E0D7</color>
     <color name="fondo_celeste_claro">#def7ff</color>
+    <color name="fondo_celeste_suave">#f5feff</color>
 </resources>

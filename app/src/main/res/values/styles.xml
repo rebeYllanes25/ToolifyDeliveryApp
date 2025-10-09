@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="radius40dp">
+        <item name="cornerSizeTopRight">40dp</item>
+        <item name="cornerSizeTopLeft">40dp</item>
+        <item name="cornerSizeBottomLeft">40dp</item>
+        <item name="cornerSizeBottomRight">40dp</item>
+    </style>
+    <style name="radius35dp">
+        <item name="cornerSizeTopRight">35dp</item>
+        <item name="cornerSizeTopLeft">35dp</item>
+        <item name="cornerSizeBottomLeft">35dp</item>
+        <item name="cornerSizeBottomRight">35dp</item>
+    </style>
+
     <style name="radius30dp">
         <item name="cornerSizeTopRight">30dp</item>
         <item name="cornerSizeTopLeft">30dp</item>

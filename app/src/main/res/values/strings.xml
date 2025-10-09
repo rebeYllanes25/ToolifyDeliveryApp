@@ -11,6 +11,7 @@
     <string name="title_navbar_calificacion">Calificación</string>
     <string name="title_navbar_notificaciones">Notificaciones</string>
 
+    <!--KEYS Cliente Seguimiento-->
     <string name="seguimiento_titulo">Seguimiento en tiempo real</string>
     <string name="seguimiento_titulo_card">Tiempo estimado de entrega</string>
     <string name="seguimiento_subtitulo_card">Mantente atento a las actualizaciones</string>
@@ -26,12 +27,25 @@
     <string name="seguimiento_fmt_propina"> S/ %1$s %2$s</string>
     <string name="seguimiento_fmt_total"> S/ %1$s %2$s</string>
 
+    <!--KEYS Cliente Calificacion-->
+    <string name="calificacion_titulo">Califica tu Entrega</string>
+    <string name="calificacion_card_pedido_titulo">Pedido:</string>
+    <string name="calificacion_card_pedido_total">Total:</string>
+    <string name="calificacion_titulo_dos">¿Como fue tu experiencia?</string>
+    <string name="calificacion_subtitulo_dos">Tu opinion nos ayuda a mejorar nuestro servicio!</string>
+    <string name="calificacion_subtitulo_tres">Cuentanos sobre tu experiencia (Opcional)</string>
+    <string name="calificacion_subtitulo_holder_cuatro">Describe toda tu experiencia</string>
+    <string name="calificacion_role">Repartidor</string>
+    <string name="title_activity_calificacion">Calificación</string>
 
+    <!--KEYS botones generales-->
     <string name="btn_nuevo_pedido"> + Nuevo pedido</string>
     <string name="btn_rastrear_pedido">Rastrear</string>
     <string name="btn_generar_qr">Generar QR</string>
     <string name="btn_call_repartidor">Llamar al repartidor</string>
     <string name="btn_message_repartidor">Mandar mensaje al repartidor</string>
+    <string name="btn_enviar_calificacion">Enviar Calificación</string>
+    <string name="btn_omitir">Omitir</string>
 
 
 </resources>
