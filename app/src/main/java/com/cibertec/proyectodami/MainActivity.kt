@@ -3,6 +3,7 @@ package com.cibertec.proyectodami
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import com.cibertec.proyectodami.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -16,23 +17,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        binding.btnNuevoPedido.setOnClickListener{
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.ContainerFragments) as androidx.navigation.fragment.NavHostFragment
 
-            val intent = Intent(this, SeguimientoActivity::class.java)
-            startActivity(intent)
+        val navController = navHostFragment.navController
+
+        binding.btnInicio.setOnClickListener {
+            navController.navigate(R.id.mainFragment)
         }
 
-        binding.btnSeguimiento.setOnClickListener{
-
-            val intent = Intent(this, SeguimientoActivity::class.java)
-            startActivity(intent)
+        binding.btnNotificaciones.setOnClickListener {
+            navController.navigate(R.id.twoFragment)
         }
 
-        binding.btnCalifiacion.setOnClickListener{
-
-            val intent = Intent(this, CalificacionActivity::class.java)
-            startActivity(intent)
+        binding.btnHistorial.setOnClickListener {
+            navController.navigate(R.id.oneFragment5)
         }
-
     }
 }
