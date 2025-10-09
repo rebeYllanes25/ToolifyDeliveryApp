@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.CALL_PHONE" /> <!-- Solicitamos al usuario permisos para la llamada-->
+    <uses-feature android:name="android.hardware.telephony" android:required="false"/> <!-- Indicamos que el dispositivo no tiene q tener o ser compatible
+                                                                                        netamente con el sistema de llamadas-->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -29,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
