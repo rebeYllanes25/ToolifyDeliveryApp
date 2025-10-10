@@ -8,6 +8,7 @@ data class PedidoRepartidorDTO(
     val direccion: String,
     val fecha: LocalDateTime,
     val total: Double,
+    val movilidad: String,
     val distanciaKM: Double,
     val especificaciones: String?,
     val estado: String,

@@ -8,6 +8,7 @@ data class PedidoClienteDTO(
     val estadoDelivery: String, // PE, AS, EC, EN, FA
     val tiempoEntregaMinutos: Int?,
     val nombreRepartidor: String?,
+    val movilidad: String,
     val qrVerificationCode: String,
 
     val productos: List<ProductoPedidoDTO>,

@@ -6,5 +6,6 @@ data class ProductoPedidoDTO(
     val descripcionProducto: String,
     val imagen: String?,
     val precioUnitario: Double,
+    val cantidad: Short,
     val subTotal: Double,
 )
