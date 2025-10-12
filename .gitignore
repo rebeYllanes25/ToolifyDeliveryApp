@@ -40,7 +40,7 @@ build/
 **/api_keys.xml
 **/mapbox_access_token
 **/signing/debug.keystore
-
+**/secrets.properties
 # 5. Archivos especificos de Sistemas Operativos
 ################################################
 # macOS
