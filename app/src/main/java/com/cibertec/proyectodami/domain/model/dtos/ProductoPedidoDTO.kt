@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.models.dtos
+package com.cibertec.proyectodami.domain.model.dtos
 
 data class ProductoPedidoDTO(
     val idDetalleVenta: Int,

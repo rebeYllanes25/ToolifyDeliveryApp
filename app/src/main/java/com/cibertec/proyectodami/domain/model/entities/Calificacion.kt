@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.models.entities
+package com.cibertec.proyectodami.domain.model.entities
 
 data class Calificacion(
     val idCalificacion: Int,
