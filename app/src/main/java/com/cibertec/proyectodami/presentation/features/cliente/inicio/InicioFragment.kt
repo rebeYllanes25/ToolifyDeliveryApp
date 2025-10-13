@@ -1,3 +1,6 @@
+package com.cibertec.proyectodami.presentation.features.cliente.inicio
+
+import PedidoInicioAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,6 +1,5 @@
 package com.cibertec.proyectodami.presentation.features.cliente
 
-import InicioFragment
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -10,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ActivityClienteMainBinding
+import com.cibertec.proyectodami.presentation.features.cliente.inicio.InicioFragment
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialFragment
 import com.cibertec.proyectodami.presentation.features.cliente.perfil.PerfilFragment
 
