@@ -4,12 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ItemPedidoActivoBinding
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.presentation.features.repartidor.activo.PedidoDetailBottom
 
 class ActivoPedidoAdapter(
+    private val activity: FragmentActivity,
     private val items: MutableList<PedidoRepartidorDTO>
 ) : RecyclerView.Adapter<ActivoPedidoAdapter.VH>() {
 
@@ -35,7 +38,7 @@ class ActivoPedidoAdapter(
         // Configurar datos del pedido
         b.textName.text = pedido.nomCliente
         b.textPrice.text = ctx.getString(R.string.value_price, pedido.total)
-        b.textAddress.text = pedido.direccion
+        b.textAddress.text = pedido.direccionEntrega
 
         val tiempo = pedido.tiempoEntrega?.toString() ?: "N/A"
         b.textEta.text = ctx.getString(R.string.time_label_active, tiempo)
@@ -47,7 +50,7 @@ class ActivoPedidoAdapter(
         // Botón para navegar (abrir Google Maps)
         b.buttonNavigate.setOnClickListener {
             // TODO: Reemplazar con coordenadas reales
-            val gmmIntentUri = Uri.parse("google.navigation:q=${pedido.direccion}")
+            val gmmIntentUri = Uri.parse("google.navigation:q=${pedido.direccionEntrega}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
 
@@ -57,9 +60,9 @@ class ActivoPedidoAdapter(
         }
 
         // Botón para ver detalles (o llamar)
-        b.buttonCall.setOnClickListener {
-            // TODO: Implementar vista de detalles o llamada
-            // Por ahora podría abrir un diálogo con más información
+        b.buttonDetail.setOnClickListener {
+            val bottomSheet = PedidoDetailBottom(pedido)
+            bottomSheet.show(activity.supportFragmentManager, "PedidoDetailBottom")
         }
     }
 

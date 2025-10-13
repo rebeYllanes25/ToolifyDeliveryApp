@@ -1,14 +1,11 @@
-package com.cibertec.proyectodami.presentation.features.auth
+package com.cibertec.proyectodami
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
-import com.cibertec.proyectodami.BuildConfig
-import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.data.api.UserAuth
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.databinding.ActivityLoginBinding
@@ -81,12 +78,12 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                 }
 
                 userPreferences.guardarToken(token)
-
                 // Obtener datos del usuario
                 val usuario = withContext(Dispatchers.IO) {
                     authApi.getUsuarioInfo()
                 }
-
+                userPreferences.guardarIdUsuario(usuario.idUsuario)
+                userPreferences.guardarNombreUsuario(usuario.nombres)
                 when (usuario.rol.idRol) {
                     2 -> {
                         startActivity(Intent(this@LoginActivity, ClienteMainActivity::class.java))

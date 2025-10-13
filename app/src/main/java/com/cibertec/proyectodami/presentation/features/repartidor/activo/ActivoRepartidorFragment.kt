@@ -37,7 +37,7 @@ class ActivoRepartidorFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = ActivoPedidoAdapter(mutableListOf())
+        adapter = ActivoPedidoAdapter(requireActivity(), mutableListOf())
 
         binding.recyclerViewActivo.apply {
             layoutManager = LinearLayoutManager(context)

@@ -1,4 +1,5 @@
 package com.cibertec.proyectodami.domain.model.dtos
 
-class LoginResponse {
-}
+data class LoginResponse(
+    val token: String
+)

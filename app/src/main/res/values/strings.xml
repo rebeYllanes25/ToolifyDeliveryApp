@@ -1,50 +1,12 @@
 <resources>
     <string name="app_name">ProyectoDAMI</string>
 
-    <string name="repartidor_title">Toolify Delivery</string>
     <string name="login_subtitle">Gestión eficiente de entregas</string>
     <string name="login_email_hint">Correo:</string>
     <string name="login_password_hint">Contraseña:</string>
     <string name="login_button_text">Iniciar Sesión</string>
     <string name="login_forgot_password_link">¿Olvidaste tu contraseña?</string>
     <string name="login_version">\@2025 Toolify Delivery</string>
-    <string name="navigation_drawer_open">Abrir menú</string>
-    <string name="navigation_drawer_close">Cerrar menú</string>
-
-    <string name="main_nav_disponibles">Disponibles</string>
-    <string name="main_nav_activos">Activo</string>
-    <string name="main_nav_estadisticas">Estadísticas</string>
-
-    <string name="last_update">Ultima actualización: Ahora mismo</string>
-    <string name="reload">Recargar</string>
-    <string name="filter_options">Filtro y Opciones</string>
-    <string name="order_value">Ordenar por Valor</string>
-    <string name="order_distance">Ordenar por Distancia</string>
-    <string name="update_list">Actualizar Lista</string>
-
-    <string name="route_label">En Ruta</string>
-    <string name="time_label_active">Estimado: %1$s min</string>
-    <string name="btn_browse">Navegar</string>
-    <string name="btn_details">Detalle</string>
-
-    <string name="no_orders">Sin pedidos</string>
-    <string name="no_orders_available">No hay pedidos disponibles</string>
-    <string name="try_refresh">Actualiza para ver nuevos pedidos</string>
-    <string name="no_orders_active">No hay pedidos activos</string>
-    <string name="no_orders_active_description">Los pedidos aceptados apareceran aquí </string>
-    <string name="btn_view_orders">Ver pedidos activos</string>
-
-    <string name="order_id_prefix">#%1$s</string>
-    <string name="location_label">Ubicación</string>
-    <string name="distance_km">%1$s km</string>
-    <string name="user_name">Nombre Usuario</string>
-    <string name="user_address">Dirección</string>
-    <string name="street_placeholder">Calle...</string>
-    <string name="order_value_label">Valor del Pedido</string>
-    <string name="value_price">S/. %1$.2f</string>
-    <string name="time_description">Tiempo</string>
-    <string name="time_label">%1$s min</string>
-    <string name="btn_order_accept">Aceptar pedido</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_cliente_main">ClienteMainActivity</string>
