@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.repartidor.disponibles.DisponiblesRepartidorFragment">
+    tools:context=".presentation.features.repartidor.disponibles.DisponiblesRepartidorFragment">
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

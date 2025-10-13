@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Compartido -->
+
+    <string name="saludo_usuario">¡Hola, %1$s!</string>
+    <string name="subtitlo_seguimiento">Rastrea tus pedidos en tiempo real</string>
+    <string name="tab_inicio">Inicio</string>
+    <string name="tab_historial">Historial</string>
+    <string name="tab_usuario">Perfil</string>
+
+    <!-- Inicio -->
+    <string name="subtitulo_pedidos_vacios">No tienes pedidos activos</string>
+    <string name="desc_icono_estado_vacio">Icono de caja vacía</string>
+
+    <string name="formato_pedido_id">Pedido #%1$s</string>
+    <string name="formato_total">S/ %.2f</string>
+
+    <string name="label_total">Total:</string>
+    <string name="label_codigo_verificacion">Código de Verificación:</string>
+    <string name="btn_rastrear">Rastrear</string>
+    <string name="btn_cerrar">Cerrar</string>
+    <string name="fechaPedido">%1$s</string>
+    <string name="estadoPedido">%1$s</string>
+    <string name="codigoQR">%1$s</string>
+    <string name="desc_ver_detalle">Detalles</string>
+
+
+
+    <string name="titulo_detalle_pedido">Detalles del Pedido</string>
+    <string name="instrucciones_codigo_verificacion">Proporciona este código al repartidor para confirmar la entrega</string>
+
+    <string name="estado_pendiente">Pendiente</string>
+    <string name="estado_asignado">Asignado</string>
+    <string name="estado_en_camino">En camino</string>
+    <string name="estado_entregado">Entregado</string>
+    <string name="estado_fallido">Fallido</string>
+
+    <!-- Rastreo -->
+    <string name="titulo_rastreo">Rastreo de Pedido</string>
+    <string name="mapa_y_tracking_placeholder">Aquí irá el mapa y tracking del pedido</string>
+    <string name="desc_boton_atras">Botón para volver a la pantalla anterior</string>
+
+
+    <!-- Seguimiento -->
+
+    <!-- Historial -->
+    <string name="subtitulo_pedidos_inexistentes">No hay p edidos existentes.</string>
+
+    <!-- Perfil -->
+    <!-- Notificaciones -->
+
+</resources>

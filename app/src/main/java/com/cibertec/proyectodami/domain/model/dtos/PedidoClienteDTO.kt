@@ -1,6 +1,6 @@
 package com.cibertec.proyectodami.domain.model.dtos
 
-import java.time.LocalDateTime
+import org.threeten.bp.LocalDateTime
 
 data class PedidoClienteDTO(
     val nroPedido: String,

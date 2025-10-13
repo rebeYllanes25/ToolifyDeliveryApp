@@ -1,8 +1,8 @@
-package com.cibertec.proyectodami.ui.repartidor.repository
+package com.cibertec.proyectodami.domain.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.cibertec.proyectodami.models.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
 
 object PedidoRepository {
     private val _pedidoActivo = MutableLiveData<PedidoRepartidorDTO?>(null)

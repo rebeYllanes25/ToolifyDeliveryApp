@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.ui.repartidor.activo
+package com.cibertec.proyectodami.presentation.common.adapters
 
 import android.content.Intent
 import android.net.Uri
@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ItemPedidoActivoBinding
-import com.cibertec.proyectodami.models.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
 
 class ActivoPedidoAdapter(
     private val items: MutableList<PedidoRepartidorDTO>

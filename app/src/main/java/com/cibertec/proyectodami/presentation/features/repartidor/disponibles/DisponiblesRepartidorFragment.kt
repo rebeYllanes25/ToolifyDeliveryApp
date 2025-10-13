@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.ui.repartidor.disponibles
+package com.cibertec.proyectodami.presentation.features.repartidor.disponibles
 
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.databinding.ButtonOptionsBinding
 import com.cibertec.proyectodami.databinding.FragmentDisponiblesRepartidorBinding
 import com.cibertec.proyectodami.listener.OptionsMenuListener
-import com.cibertec.proyectodami.ui.repartidor.RepartidorMainActivity
-import com.cibertec.proyectodami.ui.repartidor.repository.PedidoRepository
+import com.cibertec.proyectodami.presentation.common.adapters.DisponiblesPedidoAdapter
+import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
+import com.cibertec.proyectodami.domain.repository.PedidoRepository
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {

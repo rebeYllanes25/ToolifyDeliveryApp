@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.ui.repartidor
+package com.cibertec.proyectodami.presentation.features.repartidor
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,9 +6,9 @@ import androidx.fragment.app.Fragment
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ActivityRepartidorMainBinding
 import com.cibertec.proyectodami.listener.OptionsMenuListener
-import com.cibertec.proyectodami.ui.repartidor.activo.ActivoRepartidorFragment
-import com.cibertec.proyectodami.ui.repartidor.disponibles.DisponiblesRepartidorFragment
-import com.cibertec.proyectodami.ui.repartidor.estadistica.EstadisticaRepartidorFragment
+import com.cibertec.proyectodami.presentation.features.repartidor.activo.ActivoRepartidorFragment
+import com.cibertec.proyectodami.presentation.features.repartidor.disponibles.DisponiblesRepartidorFragment
+import com.cibertec.proyectodami.presentation.features.repartidor.estadistica.EstadisticaRepartidorFragment
 import com.google.android.material.tabs.TabLayout
 
 class RepartidorMainActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.ui.repartidor.activo
+package com.cibertec.proyectodami.presentation.features.repartidor.activo
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.FragmentActivoRepartidorBinding
+import com.cibertec.proyectodami.presentation.common.adapters.ActivoPedidoAdapter
 
 class ActivoRepartidorFragment : Fragment() {
 

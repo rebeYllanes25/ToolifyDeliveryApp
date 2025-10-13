@@ -1,10 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="repartidor_title">Toolify Delivery</string>
-    <string name="login_subtitle">Gestión eficiente de entregas</string>
-    <string name="login_email_hint">Correo:</string>
-    <string name="login_password_hint">Contraseña:</string>
-    <string name="login_button_text">Iniciar Sesión</string>
-    <string name="login_forgot_password_link">¿Olvidaste tu contraseña?</string>
-    <string name="login_version">\@2025 Toolify Delivery</string>
 </resources>

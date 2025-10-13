@@ -1,11 +1,11 @@
-package com.cibertec.proyectodami.ui.repartidor.activo
+package com.cibertec.proyectodami.presentation.features.repartidor.activo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cibertec.proyectodami.models.dtos.PedidoRepartidorDTO
-import com.cibertec.proyectodami.ui.repartidor.repository.PedidoRepository
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.repository.PedidoRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

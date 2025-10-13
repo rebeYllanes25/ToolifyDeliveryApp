@@ -1,11 +1,11 @@
-package com.cibertec.proyectodami.ui.repartidor.disponibles
+package com.cibertec.proyectodami.presentation.features.repartidor.disponibles
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cibertec.proyectodami.models.dtos.PedidoRepartidorDTO
-import com.cibertec.proyectodami.ui.repartidor.repository.PedidoRepository
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.repository.PedidoRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -89,6 +89,7 @@ class DisponiblesViewModel : ViewModel() {
                 nomCliente = "María González",
                 direccion = "Calle Mayor 45, 2º B\n28013 Madrid, España",
                 fecha = null,
+                movilidad = "Moto",
                 total = 45.80,
                 distanciaKM = 2.3,
                 especificaciones = null,
@@ -100,6 +101,7 @@ class DisponiblesViewModel : ViewModel() {
                 nomCliente = "Juan Pérez",
                 direccion = "Av. Principal 123\nSan Isidro, Lima",
                 fecha = null,
+                movilidad = "Moto",
                 total = 32.50,
                 distanciaKM = 1.5,
                 especificaciones = "Sin azúcar",
@@ -111,6 +113,7 @@ class DisponiblesViewModel : ViewModel() {
                 nomCliente = "Ana Torres",
                 direccion = "Jr. Los Olivos 890\nMiraflores, Lima",
                 fecha = null,
+                movilidad = "Moto",
                 total = 78.90,
                 distanciaKM = 4.2,
                 especificaciones = null,
@@ -122,6 +125,7 @@ class DisponiblesViewModel : ViewModel() {
                 nomCliente = "Carlos Ruiz",
                 direccion = "Calle Las Flores 456\nSurco, Lima",
                 fecha = null,
+                movilidad = "Moto",
                 total = 56.20,
                 distanciaKM = 3.1,
                 especificaciones = "Entregar antes de las 7pm",

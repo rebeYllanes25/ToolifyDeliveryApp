@@ -1,11 +1,12 @@
-package com.cibertec.proyectodami.ui.repartidor.disponibles
+package com.cibertec.proyectodami.presentation.common.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.databinding.ItemPedidoRepartidorBinding
 import com.cibertec.proyectodami.R
-import com.cibertec.proyectodami.models.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+
 
 class DisponiblesPedidoAdapter(
     private val items: MutableList<PedidoRepartidorDTO>,

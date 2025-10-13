@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Repartidor -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
     <color name="primary_repartidor">#576EAA</color>
     <color name="primary_repartidor_index">#FF703C</color>
     <color name="gris">#DADEE1</color>
@@ -12,4 +15,16 @@
     <color name="orange_light">#F8F0E3</color>
     <color name="orange_strong">#FF6B35</color>
     <color name="orange_light_alt">#F9EBE6</color>
+
+    <!-- Cliente -->
+    <color name="color_principal">#2B63EB</color>
+    <color name="color_subtitulos">#BDBDBD</color>
+    <color name="color_fondo">#F5F5F5</color>
+    <color name="color_texto_normal">#1A1A1A</color>
+    <color name="color_badge_rojo">#F44336</color>
+    <color name="color_iconos_vacios">#BDBDBD</color>
+    <color name="color_status_fondo">#FFEDE0</color>
+    <color name="color_status_texto">#FF9800</color>
+    <color name="color_divisor">#E0E0E0</color> ```
+
 </resources>

@@ -1,4 +1,4 @@
-package com.cibertec.proyectodami.ui.repartidor.estadistica
+package com.cibertec.proyectodami.presentation.features.repartidor.estadistica
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
