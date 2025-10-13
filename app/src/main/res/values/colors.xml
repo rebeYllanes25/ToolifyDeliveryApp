@@ -26,5 +26,10 @@
     <color name="color_status_fondo">#FFEDE0</color>
     <color name="color_status_texto">#FF9800</color>
     <color name="color_divisor">#E0E0E0</color> ```
+    <color name="fondo_celeste_claro">#def7ff</color>
+    <color name="color_amarillo">#FFEB3B</color>
+    <color name="verde">#4CAF50</color>
+    <color name="gris_claro">#9C9C9C</color>
+
 
 </resources>
