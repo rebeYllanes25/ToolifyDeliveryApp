@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
     android:layout_width="match_parent"
@@ -10,10 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
@@ -24,9 +25,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    >
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="0dp">
 
                     <TextView
                         android:id="@+id/toolbar_title"
@@ -34,23 +35,45 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="@string/repartidor_title"
-                        android:textStyle="bold"
                         android:textColor="@color/black"
-                        android:textSize="26sp" />
-                    <ImageButton
-                        android:id="@+id/btn_reload"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="end|center_vertical"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:paddingEnd="10dp"
-                        android:paddingStart="0dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/ic_recargar"
-                        app:tint="@color/primary_repartidor_index"
-                        android:contentDescription="@string/reload" />
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/user_profile_container"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="12dp"
+                        android:paddingVertical="6dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@drawable/profile_button_background"
+                        android:clickable="true"
+                        android:focusable="true">
+
+                        <ImageView
+                            android:id="@+id/user_icon"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_marginEnd="6dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_user"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:id="@+id/user_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/user_name"
+                            android:textColor="@color/white"
+                            android:textSize="16sp"
+                            android:textStyle="normal" />
+                    </LinearLayout>
                 </LinearLayout>
+
             </androidx.appcompat.widget.Toolbar>
+
             <TextView
                 android:id="@+id/toolbar_subtitle"
                 android:layout_width="match_parent"
@@ -68,20 +91,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            app:tabMode="fixed"
             app:tabGravity="fill"
             app:tabIconTint="@animator/item_selector_color"
-            app:tabTextColor="@color/gris"
+            app:tabIndicatorColor="@color/primary_repartidor_index"
             app:tabInlineLabel="true"
+            app:tabMode="fixed"
             app:tabSelectedTextColor="@color/primary_repartidor_index"
-            app:tabIndicatorColor="@color/primary_repartidor_index"/>
+            app:tabTextColor="@color/gris" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/opcion"
@@ -89,11 +112,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
+        android:contentDescription="@string/filter_options"
         android:src="@drawable/ic_menu"
         app:backgroundTint="@color/primary_repartidor_index"
-        app:tint="@android:color/white"
         app:cornerRadius="10dp"
-        android:contentDescription="@string/filter_options"
-        />
+        app:tint="@android:color/white" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

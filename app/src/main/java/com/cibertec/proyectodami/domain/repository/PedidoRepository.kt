@@ -2,35 +2,60 @@ package com.cibertec.proyectodami.domain.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.cibertec.proyectodami.data.api.PedidosRepartidor
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
 
 object PedidoRepository {
+
     private val _pedidoActivo = MutableLiveData<PedidoRepartidorDTO?>(null)
     val pedidoActivo: LiveData<PedidoRepartidorDTO?> = _pedidoActivo
 
     private val _pedidosDisponibles = MutableLiveData<List<PedidoRepartidorDTO>>(emptyList())
     val pedidosDisponibles: LiveData<List<PedidoRepartidorDTO>> = _pedidosDisponibles
 
+    private lateinit var pedidoApi: PedidosRepartidor
+
+    fun init(api: PedidosRepartidor) {
+        this.pedidoApi = api
+    }
     fun setPedidosDisponibles(pedidos: List<PedidoRepartidorDTO>) {
         _pedidosDisponibles.value = pedidos
     }
 
-    fun aceptarPedido(pedido: PedidoRepartidorDTO) {
-        // Establecer como pedido activo
-        _pedidoActivo.value = pedido
+    suspend fun cargarPedidosDisponibles() {
+        try {
+            val pedidos = pedidoApi.obtenerPedidosPendientes()
 
-        // Remover de disponibles
-        val disponibles = _pedidosDisponibles.value?.toMutableList() ?: mutableListOf()
-        disponibles.remove(pedido)
-        _pedidosDisponibles.value = disponibles
+            val pedidoActivo = _pedidoActivo.value
+            val pedidosFiltrados = if (pedidoActivo != null) {
+                pedidos.filter { it.numPedido != pedidoActivo.numPedido }
+            } else {
+                pedidos
+            }
 
-        // TODO: Aquí harías la llamada a la API
-        // api.aceptarPedido(pedido.nroPedido)
+            _pedidosDisponibles.postValue(pedidosFiltrados)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    suspend fun aceptarPedido(pedido: PedidoRepartidorDTO, idRepartidor: Int) {
+        try {
+            val pedidoActualizado = pedidoApi.asignarRepartidor(pedido.idPedido, idRepartidor)
+            _pedidoActivo.postValue(pedidoActualizado)
+
+            val disponibles = _pedidosDisponibles.value?.toMutableList() ?: mutableListOf()
+            disponibles.remove(pedido)
+            _pedidosDisponibles.postValue(disponibles)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
     }
 
     fun completarPedido() {
         _pedidoActivo.value = null
-        // TODO: Llamada a API para marcar como completado
     }
 
     fun tienePedidoActivo(): Boolean {

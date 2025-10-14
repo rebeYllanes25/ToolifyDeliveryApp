@@ -177,7 +177,7 @@
                 style="@style/Widget.MaterialComponents.Button" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/button_call"
+                android:id="@+id/button_Detail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

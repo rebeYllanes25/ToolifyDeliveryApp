@@ -1,0 +1,22 @@
+package com.cibertec.proyectodami.data.api
+
+import com.cibertec.proyectodami.domain.model.dtos.LoginRequest
+import com.cibertec.proyectodami.domain.model.dtos.LoginResponse
+import com.cibertec.proyectodami.domain.model.dtos.UsuarioDTO
+import retrofit2.http.Body
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
+import retrofit2.http.POST
+
+interface UserAuth {
+    @POST("auth/login")
+    @FormUrlEncoded
+    suspend fun login(
+        @Field("correo") correo: String,
+        @Field("clave") clave: String
+    ): LoginResponse
+
+    @GET("auth/me")
+    suspend fun getUsuarioInfo(): UsuarioDTO
+}

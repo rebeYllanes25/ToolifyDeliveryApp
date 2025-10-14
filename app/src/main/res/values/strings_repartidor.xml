@@ -1,3 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="repartidor_title">Toolify Delivery</string>
+
+    <!-- Navegación -->
+    <string name="navigation_drawer_open">Abrir menú</string>
+    <string name="navigation_drawer_close">Cerrar menú</string>
+
+    <!-- Menú principal (Tabs) -->
+    <string name="main_nav_disponibles">Disponibles</string>
+    <string name="main_nav_activos">Activo</string>
+    <string name="main_nav_estadisticas">Estadísticas</string>
+
+    <!-- Estado / Actualización -->
+    <string name="last_update">Última actualización: Ahora mismo</string>
+    <string name="reload">Recargar</string>
+    <string name="update_list">Actualizar Lista</string>
+
+    <!-- Filtros y orden -->
+    <string name="filter_options">Filtro y Opciones</string>
+    <string name="order_value">Ordenar por Valor</string>
+    <string name="order_distance">Ordenar por Distancia</string>
+
+    <!-- Estados de pedidos -->
+    <string name="no_orders">Sin pedidos</string>
+    <string name="no_orders_available">No hay pedidos disponibles</string>
+    <string name="try_refresh">Actualiza para ver nuevos pedidos</string>
+    <string name="no_orders_active">No hay pedidos activos</string>
+    <string name="no_orders_active_description">Los pedidos aceptados aparecerán aquí</string>
+
+    <!-- Botones generales -->
+    <string name="btn_browse">Navegar</string>
+    <string name="btn_details">Detalle</string>
+    <string name="btn_view_orders">Ver pedidos activos</string>
+    <string name="btn_order_accept">Aceptar pedido</string>
+    <string name="description_btn_close">Cerrar</string>
+
+    <!-- Etiquetas y descripciones -->
+    <string name="route_label">En Ruta</string>
+    <string name="time_label_active">Estimado: %1$s min</string>
+    <string name="time_label">%1$s min</string>
+    <string name="time_description">Tiempo</string>
+
+    <string name="order_details_label">Detalles del Pedido</string>
+    <string name="label_client">Cliente</string>
+    <string name="label_monto">Monto</string>
+    <string name="number_order">Número de Pedido</string>
+    <string name="description_qr">Código QR</string>
+    <string name="order_id_prefix">#%1$s</string>
+    <string name="mail_label">email@ejemplo.com</string>
+    <string name="location_label">Ubicación</string>
+    <string name="distance_km">%1$s km</string>
+
+    <string name="user_name">Nombre Usuario</string>
+    <string name="user_address">Dirección</string>
+    <string name="street_placeholder">Calle</string>
+    <string name="specs">Especificaciones</string>
+    <string name="labe_specs">Debe dejar</string>
+    <string name="order_value_label">Valor del Pedido</string>
+    <string name="value_price">S/. %1$.2f</string>
+
+    <string name="logout">Cerrar Sesión</string>
+    <string name="information_user">Información Personal</string>
+    <string name="role_user">Rol del usuario</string>
+    <string name="mi_perfil_title">Mi Perfil</string>
+    <string name="label_telefono">Telefono</string>
+    <string name="text_telefono">987654321</string>
 </resources>

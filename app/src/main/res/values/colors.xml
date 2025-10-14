@@ -3,7 +3,7 @@
     <!-- Repartidor -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="black_leve">#1B1B1B</color>
 
     <color name="primary_repartidor">#576EAA</color>
     <color name="primary_repartidor_index">#FF703C</color>
@@ -15,6 +15,7 @@
     <color name="orange_light">#F8F0E3</color>
     <color name="orange_strong">#FF6B35</color>
     <color name="orange_light_alt">#F9EBE6</color>
+    <color name="red">#F21212</color>
 
     <!-- Cliente -->
     <color name="color_principal">#2B63EB</color>

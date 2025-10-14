@@ -6,14 +6,20 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.databinding.ItemPedidoRepartidorBinding
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.roundToInt
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 
 class DisponiblesPedidoAdapter(
     private val items: MutableList<PedidoRepartidorDTO>,
     private val onAceptarClick: (PedidoRepartidorDTO) -> Unit
 ) : RecyclerView.Adapter<DisponiblesPedidoAdapter.VH>() {
-
-    private var bloqueado = false // NUEVO: Flag para bloquear interacción
+    private val RADIO_TIERRA_KM = 6371.0
+    private val VELOCIDAD_PROMEDIO_KMH = 20.0
+    private var bloqueado = false
 
     inner class VH(val binding: ItemPedidoRepartidorBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -34,38 +40,39 @@ class DisponiblesPedidoAdapter(
         val b = holder.binding
         val ctx = b.root.context
 
-        b.tvPedidoId.text = ctx.getString(R.string.order_id_prefix, pedido.nroPedido)
+        // Asignación de datos básicos
+        b.tvPedidoId.text = ctx.getString(R.string.order_id_prefix, pedido.numPedido)
         b.tvCliente.text = pedido.nomCliente
-        b.tvDireccion.text = pedido.direccion
+        b.tvDireccion.text = pedido.direccionEntrega
         b.tvTotal.text = ctx.getString(R.string.value_price, pedido.total)
-        b.tvDistancia.text = ctx.getString(R.string.distance_km, pedido.distanciaKM.toString())
-        val tiempo = pedido.tiempoEntrega?.toString() ?: "N/A"
-        b.tvTiempo.text = ctx.getString(R.string.time_label, tiempo)
 
-        // MODIFICADO: Deshabilitar botón si está bloqueado
+        // LÓGICA DE CÁLCULO DE DISTANCIA Y TIEMPO
+        // 1. Coordenadas del Repartidor (DEBE SER DINÁMICO/REAL)
+        // **IMPORTANTE: Reemplaza estos valores fijos con la ubicación actual del usuario.**
+        val repartidorLatitud = -12.10
+        val repartidorLongitud = -77.05
+
+        // 2. Coordenadas de Destino (Asumimos que están en el DTO)
+        val destinoLatitud = pedido.latitud // Necesitas este campo en PedidoRepartidorDTO
+        val destinoLongitud = pedido.longitud // Necesitas este campo en PedidoRepartidorDTO
+
+        val distanciaKm = calcularDistancia(
+            repartidorLatitud, repartidorLongitud,
+            destinoLatitud, destinoLongitud
+        )
+
+        // 4. Calcular Tiempo Estimado (min)
+        val tiempoEstimadoHoras = distanciaKm / VELOCIDAD_PROMEDIO_KMH
+        val tiempoEstimadoMinutos = (tiempoEstimadoHoras * 60).roundToInt()
+
+        // 5. Asignar al TextView
+        val distanciaFormateada = String.format("%.1f", distanciaKm)
+        b.tvDistancia.text = ctx.getString(R.string.distance_km, distanciaFormateada) // Muestra el valor en el formato de tu recurso string
+
+        val tiempoFormateado = tiempoEstimadoMinutos.toString()
+        b.tvTiempo.text = ctx.getString(R.string.time_label, tiempoFormateado) // Muestra el valor en el formato de tu recurso string
+
         b.btnAceptarPedido.isEnabled = !bloqueado
-
-        if (bloqueado) {
-            // Botón bloqueado - gris
-            b.btnAceptarPedido.setBackgroundColor(
-                ctx.getColor(android.R.color.darker_gray)
-            )
-            b.btnAceptarPedido.setTextColor(
-                ctx.getColor(android.R.color.white)
-            )
-            b.btnAceptarPedido.alpha = 0.9f
-            b.root.alpha = 0.9f
-        } else {
-            // Botón activo - color original (naranja)
-            b.btnAceptarPedido.setBackgroundColor(
-                ctx.getColor(R.color.orange_strong)
-            )
-            b.btnAceptarPedido.setTextColor(
-                ctx.getColor(android.R.color.white)
-            )
-            b.btnAceptarPedido.alpha = 1f
-            b.root.alpha = 1f
-        }
 
         b.btnAceptarPedido.setOnClickListener {
             if (!bloqueado) {
@@ -88,17 +95,27 @@ class DisponiblesPedidoAdapter(
         }
     }
 
-    // NUEVO: Método para bloquear todos los pedidos
     fun bloquearPedidos() {
-        if (bloqueado) return // Ya está bloqueado, evitar múltiples notificaciones
+        if (bloqueado) return
         bloqueado = true
         notifyDataSetChanged()
     }
 
-    // NUEVO: Método para desbloquear (por si se cancela)
     fun desbloquearPedidos() {
-        if (!bloqueado) return // Ya está desbloqueado
+        if (!bloqueado) return
         bloqueado = false
         notifyDataSetChanged()
+    }
+
+    fun calcularDistancia(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+        val dLat = Math.toRadians(lat2 - lat1)
+        val dLon = Math.toRadians(lon2 - lon1)
+
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(lat1)) * cos(Math.toRadians(lat2)) *
+                sin(dLon / 2) * sin(dLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+
+        return RADIO_TIERRA_KM * c
     }
 }
