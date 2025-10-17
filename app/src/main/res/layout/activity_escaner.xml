@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <!-- Vista REAL de la cámara -->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <!-- Overlay encima de la cámara -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
+
+    <!-- Marco del QR -->
+    <View
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_centerInParent="true"
+         />
+
+    <!-- Línea de escaneo animada -->
+    <View
+        android:id="@+id/scanLine"
+        android:layout_width="250dp"
+        android:layout_height="3dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/scan_line_gradient" />
+
+    <!-- Header -->
+    <LinearLayout
+        android:id="@+id/headerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/gradient_top"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Escaner QR"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Botón WhatsApp -->
+        <ImageButton
+            android:id="@+id/btnWhatsApp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
+            app:tint="#FFFFFF"
+            android:contentDescription="WhatsApp" />
+
+        <!-- Botón Linterna -->
+        <ImageButton
+            android:id="@+id/btnLinterna"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_flash_off"
+            app:tint="#FFFFFF"
+            android:contentDescription="Linterna" />
+
+        <!-- Botón Cerrar -->
+        <ImageButton
+            android:id="@+id/btnCerrar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_cerrar"
+            app:tint="#FFFFFF"
+            android:contentDescription="Cerrar" />
+    </LinearLayout>
+
+    <!-- Contenedor inferior -->
+    <LinearLayout
+        android:id="@+id/bottomContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/gradient_bottom"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <!-- Texto de instrucciones -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Alinea el código QR dentro del marco"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Mantén el dispositivo estable para mejor lectura"
+            android:textColor="#CCCCCC"
+            android:textSize="12sp" />
+
+        <!-- Icono de consejo -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_info"
+                app:tint="#FF7043" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="Asegúrate de tener buena iluminación"
+                android:textColor="#CCCCCC"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Botón Entrada Manual -->
+        <Button
+            android:id="@+id/btnEntradaManual"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="24dp"
+            android:backgroundTint="#1E1E1E"
+            android:drawablePadding="12dp"
+            android:gravity="center"
+            android:text="Entrada Manual"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:cornerRadius="12dp"
+            app:strokeColor="#FFFFFF"
+            app:strokeWidth="1dp" />
+    </LinearLayout>
+
+</RelativeLayout>
