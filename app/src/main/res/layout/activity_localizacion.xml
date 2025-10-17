@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Mapa (placeholder - aquí irá Google Maps) -->
+    <FrameLayout
+        android:id="@+id/mapContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E8F5E9">
+
+        <!-- Header con nombre del navegante -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/card_background_white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Navegando a"
+                android:textColor="#95A5A6"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/tvNombreCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="María González"
+                android:textColor="#2C3E50"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Botón GPS -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabGPS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|top"
+            android:layout_marginTop="180dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_ubicacion"
+            app:backgroundTint="#FFFFFF"
+            app:fabSize="mini"
+            app:tint="#FF7043" />
+
+        <!-- Botón Flecha Atrás -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|top"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="180dp"
+            android:src="@drawable/ic_flecha_atras"
+            app:backgroundTint="#FFFFFF"
+            app:fabSize="mini"
+            app:tint="#2C3E50" />
+
+        <!-- Botón En Ruta -->
+        <Button
+            android:id="@+id/btnEnRuta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="#FF7043"
+            android:drawableStart="@drawable/ic_navigation"
+            android:drawablePadding="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="20dp"
+            android:text="En Ruta"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            app:cornerRadius="24dp" />
+    </FrameLayout>
+
+    <!-- Bottom Sheet -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_sheet_background"
+        android:elevation="8dp"
+        android:paddingBottom="16dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Handle del bottom sheet -->
+            <View
+                android:layout_width="40dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:background="#CCCCCC" />
+
+            <!-- Cards de tiempo -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <!-- Card Calculando Distancia -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#FFE0B2"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_navigation"
+                            app:tint="#FF7043" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Calculando..."
+                            android:textColor="#FF7043"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="En Distancia"
+                            android:textColor="#FF7043"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Card Calculando Tiempo -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    app:cardBackgroundColor="#C8E6C9"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_reloj"
+                            app:tint="#4CAF50" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:text="Calculando..."
+                            android:textColor="#4CAF50"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Tiempo Est."
+                            android:textColor="#4CAF50"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+            <!-- Detalles del Cliente -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Detalles del Cliente"
+                android:textColor="#2C3E50"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <!-- Info del cliente -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="vertical">
+
+                <!-- Nombre -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_user"
+                        app:tint="#95A5A6" />
+
+                    <TextView
+                        android:id="@+id/tvClienteNombre"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="María González"
+                        android:textColor="#2C3E50"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- Dirección -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_ubicacion"
+                        app:tint="#95A5A6" />
+
+                    <TextView
+                        android:id="@+id/tvClienteDireccion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="Calle Grau Via 28, 28013 Madrid, España"
+                        android:textColor="#2C3E50"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- Teléfono -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_telefono"
+                        app:tint="#95A5A6" />
+
+                    <TextView
+                        android:id="@+id/tvClienteTelefono"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="+34 612 345 678"
+                        android:textColor="#2C3E50"
+                        android:textSize="14sp" />
+                </LinearLayout>
+
+                <!-- Precio -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_dolar"
+                        app:tint="#95A5A6" />
+
+                    <TextView
+                        android:id="@+id/tvPrecio"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="45,50"
+                        android:textColor="#4CAF50"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Instrucciones Especiales -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Instrucciones Especiales"
+                android:textColor="#2C3E50"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvInstrucciones"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="#FFF9C4"
+                android:padding="12dp"
+                android:text="Llamar al timbre del segundo piso. Entregar en mano."
+                android:textColor="#F57C00"
+                android:textSize="13sp" />
+
+            <!-- Botón Llegada -->
+            <Button
+                android:id="@+id/btnLlegada"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="#BDBDBD"
+                android:drawableStart="@drawable/ic_check"
+                android:drawablePadding="8dp"
+                android:text="Llegada (9518.7 km)"
+                android:textColor="#FFFFFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
