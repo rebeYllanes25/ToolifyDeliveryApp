@@ -7,7 +7,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
-import org.threeten.bp.format.DateTimeFormatter
 import java.util.Locale
 
 class PedidoInicioAdapter(
@@ -41,10 +40,6 @@ class PedidoInicioAdapter(
             R.string.formato_pedido_id,
             pedido.nroPedido
         )
-
-        // Formatear fecha
-        val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy", Locale("es", "ES"))
-        holder.tvFecha.text = pedido.fechaPedido.format(formatter)
 
         // Configurar total
         holder.tvTotal.text = context.getString(

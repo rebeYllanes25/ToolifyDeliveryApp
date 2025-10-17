@@ -82,8 +82,22 @@
 
     <string name="btn_enviar_calificacion">Enviar Calificación</string>
     <string name="btn_omitir">Omitir</string>
+
     <!-- Historial -->
-    <string name="subtitulo_pedidos_inexistentes">No hay p edidos existentes.</string>
+    <string name="subtitulo_pedidos_inexistentes">No hay pedidos existentes.</string>
+
+    <!-- Filtros -->
+    <string name="filtros_titulo">Filtros</string>
+    <string name="filtros_limpiar">Limpiar</string>
+    <string name="filtros_rango_fechas">Rango de fechas</string>
+    <string name="filtros_fecha_inicio">Fecha inicio</string>
+    <string name="filtros_fecha_fin">Fecha fin</string>
+    <string name="filtros_rango_precio">Rango de precio</string>
+    <string name="filtros_precio_min">S/ 0</string>
+    <string name="filtros_precio_max">S/ 1000</string>
+    <string name="filtros_aplicar">Aplicar filtros</string>
+    <string name="filtros_activos">Filtros activos</string>
+    <string name="desc_icono_filtros">Icono de filtros</string>
 
     <!-- Perfil -->
     <!-- Notificaciones -->

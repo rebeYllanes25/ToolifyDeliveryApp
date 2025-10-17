@@ -12,7 +12,6 @@ import com.cibertec.proyectodami.databinding.FragmentInicioBinding
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.detallepedido.DetallePedidoFragment
 import com.cibertec.proyectodami.presentation.features.cliente.rastreo.RastreoActivity
-import org.threeten.bp.LocalDateTime
 
 class InicioFragment : Fragment() {
 
@@ -101,7 +100,7 @@ class InicioFragment : Fragment() {
         return listOf(
             PedidoClienteDTO(
                 nroPedido = "DEL2024001",
-                fechaPedido = LocalDateTime.now().minusHours(2),
+                fechaPedido = null,
                 estadoDelivery = "EC",
                 tiempoEntregaMinutos = 15,
                 nombreRepartidor = "Juan Pérez",
@@ -114,7 +113,7 @@ class InicioFragment : Fragment() {
             ),
             PedidoClienteDTO(
                 nroPedido = "DEL2024002",
-                fechaPedido = LocalDateTime.now().minusHours(3),
+                fechaPedido = null,
                 estadoDelivery = "AS",
                 tiempoEntregaMinutos = 30,
                 nombreRepartidor = "María García",
