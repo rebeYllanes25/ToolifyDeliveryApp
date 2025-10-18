@@ -7,17 +7,19 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.cibertec.proyectodami.R
+import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.databinding.ActivityClienteMainBinding
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.InicioFragment
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialFragment
+import com.cibertec.proyectodami.presentation.features.cliente.notificaciones.NotificacionesFragment
 import com.cibertec.proyectodami.presentation.features.cliente.perfil.PerfilFragment
+import kotlinx.coroutines.launch
 
 class ClienteMainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClienteMainBinding
-
-    // Referencias a los apartados
     private var apartadoActual: ApartadoType = ApartadoType.INICIO
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,16 +30,21 @@ class ClienteMainActivity : AppCompatActivity() {
         configurarSaludo()
         configurarApartados()
 
-        // Cargar fragment inicial
         if (savedInstanceState == null) {
             cargarFragment(InicioFragment(), ApartadoType.INICIO)
         }
     }
 
     private fun configurarSaludo() {
-        // TODO: Obtener nombre del usuario desde SharedPreferences o ViewModel
-        val nombreUsuario = "María"
-        binding.tvSaludo.text = getString(R.string.saludo_usuario, nombreUsuario)
+
+        val userPreferences = UserPreferences(applicationContext)
+
+        lifecycleScope.launch {
+            userPreferences.nombreUsuario.collect { nombre ->
+                binding.tvSaludo.text = nombre ?: getString(R.string.user_name)
+            }
+        }
+
     }
 
     private fun configurarApartados() {
@@ -60,8 +67,7 @@ class ClienteMainActivity : AppCompatActivity() {
         }
 
         binding.btnNotificaciones.setOnClickListener {
-            // TODO: Abrir fragment o activity de notificaciones
-            abrirNotificaciones()
+            cargarFragment(NotificacionesFragment(), ApartadoType.NOTIFICACIONES)
         }
     }
 
@@ -75,14 +81,24 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun actualizarEstiloApartados(apartadoSeleccionado: ApartadoType) {
-        resetearApartado(binding.apartadoInicio)
-        resetearApartado(binding.apartadoHistorial)
-        resetearApartado(binding.apartadoPerfil)
 
-        when (apartadoSeleccionado) {
-            ApartadoType.INICIO -> activarApartado(binding.apartadoInicio)
-            ApartadoType.HISTORIAL -> activarApartado(binding.apartadoHistorial)
-            ApartadoType.PERFIL -> activarApartado(binding.apartadoPerfil)
+        if (apartadoSeleccionado == ApartadoType.NOTIFICACIONES) {
+            binding.layoutApartados.visibility = android.view.View.GONE
+            resetearApartado(binding.apartadoInicio)
+            resetearApartado(binding.apartadoHistorial)
+            resetearApartado(binding.apartadoPerfil)
+        } else {
+            binding.layoutApartados.visibility = android.view.View.VISIBLE
+            resetearApartado(binding.apartadoInicio)
+            resetearApartado(binding.apartadoHistorial)
+            resetearApartado(binding.apartadoPerfil)
+
+            when (apartadoSeleccionado) {
+                ApartadoType.INICIO -> activarApartado(binding.apartadoInicio)
+                ApartadoType.HISTORIAL -> activarApartado(binding.apartadoHistorial)
+                ApartadoType.PERFIL -> activarApartado(binding.apartadoPerfil)
+                else -> {}
+            }
         }
     }
 
@@ -110,19 +126,15 @@ class ClienteMainActivity : AppCompatActivity() {
         textView.setTypeface(null, android.graphics.Typeface.BOLD)
     }
 
-    private fun abrirNotificaciones() {
-        // Opción 1: Abrir como BottomSheet
-        //val notificacionesFragment = NotificacionesFragment()
-        //notificacionesFragment.show(supportFragmentManager, "NotificacionesFragment")
-
-        // Opción 2: Navegar a un nuevo Fragment
-        // cargarFragment(NotificacionesFragment(), null)
-
-        // Ocultar badge después de abrir
-        binding.insigniaNotificacion.visibility = android.view.View.GONE
+    override fun onBackPressed() {
+        if (apartadoActual == ApartadoType.NOTIFICACIONES) {
+            cargarFragment(InicioFragment(), ApartadoType.INICIO)
+        } else {
+            super.onBackPressed()
+        }
     }
 
     enum class ApartadoType {
-        INICIO, HISTORIAL, PERFIL
+        INICIO, HISTORIAL, PERFIL, NOTIFICACIONES
     }
 }

@@ -1,10 +1,8 @@
 package com.cibertec.proyectodami.domain.model.dtos
 
-import org.threeten.bp.LocalDateTime
-
 data class PedidoClienteDTO(
     val nroPedido: String,
-    val fechaPedido: LocalDateTime,
+    val fechaPedido: String?,
     val estadoDelivery: String, // PE, AS, EC, EN, FA
     val tiempoEntregaMinutos: Int?,
     val nombreRepartidor: String?,

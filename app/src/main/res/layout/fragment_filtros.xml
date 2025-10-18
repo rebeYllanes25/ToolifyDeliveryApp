@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet"
+    android:padding="24dp"
+    tools:context=".presentation.features.cliente.historial.filtros.FiltrosFragment">
+
+
+    <!-- Header -->
+    <TextView
+        android:id="@+id/tvTitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/filtros_titulo"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_texto_normal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/btnLimpiar" />
+
+    <TextView
+        android:id="@+id/btnLimpiar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/filtros_limpiar"
+        android:textSize="16sp"
+        android:textColor="@color/color_principal"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tvTitulo"
+        app:layout_constraintBottom_toBottomOf="@id/tvTitulo" />
+
+    <!-- Sección Rango de fechas -->
+    <TextView
+        android:id="@+id/tvTituloFechas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filtros_rango_fechas"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_texto_normal"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTitulo"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutFechas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloFechas"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFechaInicio"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:hint="@string/filtros_fecha_inicio"
+            app:boxStrokeColor="@color/color_principal"
+            app:hintTextColor="@color/color_principal"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconTint="@color/gris_claro">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFechaInicio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:textColor="@color/color_texto_normal"
+                tools:text="01/10/2025" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilFechaFin"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:hint="@string/filtros_fecha_fin"
+            app:boxStrokeColor="@color/color_principal"
+            app:hintTextColor="@color/color_principal"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_calendar"
+            app:endIconTint="@color/gris_claro">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etFechaFin"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:textColor="@color/color_texto_normal"
+                tools:text="04/10/2025" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+    <!-- Sección Rango de precio -->
+    <TextView
+        android:id="@+id/tvTituloPrecio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/filtros_rango_precio"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/color_texto_normal"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toBottomOf="@id/layoutFechas"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/layoutPrecios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/tvTituloPrecio"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/tvPrecioMin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/filtros_precio_min"
+            android:textSize="14sp"
+            android:textColor="@color/color_subtitulos" />
+
+        <TextView
+            android:id="@+id/tvPrecioMax"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/filtros_precio_max"
+            android:textSize="14sp"
+            android:textColor="@color/color_subtitulos"
+            android:gravity="end" />
+
+    </LinearLayout>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/rangeSliderPrecio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:valueFrom="0"
+        android:valueTo="1000"
+        android:stepSize="1"
+        app:thumbColor="@color/color_principal"
+        app:trackColorActive="@color/color_principal"
+        app:trackColorInactive="@color/color_divisor"
+        app:layout_constraintTop_toBottomOf="@id/layoutPrecios"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- Botón Aplicar -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAplicarFiltros"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="@string/filtros_aplicar"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/color_principal"
+        app:cornerRadius="12dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/rangeSliderPrecio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

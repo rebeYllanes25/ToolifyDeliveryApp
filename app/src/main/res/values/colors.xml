@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Repartidor -->
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="black_leve">#1B1B1B</color>
 
+    <!-- Repartidor -->
     <color name="primary_repartidor">#576EAA</color>
     <color name="primary_repartidor_index">#FF703C</color>
     <color name="gris">#DADEE1</color>
@@ -32,5 +33,13 @@
     <color name="verde">#4CAF50</color>
     <color name="gris_claro">#9C9C9C</color>
 
+    <color name="primary">#2962FF</color>
+    <color name="primary_dark">#0039CB</color>
+    <color name="primary_light">#768FFF</color>
+
+    <color name="dark_gray">#424242</color>
+    <color name="medium_gray">#757575</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="background_gray">#F5F5F5</color>
 
 </resources>

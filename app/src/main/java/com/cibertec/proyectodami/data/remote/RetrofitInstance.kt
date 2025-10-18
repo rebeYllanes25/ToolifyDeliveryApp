@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
     /* Cambiar el local IP de tu red de wifi*/
-    private const val LOCAL_IP = "192.168.1.4"
+    private const val LOCAL_IP = "192.168.1.17"
     private const val PORT = "8080"
 
     fun create(userPreferences: UserPreferences): Retrofit {
@@ -26,9 +26,9 @@ object RetrofitInstance {
             .build()
 
         val baseUrl = if (isRunningOnEmulator()) {
-            "http://10.0.2.2:$PORT/v1/"
+            "http://10.0.2.2:$PORT/"
         } else {
-            "http://$LOCAL_IP:$PORT/v1/"
+            "http://$LOCAL_IP:$PORT/"
         }
 
         return Retrofit.Builder()
