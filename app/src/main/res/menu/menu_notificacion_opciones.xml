@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_marcar_leida"
+        android:title="@string/notificaciones_marcar_leida"
+        android:icon="@drawable/ic_check" />
+
+    <item
+        android:id="@+id/action_eliminar"
+        android:title="@string/notificaciones_eliminar"
+        android:icon="@drawable/ic_delete" />
+</menu>

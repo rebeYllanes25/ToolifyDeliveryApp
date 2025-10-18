@@ -24,8 +24,6 @@
     <string name="codigoQR">%1$s</string>
     <string name="desc_ver_detalle">Detalles</string>
 
-
-
     <string name="titulo_detalle_pedido">Detalles del Pedido</string>
     <string name="instrucciones_codigo_verificacion">Proporciona este código al repartidor para confirmar la entrega</string>
 
@@ -100,6 +98,49 @@
     <string name="desc_icono_filtros">Icono de filtros</string>
 
     <!-- Perfil -->
-    <!-- Notificaciones -->
 
+    <!-- Notificaciones -->
+    <string name="notificaciones_titulo">Notificaciones</string>
+    <string name="notificaciones_sin_leer">%1$d sin leer</string>
+    <string name="notificaciones_marcar_todas_leidas">Marcar todas como leídas</string>
+    <string name="notificaciones_eliminar_todas">Eliminar todas</string>
+
+    <string name="notificaciones_tab_todas">Todas</string>
+    <string name="notificaciones_tab_sin_leer">Sin leer</string>
+    <string name="notificaciones_tab_leidas">Leídas</string>
+
+    <string name="notificaciones_sin_notificaciones">No tienes notificaciones</string>
+    <string name="notificaciones_subtitulo_vacio">Cuando recibas notificaciones sobre tus pedidos aparecerán aquí</string>
+
+    <string name="notificaciones_icono_tipo">Icono de tipo de notificación</string>
+    <string name="notificaciones_icono_tiempo">Icono de tiempo</string>
+    <string name="notificaciones_opciones">Opciones de notificación</string>
+
+    <string name="notificaciones_marcar_leida">Marcar como leída</string>
+    <string name="notificaciones_marcar_no_leida">Marcar como no leída</string>
+    <string name="notificaciones_eliminar">Eliminar</string>
+
+    <string name="notificaciones_tipo_pedido_nuevo">Pedido confirmado</string>
+    <string name="notificaciones_tipo_pedido_asignado">Repartidor asignado</string>
+    <string name="notificaciones_tipo_pedido_en_camino">Pedido en camino</string>
+    <string name="notificaciones_tipo_pedido_entregado">Pedido entregado</string>
+    <string name="notificaciones_tipo_pedido_fallido">Entrega fallida</string>
+    <string name="notificaciones_tipo_promocion">Promoción especial</string>
+    <string name="notificaciones_tipo_sistema">Notificación del sistema</string>
+
+    <string name="notificaciones_tiempo_ahora">Ahora mismo</string>
+    <string name="notificaciones_tiempo_minutos">Hace %1$d min</string>
+    <string name="notificaciones_tiempo_horas">Hace %1$d h</string>
+    <string name="notificaciones_tiempo_dias">Hace %1$d d</string>
+    <string name="notificaciones_tiempo_semanas">Hace %1$d sem</string>
+
+    <string name="notificaciones_confirmar_eliminar_todas">¿Eliminar todas las notificaciones?</string>
+    <string name="notificaciones_confirmar_eliminar_titulo">Confirmar eliminación</string>
+    <string name="notificaciones_confirmar_eliminar_mensaje">Esta acción no se puede deshacer</string>
+    <string name="notificaciones_btn_cancelar">Cancelar</string>
+    <string name="notificaciones_btn_confirmar">Eliminar</string>
+
+    <string name="notificaciones_todas_marcadas_leidas">Todas las notificaciones marcadas como leídas</string>
+    <string name="notificaciones_todas_eliminadas">Todas las notificaciones eliminadas</string>
+    <string name="notificaciones_eliminada">Notificación eliminada</string>
 </resources>
