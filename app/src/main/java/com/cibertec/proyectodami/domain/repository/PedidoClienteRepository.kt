@@ -42,19 +42,27 @@ class PedidoClienteRepository(context: Context) {
     suspend fun obtenerPedidosEnCamino(idCliente: Int) {
         Log.d(TAG, "═══════════════════════════════")
         Log.d(TAG, "📡 obtenerPedidosEnCamino - ID Cliente: $idCliente")
-        Log.d(TAG, "═══════════════════════════════")
 
         try {
             val pedidos = pedidoApi.obtenerPedidosEC(idCliente, "EC")
-            Log.i(TAG, "✅ Pedidos en camino obtenidos: ${pedidos.size}")
+
+            Log.i(TAG, "✅ Respuesta recibida: ${pedidos.size} pedidos")
+            pedidos.forEach {
+                Log.d(TAG, "Pedido: ${it.numPedido}, Estado: ${it.estado}")
+            }
+
             _pedidosEnCamino.postValue(pedidos)
+            Log.d(TAG, "✅ LiveData actualizado")
+
         } catch (e: HttpException) {
-            Log.e(TAG, "❌ ERROR HTTP ${e.code()} - ${e.message()}")
+            Log.e(TAG, "❌ HTTP ${e.code()}: ${e.response()?.errorBody()?.string()}")
             _pedidosEnCamino.postValue(emptyList())
         } catch (e: Exception) {
-            Log.e(TAG, "❌ ERROR GENERAL", e)
+            Log.e(TAG, "❌ ERROR: ${e.message}", e)
             _pedidosEnCamino.postValue(emptyList())
         }
+
+        Log.d(TAG, "═══════════════════════════════")
     }
 
     suspend fun obtenerPedidosHistorial(idCliente: Int) {

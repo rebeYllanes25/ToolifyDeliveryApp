@@ -16,16 +16,12 @@ class InicioViewModel(application: Application) : AndroidViewModel(application) 
     val pedidosEnCamino: LiveData<List<PedidoClienteDTO>> = repository.pedidosEnCamino
 
     fun cargarPedidos(idCliente: Int) {
-        Log.d("InicioViewModel", "🚀 Iniciando carga de pedidos")
-        Log.d("InicioViewModel", "ID Cliente: $idCliente")
-
 
         viewModelScope.launch {
             try {
                 repository.obtenerPedidosEnCamino(idCliente)
-                Log.i("InicioViewModel", "✅ Petición completada correctamente")
             } catch (e: Exception) {
-                Log.e("InicioViewModel", "❌ Error al cargar pedidos", e)
+                Log.e("InicioViewModel", "Error al cargar pedidos", e)
             }
         }
     }

@@ -32,10 +32,6 @@ class ClienteMainActivity : AppCompatActivity() {
         binding = ActivityClienteMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        android.util.Log.d("ClienteMainActivity", "═══════════════════════════════")
-        android.util.Log.d("ClienteMainActivity", "🚀 Iniciando ClienteMainActivity")
-        android.util.Log.d("ClienteMainActivity", "═══════════════════════════════")
-
         inicializarRepositorio()
         configurarSaludo()
         configurarApartados()
@@ -47,16 +43,14 @@ class ClienteMainActivity : AppCompatActivity() {
 
     private fun inicializarRepositorio() {
         try {
-            android.util.Log.i("ClienteMainActivity", "🔧 Inicializando Repository...")
             val userPreferences = UserPreferences(applicationContext)
             val retrofit = RetrofitInstance.create(userPreferences)
             val pedidosApi = retrofit.create(PedidosCliente::class.java)
 
             pedidoRepository = PedidoClienteRepository(applicationContext)
 
-            android.util.Log.i("ClienteMainActivity", "✅ Repository inicializado correctamente")
         } catch (e: Exception) {
-            android.util.Log.e("ClienteMainActivity", "❌ Error al inicializar Repository", e)
+            android.util.Log.e("ClienteMainActivity", "Error al inicializar Repository", e)
         }
     }
 

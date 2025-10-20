@@ -7,13 +7,12 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
-import java.util.Locale
 
-class PedidoInicioAdapter(
+class ClientePedidoAdapter(
     private val pedidos: List<PedidoClienteDTO>,
     private val onRastrearClick: (PedidoClienteDTO) -> Unit,
     private val onDetalleClick: (PedidoClienteDTO) -> Unit
-) : RecyclerView.Adapter<PedidoInicioAdapter.PedidoViewHolder>() {
+) : RecyclerView.Adapter<ClientePedidoAdapter.PedidoViewHolder>() {
 
     inner class PedidoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvPedidoId: TextView = itemView.findViewById(R.id.tvPedidoId)
@@ -35,20 +34,31 @@ class PedidoInicioAdapter(
         val pedido = pedidos[position]
         val context = holder.itemView.context
 
-        // Configurar ID del pedido
         holder.tvPedidoId.text = context.getString(
             R.string.formato_pedido_id,
-            pedido.nroPedido
+            pedido.numPedido
         )
 
-        // Configurar total
+        holder.tvFecha.text = pedido.fecha?.let { fechaStr ->
+            try {
+                val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", java.util.Locale.getDefault())
+
+                val date = inputFormat.parse(fechaStr)
+
+                val outputFormat = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
+                outputFormat.format(date!!)
+            } catch (e: Exception) {
+                "Fecha inválida"
+            }
+        } ?: "Sin fecha"
+
         holder.tvTotal.text = context.getString(
             R.string.formato_total,
-            pedido.totalPagar
+            pedido.total
         )
 
         // Configurar estado con colores
-        val estadoInfo = obtenerEstadoInfo(pedido.estadoDelivery)
+        val estadoInfo = obtenerEstadoInfo(pedido.estado)
         holder.tvStatus.text = estadoInfo.texto
         holder.tvStatus.setTextColor(ContextCompat.getColor(context, estadoInfo.colorTexto))
         holder.statusChip.setCardBackgroundColor(
@@ -70,7 +80,7 @@ class PedidoInicioAdapter(
     /**
      * Obtiene información de color y texto según el estado del pedido
      */
-    private fun obtenerEstadoInfo(estado: String): EstadoInfo {
+    private fun obtenerEstadoInfo(estado: String?): EstadoInfo {
         return when (estado) {
             "PE" -> EstadoInfo(
                 texto = "Pendiente",

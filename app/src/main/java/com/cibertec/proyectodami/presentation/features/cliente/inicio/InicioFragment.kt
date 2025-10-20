@@ -1,8 +1,9 @@
 package com.cibertec.proyectodami.presentation.features.cliente.inicio
 
-import PedidoInicioAdapter
+import ClientePedidoAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,10 +21,14 @@ import kotlinx.coroutines.launch
 
 class InicioFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "InicioFragment"
+    }
+
     private var _binding: FragmentInicioBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: PedidoInicioAdapter
+    private lateinit var adapter: ClientePedidoAdapter
     private val viewModel: InicioViewModel by viewModels()
     private lateinit var userPreferences: UserPreferences
 
@@ -39,15 +44,21 @@ class InicioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "📱 Fragment creado")
 
         setupRecyclerView()
+
+        // PRIMERO configurar el observer
         observarPedidos()
+
+        // LUEGO cargar los datos
         cargarDatosUsuario()
     }
 
     private fun cargarDatosUsuario() {
         viewLifecycleOwner.lifecycleScope.launch {
             val idCliente = userPreferences.idUsuario.first()
+            Log.d(TAG, "ID Cliente obtenido: $idCliente")
 
             if (idCliente != -1) {
                 viewModel.cargarPedidos(idCliente)
@@ -62,7 +73,17 @@ class InicioFragment : Fragment() {
     }
 
     private fun observarPedidos() {
+
         viewModel.pedidosEnCamino.observe(viewLifecycleOwner) { pedidos ->
+            Log.d(TAG, "📦 DATOS RECIBIDOS EN FRAGMENT")
+            Log.d(TAG, "Pedidos: ${pedidos?.size ?: 0}")
+            pedidos?.forEach { pedido ->
+                Log.d(TAG, "  - Pedido #${pedido.numPedido}")
+                Log.d(TAG, "    Estado: ${pedido.estado}")
+                Log.d(TAG, "    Total: ${pedido.total}")
+                Log.d(TAG, "    Repartidor: ${pedido.nomRepartidor}")
+            }
+
             if (pedidos.isNullOrEmpty()) {
                 mostrarEstadoVacio(true)
             } else {
@@ -73,7 +94,8 @@ class InicioFragment : Fragment() {
     }
 
     private fun configurarAdapter(pedidos: List<PedidoClienteDTO>) {
-        adapter = PedidoInicioAdapter(
+        Log.d(TAG, "Creando adapter con ${pedidos.size} items")
+        adapter = ClientePedidoAdapter(
             pedidos = pedidos,
             onRastrearClick = { pedido -> abrirRastreo(pedido) },
             onDetalleClick = { pedido -> abrirDetalle(pedido) }
@@ -87,19 +109,21 @@ class InicioFragment : Fragment() {
     }
 
     private fun abrirRastreo(pedido: PedidoClienteDTO) {
+        Log.d(TAG, "Abriendo rastreo para pedido #${pedido.numPedido}")
         val intent = Intent(requireContext(), RastreoActivity::class.java).apply {
-            putExtra("PEDIDO_ID", pedido.nroPedido)
-            putExtra("ESTADO", pedido.estadoDelivery)
-            putExtra("REPARTIDOR", pedido.nombreRepartidor)
+            putExtra("PEDIDO_ID", pedido.numPedido)
+            putExtra("ESTADO", pedido.estado)
+            putExtra("REPARTIDOR", pedido.nomRepartidor)
             putExtra("TIEMPO_ENTREGA", pedido.tiempoEntregaMinutos)
         }
         startActivity(intent)
     }
 
     private fun abrirDetalle(pedido: PedidoClienteDTO) {
+        Log.d(TAG, "Abriendo detalle para pedido #${pedido.numPedido}")
         val detalleFragment = DetallePedidoFragment.newInstance(
-            nroPedido = pedido.nroPedido,
-            qrCode = pedido.qrVerificationCode
+            nroPedido = pedido.numPedido,
+            qrCode = pedido.qrVerificationCode!!
         )
         detalleFragment.show(childFragmentManager, "DetallePedidoFragment")
     }
