@@ -25,14 +25,18 @@ class ClienteMainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityClienteMainBinding
     private var apartadoActual: ApartadoType = ApartadoType.INICIO
 
+    lateinit var pedidoRepository: PedidoClienteRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClienteMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Inicializar repository directamente
-        inicializarRepositorio()
+        android.util.Log.d("ClienteMainActivity", "═══════════════════════════════")
+        android.util.Log.d("ClienteMainActivity", "🚀 Iniciando ClienteMainActivity")
+        android.util.Log.d("ClienteMainActivity", "═══════════════════════════════")
 
+        inicializarRepositorio()
         configurarSaludo()
         configurarApartados()
 
@@ -42,10 +46,18 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun inicializarRepositorio() {
-        val userPreferences = UserPreferences(applicationContext)
-        val retrofit = RetrofitInstance.create(userPreferences)
-        val pedidosApi = retrofit.create(PedidosCliente::class.java)
-        PedidoClienteRepository.init(pedidosApi)
+        try {
+            android.util.Log.i("ClienteMainActivity", "🔧 Inicializando Repository...")
+            val userPreferences = UserPreferences(applicationContext)
+            val retrofit = RetrofitInstance.create(userPreferences)
+            val pedidosApi = retrofit.create(PedidosCliente::class.java)
+
+            pedidoRepository = PedidoClienteRepository(applicationContext)
+
+            android.util.Log.i("ClienteMainActivity", "✅ Repository inicializado correctamente")
+        } catch (e: Exception) {
+            android.util.Log.e("ClienteMainActivity", "❌ Error al inicializar Repository", e)
+        }
     }
 
     private fun configurarSaludo() {

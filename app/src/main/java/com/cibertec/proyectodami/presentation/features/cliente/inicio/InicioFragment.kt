@@ -47,7 +47,6 @@ class InicioFragment : Fragment() {
 
     private fun cargarDatosUsuario() {
         viewLifecycleOwner.lifecycleScope.launch {
-            // Obtener el ID del usuario desde DataStore
             val idCliente = userPreferences.idUsuario.first()
 
             if (idCliente != -1) {
