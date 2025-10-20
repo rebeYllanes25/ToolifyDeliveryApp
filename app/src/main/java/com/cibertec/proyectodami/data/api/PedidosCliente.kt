@@ -12,23 +12,23 @@ import retrofit2.http.Query
 
 interface PedidosCliente {
 
-    @GET("{idCliente}/pedidos")
+    @GET("pedido/{idCliente}/pedidos")
     suspend fun obtenerPedidosEC(
         @Path("idCliente") idCliente: Int,
         @Query("estado") estado: String
     ): List<PedidoClienteDTO>
 
-    @GET("historial/{idCliente}")
+    @GET("pedido/historial/{idCliente}")
     suspend fun obtenerPedidosHistorial(
         @Path("idCliente") idCliente: Int
     ): List<PedidoClienteDTO>
 
-    @GET("{idPedido}")
+    @GET("pedido/{idPedido}")
     suspend fun obtenerPedidoPorId(
         @Path("idPedido") idPedido: Int
     ): PedidoClienteDTO
 
-    @POST("{idPedido}/calificar")
+    @POST("pedido/{idPedido}/calificar")
     suspend fun registrarCalificacion(
         @Path("idPedido") idPedido: Int,
         @Body request: CalificarRequest?

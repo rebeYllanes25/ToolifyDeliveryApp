@@ -18,7 +18,6 @@ class PedidoClienteRepository(context: Context) {
         private const val TAG = "PedidoClienteRepo"
     }
 
-    // DataStore del usuario
     private val userPreferences = UserPreferences(context)
 
     // Retrofit con interceptor (token incluido)
@@ -27,7 +26,6 @@ class PedidoClienteRepository(context: Context) {
         retrofit.create(PedidosCliente::class.java)
     }
 
-    // LiveData observables
     private val _pedidoSeguimiento = MutableLiveData<PedidoClienteDTO?>(null)
     val pedidoSeguimiento: LiveData<PedidoClienteDTO?> = _pedidoSeguimiento
 
@@ -40,8 +38,6 @@ class PedidoClienteRepository(context: Context) {
     private val _pedidosHistorial = MutableLiveData<List<PedidoClienteDTO>>(emptyList())
     val pedidosHistorial: LiveData<List<PedidoClienteDTO>> = _pedidosHistorial
 
-
-    // -------------------- PETICIONES --------------------
 
     suspend fun obtenerPedidosEnCamino(idCliente: Int) {
         Log.d(TAG, "═══════════════════════════════")
@@ -65,10 +61,8 @@ class PedidoClienteRepository(context: Context) {
         Log.d(TAG, "📡 obtenerPedidosHistorial - ID Cliente: $idCliente")
         try {
             val pedidos = pedidoApi.obtenerPedidosHistorial(idCliente)
-            Log.i(TAG, "✅ Historial obtenido: ${pedidos.size} pedidos")
             _pedidosHistorial.postValue(pedidos)
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error al obtener historial", e)
             _pedidosHistorial.postValue(emptyList())
         }
     }
@@ -77,10 +71,8 @@ class PedidoClienteRepository(context: Context) {
         Log.d(TAG, "📡 obtenerPedidoPorId - ID Pedido: $idPedido")
         try {
             val pedido = pedidoApi.obtenerPedidoPorId(idPedido)
-            Log.i(TAG, "✅ Pedido obtenido: ${pedido.nroPedido}")
             _pedidoSeguimiento.postValue(pedido)
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error al obtener pedido", e)
             _pedidoSeguimiento.postValue(null)
         }
     }
@@ -90,14 +82,11 @@ class PedidoClienteRepository(context: Context) {
         try {
             val response = pedidoApi.registrarCalificacion(idPedido, calificacion)
             if (response.isSuccessful) {
-                Log.i(TAG, "✅ Calificación registrada correctamente")
                 _pedidoCalificado.postValue(response.body())
             } else {
-                Log.e(TAG, "❌ Error ${response.code()} al registrar calificación")
                 throw Exception("Error HTTP ${response.code()}")
             }
         } catch (e: Exception) {
-            Log.e(TAG, "❌ Error al calificar pedido", e)
             throw e
         }
     }
