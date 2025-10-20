@@ -1,3 +1,5 @@
+package com.cibertec.proyectodami.presentation.features.cliente.historial
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -7,30 +9,30 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
+import java.text.SimpleDateFormat
+import java.util.*
 
-class ClientePedidoAdapter(
+class HistorialPedidoAdapter(
     private val pedidos: List<PedidoClienteDTO>,
-    private val onRastrearClick: (PedidoClienteDTO) -> Unit,
     private val onDetalleClick: (PedidoClienteDTO) -> Unit
-) : RecyclerView.Adapter<ClientePedidoAdapter.PedidoViewHolder>() {
+) : RecyclerView.Adapter<HistorialPedidoAdapter.HistorialViewHolder>() {
 
-    inner class PedidoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class HistorialViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val tvPedidoId: TextView = itemView.findViewById(R.id.tvPedidoId)
         val tvFecha: TextView = itemView.findViewById(R.id.tvFecha)
         val tvStatus: TextView = itemView.findViewById(R.id.tvStatus)
         val statusChip: CardView = itemView.findViewById(R.id.statusChip)
         val tvTotal: TextView = itemView.findViewById(R.id.tvTotal)
-        val btnRastrear: CardView = itemView.findViewById(R.id.btnRastrear)
         val btnDetalle: CardView = itemView.findViewById(R.id.btnDetalle)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PedidoViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistorialViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_pedido_inicio, parent, false)
-        return PedidoViewHolder(view)
+            .inflate(R.layout.item_pedido_historial, parent, false)
+        return HistorialViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: PedidoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: HistorialViewHolder, position: Int) {
         val pedido = pedidos[position]
         val context = holder.itemView.context
 
@@ -41,11 +43,9 @@ class ClientePedidoAdapter(
 
         holder.tvFecha.text = pedido.fecha?.let { fechaStr ->
             try {
-                val inputFormat = java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", java.util.Locale.getDefault())
-
+                val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS", Locale.getDefault())
                 val date = inputFormat.parse(fechaStr)
-
-                val outputFormat = java.text.SimpleDateFormat("dd/MM/yyyy HH:mm", java.util.Locale.getDefault())
+                val outputFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
                 outputFormat.format(date!!)
             } catch (e: Exception) {
                 "Fecha inválida"
@@ -57,18 +57,12 @@ class ClientePedidoAdapter(
             pedido.total
         )
 
-        // Configurar estado con colores
         val estadoInfo = obtenerEstadoInfo(pedido.estado)
         holder.tvStatus.text = estadoInfo.texto
         holder.tvStatus.setTextColor(ContextCompat.getColor(context, estadoInfo.colorTexto))
         holder.statusChip.setCardBackgroundColor(
             ContextCompat.getColor(context, estadoInfo.colorFondo)
         )
-
-        // Click listeners
-        holder.btnRastrear.setOnClickListener {
-            onRastrearClick(pedido)
-        }
 
         holder.btnDetalle.setOnClickListener {
             onDetalleClick(pedido)
@@ -77,9 +71,6 @@ class ClientePedidoAdapter(
 
     override fun getItemCount() = pedidos.size
 
-    /**
-     * Obtiene información de color y texto según el estado del pedido
-     */
     private fun obtenerEstadoInfo(estado: String?): EstadoInfo {
         return when (estado) {
             "PE" -> EstadoInfo(

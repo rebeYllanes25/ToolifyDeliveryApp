@@ -1,6 +1,6 @@
 package com.cibertec.proyectodami.presentation.features.cliente.inicio
 
-import ClientePedidoAdapter
+import InicioPedidoAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -28,7 +28,7 @@ class InicioFragment : Fragment() {
     private var _binding: FragmentInicioBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: ClientePedidoAdapter
+    private lateinit var adapter: InicioPedidoAdapter
     private val viewModel: InicioViewModel by viewModels()
     private lateinit var userPreferences: UserPreferences
 
@@ -95,7 +95,7 @@ class InicioFragment : Fragment() {
 
     private fun configurarAdapter(pedidos: List<PedidoClienteDTO>) {
         Log.d(TAG, "Creando adapter con ${pedidos.size} items")
-        adapter = ClientePedidoAdapter(
+        adapter = InicioPedidoAdapter(
             pedidos = pedidos,
             onRastrearClick = { pedido -> abrirRastreo(pedido) },
             onDetalleClick = { pedido -> abrirDetalle(pedido) }
