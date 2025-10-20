@@ -7,11 +7,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.databinding.FragmentInicioBinding
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
+import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.detallepedido.DetallePedidoFragment
 import com.cibertec.proyectodami.presentation.features.cliente.rastreo.RastreoActivity
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 
 class InicioFragment : Fragment() {
 
@@ -19,6 +24,8 @@ class InicioFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var adapter: PedidoInicioAdapter
+    private val viewModel: InicioViewModel by viewModels()
+    private lateinit var userPreferences: UserPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +33,7 @@ class InicioFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentInicioBinding.inflate(inflater, container, false)
+        userPreferences = UserPreferences(requireContext())
         return binding.root
     }
 
@@ -33,38 +41,44 @@ class InicioFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupRecyclerView()
-        cargarPedidos()
+        observarPedidos()
+        cargarDatosUsuario()
+    }
+
+    private fun cargarDatosUsuario() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Obtener el ID del usuario desde DataStore
+            val idCliente = userPreferences.idUsuario.first()
+
+            if (idCliente != -1) {
+                viewModel.cargarPedidos(idCliente)
+            } else {
+                mostrarEstadoVacio(true)
+            }
+        }
     }
 
     private fun setupRecyclerView() {
         binding.recyclerViewPedidosInicio.layoutManager = LinearLayoutManager(requireContext())
     }
 
-    private fun cargarPedidos() {
-        // TODO: Reemplazar con llamada real a tu API/ViewModel
-        val pedidos = obtenerPedidosEjemplo()
-
-        if (pedidos.isEmpty()) {
-            mostrarEstadoVacio(true)
-        } else {
-            mostrarEstadoVacio(false)
-            configurarAdapter(pedidos)
+    private fun observarPedidos() {
+        viewModel.pedidosEnCamino.observe(viewLifecycleOwner) { pedidos ->
+            if (pedidos.isNullOrEmpty()) {
+                mostrarEstadoVacio(true)
+            } else {
+                mostrarEstadoVacio(false)
+                configurarAdapter(pedidos)
+            }
         }
     }
 
     private fun configurarAdapter(pedidos: List<PedidoClienteDTO>) {
         adapter = PedidoInicioAdapter(
             pedidos = pedidos,
-            onRastrearClick = { pedido ->
-                // Navegar a Activity de rastreo
-                abrirRastreo(pedido)
-            },
-            onDetalleClick = { pedido ->
-                // Abrir fragment de detalle
-                abrirDetalle(pedido)
-            }
+            onRastrearClick = { pedido -> abrirRastreo(pedido) },
+            onDetalleClick = { pedido -> abrirDetalle(pedido) }
         )
-
         binding.recyclerViewPedidosInicio.adapter = adapter
     }
 
@@ -84,47 +98,11 @@ class InicioFragment : Fragment() {
     }
 
     private fun abrirDetalle(pedido: PedidoClienteDTO) {
-        // Abrir BottomSheet o Fragment con detalles del pedido
         val detalleFragment = DetallePedidoFragment.newInstance(
             nroPedido = pedido.nroPedido,
             qrCode = pedido.qrVerificationCode
         )
-
         detalleFragment.show(childFragmentManager, "DetallePedidoFragment")
-    }
-
-    /**
-     * DATOS DE EJEMPLO - Reemplazar con datos reales de tu API
-     */
-    private fun obtenerPedidosEjemplo(): List<PedidoClienteDTO> {
-        return listOf(
-            PedidoClienteDTO(
-                nroPedido = "DEL2024001",
-                fechaPedido = null,
-                estadoDelivery = "EC",
-                tiempoEntregaMinutos = 15,
-                nombreRepartidor = "Juan Pérez",
-                movilidad = "Moto",
-                qrVerificationCode = "QR123ABC",
-                productos = emptyList(),
-                subtotalProductos = 20.50,
-                costoEnvio = 4.00,
-                totalPagar = 24.50
-            ),
-            PedidoClienteDTO(
-                nroPedido = "DEL2024002",
-                fechaPedido = null,
-                estadoDelivery = "AS",
-                tiempoEntregaMinutos = 30,
-                nombreRepartidor = "María García",
-                movilidad = "Bicicleta",
-                qrVerificationCode = "QR456DEF",
-                productos = emptyList(),
-                subtotalProductos = 15.75,
-                costoEnvio = 3.00,
-                totalPagar = 18.75
-            )
-        )
     }
 
     override fun onDestroyView() {

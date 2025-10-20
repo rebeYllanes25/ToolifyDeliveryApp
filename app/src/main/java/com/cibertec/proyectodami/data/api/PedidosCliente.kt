@@ -13,9 +13,14 @@ import retrofit2.http.Query
 interface PedidosCliente {
 
     @GET("{idCliente}/pedidos")
-    suspend fun obtenerPedidos(
+    suspend fun obtenerPedidosEC(
         @Path("idCliente") idCliente: Int,
         @Query("estado") estado: String
+    ): List<PedidoClienteDTO>
+
+    @GET("historial/{idCliente}")
+    suspend fun obtenerPedidosHistorial(
+        @Path("idCliente") idCliente: Int
     ): List<PedidoClienteDTO>
 
     @GET("{idPedido}")
