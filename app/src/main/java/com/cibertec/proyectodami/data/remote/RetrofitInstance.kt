@@ -1,6 +1,7 @@
 package com.cibertec.proyectodami.data.remote
 
 import android.os.Build
+import com.cibertec.proyectodami.BuildConfig
 import com.cibertec.proyectodami.data.dataStore.AuthInterceptor
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import okhttp3.OkHttpClient
@@ -10,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
-    /* Cambiar el local IP de tu red de wifi*/
+    /* Cambiar el local IP de tu red de wifi cuando uses dispositivo físico */
     private const val LOCAL_IP = "192.168.1.17"
     private const val PORT = "8080"
 
@@ -25,10 +26,15 @@ object RetrofitInstance {
             .writeTimeout(30, TimeUnit.SECONDS)
             .build()
 
-        val baseUrl = if (isRunningOnEmulator()) {
-            "http://10.0.2.2:$PORT/"
-        } else {
-            "http://$LOCAL_IP:$PORT/"
+        val baseUrl = when {
+            // Emulador: usar DEV_BASE_URL (10.0.2.2)
+            isRunningOnEmulator() -> BuildConfig.DEV_BASE_URL
+
+            // Dispositivo físico en red local: usar IP local
+            BuildConfig.DEBUG -> "http://$LOCAL_IP:$PORT/"
+
+            // Producción: usar PROD_BASE_URL
+            else -> BuildConfig.PROD_BASE_URL
         }
 
         return Retrofit.Builder()

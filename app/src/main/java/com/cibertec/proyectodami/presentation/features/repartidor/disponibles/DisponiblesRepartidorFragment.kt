@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.data.api.PedidosRepartidor
@@ -19,7 +18,7 @@ import com.cibertec.proyectodami.databinding.FragmentDisponiblesRepartidorBindin
 import com.cibertec.proyectodami.listener.OptionsMenuListener
 import com.cibertec.proyectodami.presentation.common.adapters.DisponiblesPedidoAdapter
 import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
-import com.cibertec.proyectodami.domain.repository.PedidoRepository
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 
@@ -35,7 +34,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
         val context = requireContext().applicationContext
         userPreferences = UserPreferences(context)
         val pedidoApi = RetrofitInstance.create(userPreferences).create(PedidosRepartidor::class.java)
-        PedidoRepository.init(pedidoApi)
+        PedidoRepartidorRepository.init(pedidoApi)
     }
 
     override fun onCreateView(
@@ -63,7 +62,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
 
     private fun setupRecyclerView() {
         adapter = DisponiblesPedidoAdapter(mutableListOf()) { pedido ->
-            if (PedidoRepository.tienePedidoActivo()) {
+            if (PedidoRepartidorRepository.tienePedidoActivo()) {
                 Toast.makeText(
                     context,
                     "Ya tienes un pedido activo. Complétalo primero.",
@@ -110,7 +109,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
                 if (pedidos.isEmpty()) View.VISIBLE else View.GONE
 
             // NUEVO: Verificar bloqueo después de cargar datos
-            if (PedidoRepository.tienePedidoActivo()) {
+            if (PedidoRepartidorRepository.tienePedidoActivo()) {
                 adapter.bloquearPedidos()
                 binding.recyclerViewPedidos.alpha = 0.5f
             }
@@ -135,7 +134,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
             }
         }
 
-        PedidoRepository.pedidoActivo.observe(viewLifecycleOwner) { pedidoActivo ->
+        PedidoRepartidorRepository.pedidoActivo.observe(viewLifecycleOwner) { pedidoActivo ->
             if (pedidoActivo != null) {
                 adapter.bloquearPedidos()
                 binding.recyclerViewPedidos.alpha = 0.5f
@@ -185,7 +184,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
 
     // NUEVO: Verificar si hay pedido activo y aplicar bloqueo
     private fun verificarPedidoActivo() {
-        if (PedidoRepository.tienePedidoActivo()) {
+        if (PedidoRepartidorRepository.tienePedidoActivo()) {
             adapter.bloquearPedidos()
             binding.recyclerViewPedidos.alpha = 0.5f
             Log.d("DisponiblesFragment", "Pedido activo detectado - bloqueando UI")

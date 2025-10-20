@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.cibertec.proyectodami.data.api.PedidosRepartidor
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
 
-object PedidoRepository {
+object PedidoRepartidorRepository {
 
     private val _pedidoActivo = MutableLiveData<PedidoRepartidorDTO?>(null)
     val pedidoActivo: LiveData<PedidoRepartidorDTO?> = _pedidoActivo
