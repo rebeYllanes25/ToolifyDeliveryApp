@@ -75,7 +75,7 @@ class HistorialPedidoAdapter(
         return when (estado) {
             "PE" -> EstadoInfo(
                 texto = "Pendiente",
-                colorTexto = R.color.orange,
+                colorTexto = R.color.color_status_texto,
                 colorFondo = R.color.orange_light
             )
             "AS" -> EstadoInfo(
@@ -85,18 +85,18 @@ class HistorialPedidoAdapter(
             )
             "EC" -> EstadoInfo(
                 texto = "En camino",
-                colorTexto = R.color.orange,
-                colorFondo = R.color.orange_light
+                colorTexto = R.color.color_amarillo,
+                colorFondo = R.color.amarillo_light
             )
             "EN" -> EstadoInfo(
                 texto = "Entregado",
-                colorTexto = R.color.green,
+                colorTexto = R.color.verde,
                 colorFondo = R.color.green_light
             )
             "FA" -> EstadoInfo(
                 texto = "Fallido",
-                colorTexto = R.color.orange_strong,
-                colorFondo = R.color.orange_light_alt
+                colorTexto = R.color.color_badge_rojo,
+                colorFondo = R.color.rojo_light
             )
             else -> EstadoInfo(
                 texto = "Desconocido",

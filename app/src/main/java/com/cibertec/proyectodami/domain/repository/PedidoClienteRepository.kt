@@ -45,20 +45,11 @@ class PedidoClienteRepository(context: Context) {
 
         try {
             val pedidos = pedidoApi.obtenerPedidosEC(idCliente, "EC")
-
-            Log.i(TAG, "✅ Respuesta recibida: ${pedidos.size} pedidos")
-            pedidos.forEach {
-                Log.d(TAG, "Pedido: ${it.numPedido}, Estado: ${it.estado}")
-            }
-
             _pedidosEnCamino.postValue(pedidos)
-            Log.d(TAG, "✅ LiveData actualizado")
 
         } catch (e: HttpException) {
-            Log.e(TAG, "❌ HTTP ${e.code()}: ${e.response()?.errorBody()?.string()}")
             _pedidosEnCamino.postValue(emptyList())
         } catch (e: Exception) {
-            Log.e(TAG, "❌ ERROR: ${e.message}", e)
             _pedidosEnCamino.postValue(emptyList())
         }
 
@@ -66,13 +57,23 @@ class PedidoClienteRepository(context: Context) {
     }
 
     suspend fun obtenerPedidosHistorial(idCliente: Int) {
+        Log.d(TAG, "═══════════════════════════════")
         Log.d(TAG, "📡 obtenerPedidosHistorial - ID Cliente: $idCliente")
+
         try {
             val pedidos = pedidoApi.obtenerPedidosHistorial(idCliente)
             _pedidosHistorial.postValue(pedidos)
+
+        } catch (e: HttpException) {
+            Log.e(TAG, "Error Body: ${e.response()?.errorBody()?.string()}")
+            _pedidosHistorial.postValue(emptyList())
         } catch (e: Exception) {
+            Log.e(TAG, "ERROR: ${e.message}", e)
+            e.printStackTrace()
             _pedidosHistorial.postValue(emptyList())
         }
+
+        Log.d(TAG, "═══════════════════════════════")
     }
 
     suspend fun obtenerPedidoPorId(idPedido: Int) {

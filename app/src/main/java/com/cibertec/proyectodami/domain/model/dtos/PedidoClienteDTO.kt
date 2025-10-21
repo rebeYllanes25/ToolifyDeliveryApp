@@ -7,23 +7,22 @@ data class PedidoClienteDTO(
     val idPedido: Int,
     val numPedido: String,
     val idCliente: Int,
-    val nombreCliente: String,
+    val nomCliente: String,
     val fecha: String?,
     val total: Double,
     val direccionEntrega: String,
     val latitud: Double,
     val longitud: Double,
     val movilidad: String,
+    val qrVerificationCode: String,
 
     @SerializedName("detalles")
     val productos: List<ProductoPedidoDTO>,
 
-    val nomRepartidor: String,
+    val nomRepartidor: String?,
     val especificaciones: String?,
     val estado: String, // PE, AS, EC, EN, FA
 
 
-    val tiempoEntregaMinutos: Int?,
-    val qrVerificationCode: String?,
-
+    val tiempoEntregaMinutos: Int?
     )

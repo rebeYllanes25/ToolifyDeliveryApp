@@ -123,7 +123,7 @@ class InicioFragment : Fragment() {
         Log.d(TAG, "Abriendo detalle para pedido #${pedido.numPedido}")
         val detalleFragment = DetallePedidoFragment.newInstance(
             nroPedido = pedido.numPedido,
-            qrCode = pedido.qrVerificationCode!!
+            qrCode = pedido.qrVerificationCode
         )
         detalleFragment.show(childFragmentManager, "DetallePedidoFragment")
     }

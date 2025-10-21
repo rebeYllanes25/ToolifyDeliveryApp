@@ -24,12 +24,14 @@
     <color name="color_fondo">#F5F5F5</color>
     <color name="color_texto_normal">#1A1A1A</color>
     <color name="color_badge_rojo">#F44336</color>
+    <color name="rojo_light">#F44336</color>
     <color name="color_iconos_vacios">#BDBDBD</color>
     <color name="color_status_fondo">#FFEDE0</color>
     <color name="color_status_texto">#FF9800</color>
     <color name="color_divisor">#E0E0E0</color> ```
     <color name="fondo_celeste_claro">#def7ff</color>
-    <color name="color_amarillo">#FFEB3B</color>
+    <color name="color_amarillo">#C8B623</color>
+    <color name="amarillo_light">#F8F6D2</color>
     <color name="verde">#4CAF50</color>
     <color name="gris_claro">#9C9C9C</color>
 

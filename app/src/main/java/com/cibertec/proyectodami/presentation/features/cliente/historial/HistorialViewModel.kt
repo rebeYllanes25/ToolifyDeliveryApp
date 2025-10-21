@@ -16,8 +16,8 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val repository = PedidoClienteRepository(application)
 
-    private val _historialDePedidos = MutableLiveData<List<PedidoClienteDTO>>(emptyList())
-    val historialDePedidos: LiveData<List<PedidoClienteDTO>> = _historialDePedidos
+    // ✅ USA DIRECTAMENTE EL LIVEDATA DEL REPOSITORY:
+    val historialDePedidos: LiveData<List<PedidoClienteDTO>> = repository.pedidosHistorial
 
     private val _historialFiltrado = MutableLiveData<List<PedidoClienteDTO>>(emptyList())
     val historialFiltrado: LiveData<List<PedidoClienteDTO>> = _historialFiltrado
@@ -28,12 +28,17 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
     private val _filtrosActivos = MutableLiveData<FiltrosData?>(null)
     val filtrosActivos: LiveData<FiltrosData?> = _filtrosActivos
 
+    init {
+        historialDePedidos.observeForever { pedidos ->
+            if (_hayFiltrosAplicados.value == false) {
+                _historialFiltrado.value = pedidos
+            }
+        }
+    }
+
     fun cargarPedidos(idCliente: Int) {
         viewModelScope.launch {
             repository.obtenerPedidosHistorial(idCliente)
-            val pedidos = repository.pedidosHistorial.value ?: emptyList()
-            _historialDePedidos.value = pedidos
-            _historialFiltrado.value = pedidos
         }
     }
 
@@ -41,7 +46,7 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
         _filtrosActivos.value = filtros
         _hayFiltrosAplicados.value = true
 
-        val listaOriginal = _historialDePedidos.value ?: emptyList()
+        val listaOriginal = historialDePedidos.value ?: emptyList()  // ✅ Ahora sí tiene datos
 
         val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
         val fechaInicio = filtros.fechaInicio.takeIf { it.isNotBlank() }?.let { dateFormat.parse(it) }
@@ -72,6 +77,11 @@ class HistorialViewModel(application: Application) : AndroidViewModel(applicatio
     fun limpiarFiltros() {
         _hayFiltrosAplicados.value = false
         _filtrosActivos.value = null
-        _historialFiltrado.value = _historialDePedidos.value
+        _historialFiltrado.value = historialDePedidos.value
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        historialDePedidos.removeObserver { }
     }
 }

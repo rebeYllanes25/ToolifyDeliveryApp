@@ -65,26 +65,17 @@ class HistorialFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-
-
         viewModel.historialDePedidos.observe(viewLifecycleOwner) { pedidos ->
+            Log.d("HistorialFragment", "Observer activado: ${pedidos?.size} pedidos")
 
             if (pedidos.isNullOrEmpty()) {
+                Log.w("HistorialFragment", "Lista vacía o null")
                 mostrarEstadoVacio(true)
             } else {
+                Log.i("HistorialFragment", "Mostrando ${pedidos.size} pedidos")
                 mostrarEstadoVacio(false)
                 actualizarLista(pedidos)
             }
-        }
-
-
-
-        viewModel.hayFiltrosAplicados.observe(viewLifecycleOwner) { hayFiltros ->
-            binding.indicadorFiltros.visibility = if (hayFiltros) View.VISIBLE else View.GONE
-        }
-
-        viewModel.historialFiltrado.observe(viewLifecycleOwner) { lista ->
-            actualizarLista(lista)
         }
     }
 
