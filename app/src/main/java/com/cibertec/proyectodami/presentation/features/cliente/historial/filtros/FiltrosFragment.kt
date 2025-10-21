@@ -1,18 +1,15 @@
 package com.cibertec.proyectodami.presentation.features.cliente.historial.filtros
 
-import androidx.fragment.app.viewModels
+import android.app.DatePickerDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cibertec.proyectodami.R
-
-import androidx.fragment.app.activityViewModels
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.cibertec.proyectodami.databinding.FragmentFiltrosBinding
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialViewModel
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.slider.RangeSlider
+import androidx.fragment.app.activityViewModels
+import com.cibertec.proyectodami.domain.model.dtos.FiltrosData
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -36,13 +33,13 @@ class FiltrosFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupDatePickers()
         setupPriceSlider()
         setupButtons()
         observeViewModel()
     }
 
+    // ---------------- FECHAS ---------------- //
     private fun setupDatePickers() {
         binding.etFechaInicio.setOnClickListener {
             showDatePicker { date ->
@@ -57,6 +54,22 @@ class FiltrosFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun showDatePicker(onDateSelected: (Date) -> Unit) {
+        val calendar = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                calendar.set(year, month, dayOfMonth)
+                onDateSelected(calendar.time)
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
+    }
+
+    // ---------------- SLIDER PRECIO ---------------- //
     private fun setupPriceSlider() {
         binding.rangeSliderPrecio.apply {
             valueFrom = 0f
@@ -71,16 +84,13 @@ class FiltrosFragment : BottomSheetDialogFragment() {
         }
     }
 
+    // ---------------- BOTONES ---------------- //
     private fun setupButtons() {
-        binding.btnAplicarFiltros.setOnClickListener {
-            aplicarFiltros()
-        }
-
-        binding.btnLimpiar.setOnClickListener {
-            limpiarFiltros()
-        }
+        binding.btnAplicarFiltros.setOnClickListener { aplicarFiltros() }
+        binding.btnLimpiar.setOnClickListener { limpiarFiltros() }
     }
 
+    // ---------------- OBSERVADORES ---------------- //
     private fun observeViewModel() {
         viewModel.filtrosActivos.observe(viewLifecycleOwner) { filtros ->
             filtros?.let {
@@ -90,41 +100,39 @@ class FiltrosFragment : BottomSheetDialogFragment() {
                     it.precioMin.toFloat(),
                     it.precioMax.toFloat()
                 )
+                binding.tvPrecioMin.text = "S/ ${it.precioMin}"
+                binding.tvPrecioMax.text = "S/ ${it.precioMax}"
             }
         }
     }
 
+    // ---------------- LÓGICA ---------------- //
     private fun aplicarFiltros() {
         val fechaInicio = binding.etFechaInicio.text.toString()
         val fechaFin = binding.etFechaFin.text.toString()
         val precioMin = binding.rangeSliderPrecio.values[0].toInt()
         val precioMax = binding.rangeSliderPrecio.values[1].toInt()
 
-        viewModel.aplicarFiltros(fechaInicio, fechaFin, precioMin, precioMax)
+        // Llamada correcta al ViewModel
+        val filtros = FiltrosData(
+            fechaInicio = fechaInicio,
+            fechaFin = fechaFin,
+            precioMin = precioMin,
+            precioMax = precioMax
+        )
+
+        viewModel.aplicarFiltros(filtros)
         dismiss()
     }
 
     private fun limpiarFiltros() {
         binding.etFechaInicio.text?.clear()
         binding.etFechaFin.text?.clear()
-        binding.rangeSliderPrecio.setValues(0f, 100f)
+        binding.rangeSliderPrecio.setValues(0f, 1000f)
+        binding.tvPrecioMin.text = "S/ 0"
+        binding.tvPrecioMax.text = "S/ 1000"
         viewModel.limpiarFiltros()
         dismiss()
-    }
-
-    private fun showDatePicker(onDateSelected: (Date) -> Unit) {
-        val calendar = Calendar.getInstance()
-        val datePickerDialog = android.app.DatePickerDialog(
-            requireContext(),
-            { _, year, month, dayOfMonth ->
-                calendar.set(year, month, dayOfMonth)
-                onDateSelected(calendar.time)
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
     }
 
     override fun onDestroyView() {
@@ -134,7 +142,6 @@ class FiltrosFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "FiltrosFragment"
-
         fun newInstance() = FiltrosFragment()
     }
 }
