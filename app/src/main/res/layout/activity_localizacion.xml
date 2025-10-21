@@ -5,12 +5,11 @@
     android:layout_height="match_parent">
 
     <!-- Mapa (placeholder - aquí irá Google Maps) -->
-
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/mapView"
+    <FrameLayout
+        android:id="@+id/mapContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="#E8F5E9">
 
         <!-- Header con nombre del navegante -->
         <LinearLayout
@@ -34,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="Cliente"
+                android:text="María González"
                 android:textColor="#2C3E50"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -82,7 +81,7 @@
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             app:cornerRadius="24dp" />
-
+    </FrameLayout>
 
     <!-- Bottom Sheet -->
     <androidx.core.widget.NestedScrollView
@@ -257,12 +256,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="Dirección"
+                        android:text="Calle Grau Via 28, 28013 Madrid, España"
                         android:textColor="#2C3E50"
                         android:textSize="14sp" />
                 </LinearLayout>
 
+                <!-- Teléfono -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_telefono"
+                        app:tint="#95A5A6" />
+
+                    <TextView
+                        android:id="@+id/tvClienteTelefono"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="+34 612 345 678"
+                        android:textColor="#2C3E50"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
                 <!-- Precio -->
                 <LinearLayout
@@ -283,7 +304,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="12dp"
-                        android:text="00.00"
+                        android:text="45,50"
                         android:textColor="#4CAF50"
                         android:textSize="16sp"
                         android:textStyle="bold" />
