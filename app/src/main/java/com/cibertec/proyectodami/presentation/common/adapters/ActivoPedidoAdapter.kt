@@ -10,6 +10,7 @@ import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ItemPedidoActivoBinding
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
 import com.cibertec.proyectodami.presentation.features.repartidor.activo.PedidoDetailBottom
+import com.cibertec.proyectodami.presentation.features.repartidor.localizacion.LocalizacionActivity
 
 class ActivoPedidoAdapter(
     private val activity: FragmentActivity,
@@ -63,6 +64,20 @@ class ActivoPedidoAdapter(
         b.buttonDetail.setOnClickListener {
             val bottomSheet = PedidoDetailBottom(pedido)
             bottomSheet.show(activity.supportFragmentManager, "PedidoDetailBottom")
+        }
+
+        b.buttonNavigate.setOnClickListener {
+            val intent = Intent(ctx, LocalizacionActivity::class.java)
+            // Opcional: pasar datos del pedido
+
+            intent.putExtra("PEDIDO_ID", pedido.idPedido)
+            intent.putExtra("DIRECCION", pedido.direccionEntrega)
+            intent.putExtra("NOMBRE", pedido.nomCliente)
+            intent.putExtra("TOTAL", pedido.total)
+            intent.putExtra("LATITUD", pedido.latitud)
+            intent.putExtra("LONGITUD", pedido.longitud)
+
+            ctx.startActivity(intent)
         }
     }
 
