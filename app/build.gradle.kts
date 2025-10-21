@@ -24,9 +24,11 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        // Valores desde secrets.properties
-        buildConfigField("String", "BASE_URL", "\"${secrets.getProperty("TOOLIFY_PROD_BASE_URL")}\"")
-        resValue("string", "google_maps_key", "\"${secrets.getProperty("GOOGLE_MAPS_API_KEY")}\"")
+        buildConfigField("String", "DEV_BASE_URL", "\"${secrets.getProperty("TOOLIFY_DEV_BASE_URL", "http://10.0.2.2:8080/")}\"")
+        buildConfigField("String", "PROD_BASE_URL", "\"${secrets.getProperty("TOOLIFY_PROD_BASE_URL", "https://api.toolify.com/")}\"")
+        buildConfigField("String", "WEBSOCKET_URL", "\"${secrets.getProperty("TOOLIFY_WEBSOCKET_URL", "ws://api.toolify.com/ws/")}\"")
+
+        resValue("string", "google_maps_key", secrets.getProperty("GOOGLE_MAPS_API_KEY", "YOUR_KEY_HERE"))
     }
 
     buildTypes {
@@ -38,7 +40,7 @@ android {
             )
         }
         debug {
-            buildConfigField("String", "BASE_URL", "\"${secrets.getProperty("TOOLIFY_DEV_BASE_URL")}\"")
+
         }
     }
 

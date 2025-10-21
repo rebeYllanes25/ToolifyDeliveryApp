@@ -5,13 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
-import com.cibertec.proyectodami.domain.repository.PedidoRepository
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
 import kotlinx.coroutines.launch
 
 class DisponiblesViewModel : ViewModel() {
 
     val pedidosDisponibles: LiveData<List<PedidoRepartidorDTO>> =
-        PedidoRepository.pedidosDisponibles
+        PedidoRepartidorRepository.pedidosDisponibles
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -30,7 +30,7 @@ class DisponiblesViewModel : ViewModel() {
         viewModelScope.launch {
             _loading.value = true
             try {
-                PedidoRepository.cargarPedidosDisponibles()
+                PedidoRepartidorRepository.cargarPedidosDisponibles()
             } catch (e: Exception) {
                 e.printStackTrace()
                 // Aquí podrías mostrar un mensaje de error si deseas
@@ -42,12 +42,12 @@ class DisponiblesViewModel : ViewModel() {
 
     fun ordenarPorDistancia() {
         val pedidos = pedidosDisponibles.value ?: return
-        PedidoRepository.setPedidosDisponibles(pedidos.sortedBy { it.distanciaKM })
+        PedidoRepartidorRepository.setPedidosDisponibles(pedidos.sortedBy { it.distanciaKM })
     }
 
     fun ordenarPorValor() {
         val pedidos = pedidosDisponibles.value ?: return
-        PedidoRepository.setPedidosDisponibles(pedidos.sortedByDescending { it.total })
+        PedidoRepartidorRepository.setPedidosDisponibles(pedidos.sortedByDescending { it.total })
     }
 
     fun aceptarPedido(pedido: PedidoRepartidorDTO, idRepartidor: Int) {
@@ -56,7 +56,7 @@ class DisponiblesViewModel : ViewModel() {
             _pedidoAceptado.value = true
 
             try {
-                PedidoRepository.aceptarPedido(pedido, idRepartidor)
+                PedidoRepartidorRepository.aceptarPedido(pedido, idRepartidor)
                 _navegarAActivos.value = true
             } catch (e: Exception) {
                 e.printStackTrace()

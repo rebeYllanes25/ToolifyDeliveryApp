@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Compartido -->
-
     <string name="saludo_usuario">¡Hola, %1$s!</string>
     <string name="subtitlo_seguimiento">Rastrea tus pedidos en tiempo real</string>
     <string name="tab_inicio">Inicio</string>
     <string name="tab_historial">Historial</string>
     <string name="tab_usuario">Perfil</string>
 
-    <!-- Inicio -->
-    <string name="subtitulo_pedidos_vacios">No tienes pedidos activos</string>
+    <!-- Inicio / Historial -->
+    <string name="subtitulo_pedidos_vacios">No tienes pedidos por el momento.</string>
     <string name="desc_icono_estado_vacio">Icono de caja vacía</string>
 
     <string name="formato_pedido_id">Pedido #%1$s</string>
@@ -81,8 +80,6 @@
     <string name="btn_enviar_calificacion">Enviar Calificación</string>
     <string name="btn_omitir">Omitir</string>
 
-    <!-- Historial -->
-    <string name="subtitulo_pedidos_inexistentes">No hay pedidos existentes.</string>
 
     <!-- Filtros -->
     <string name="filtros_titulo">Filtros</string>

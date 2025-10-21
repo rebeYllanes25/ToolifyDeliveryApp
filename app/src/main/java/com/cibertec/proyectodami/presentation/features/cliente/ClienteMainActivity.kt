@@ -9,8 +9,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.cibertec.proyectodami.R
+import com.cibertec.proyectodami.data.api.PedidosCliente
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
+import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.databinding.ActivityClienteMainBinding
+import com.cibertec.proyectodami.domain.repository.PedidoClienteRepository
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.InicioFragment
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialFragment
 import com.cibertec.proyectodami.presentation.features.cliente.notificaciones.NotificacionesFragment
@@ -22,11 +25,14 @@ class ClienteMainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityClienteMainBinding
     private var apartadoActual: ApartadoType = ApartadoType.INICIO
 
+    lateinit var pedidoRepository: PedidoClienteRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClienteMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        inicializarRepositorio()
         configurarSaludo()
         configurarApartados()
 
@@ -35,8 +41,20 @@ class ClienteMainActivity : AppCompatActivity() {
         }
     }
 
-    private fun configurarSaludo() {
+    private fun inicializarRepositorio() {
+        try {
+            val userPreferences = UserPreferences(applicationContext)
+            val retrofit = RetrofitInstance.create(userPreferences)
+            val pedidosApi = retrofit.create(PedidosCliente::class.java)
 
+            pedidoRepository = PedidoClienteRepository(applicationContext)
+
+        } catch (e: Exception) {
+            android.util.Log.e("ClienteMainActivity", "Error al inicializar Repository", e)
+        }
+    }
+
+    private fun configurarSaludo() {
         val userPreferences = UserPreferences(applicationContext)
 
         lifecycleScope.launch {
@@ -44,7 +62,6 @@ class ClienteMainActivity : AppCompatActivity() {
                 binding.tvSaludo.text = nombre ?: getString(R.string.user_name)
             }
         }
-
     }
 
     private fun configurarApartados() {
@@ -81,7 +98,6 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun actualizarEstiloApartados(apartadoSeleccionado: ApartadoType) {
-
         if (apartadoSeleccionado == ApartadoType.NOTIFICACIONES) {
             binding.layoutApartados.visibility = android.view.View.GONE
             resetearApartado(binding.apartadoInicio)

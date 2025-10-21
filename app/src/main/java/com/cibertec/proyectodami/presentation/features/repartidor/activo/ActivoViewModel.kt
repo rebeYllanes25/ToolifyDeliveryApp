@@ -5,12 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
-import com.cibertec.proyectodami.domain.repository.PedidoRepository
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class ActivoViewModel : ViewModel() {
-    val pedidoActivo: LiveData<PedidoRepartidorDTO?> = PedidoRepository.pedidoActivo
+    val pedidoActivo: LiveData<PedidoRepartidorDTO?> = PedidoRepartidorRepository.pedidoActivo
 
     private val _loading = MutableLiveData<Boolean>()
     val loading: LiveData<Boolean> = _loading
@@ -27,7 +27,7 @@ class ActivoViewModel : ViewModel() {
             // TODO: Llamar a la API para completar el pedido
             // api.completarPedido(pedidoActivo.value?.nroPedido)
 
-            PedidoRepository.completarPedido()
+            PedidoRepartidorRepository.completarPedido()
 
             _loading.value = false
             _pedidoCompletado.value = true
