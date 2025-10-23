@@ -389,7 +389,7 @@
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 android:textColor="@color/black"
-                                tools:text="Carlos Rodriguez" />
+                                tools:text="" />
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -414,7 +414,7 @@
                                     android:layout_marginEnd="12dp"
                                     android:textSize="12sp"
                                     android:textColor="@color/color_texto_normal"
-                                    tools:text="4.8" />
+                                    tools:text="" />
 
                                 <TextView
                                     android:id="@+id/tvNumEntregas"
@@ -422,7 +422,7 @@
                                     android:layout_height="wrap_content"
                                     android:textSize="12sp"
                                     android:textColor="@color/color_texto_normal"
-                                    tools:text="250 entregas" />
+                                    tools:text="" />
                             </LinearLayout>
 
                         </LinearLayout>
@@ -480,7 +480,7 @@
                                 android:layout_weight="1"
                                 android:textColor="@color/color_principal"
                                 android:textSize="14sp"
-                                tools:text="A 2.5 km de distancia" />
+                                tools:text="" />
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -617,47 +617,24 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnGenerarQr"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:layout_marginTop="15dp"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:spacing="12dp"
+                android:layout_margin="10dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="25dp"
+                android:layout_marginEnd="25dp"
+                android:padding="14dp"
+                android:text="@string/btn_generar_qr"
+                android:textSize="14sp"
+                android:textStyle="bold|italic"
+                app:backgroundTint="@color/color_principal"
+                app:cornerRadius="20dp"
+                app:elevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cdResumen">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnGenerarQr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:padding="14dp"
-                    android:text="@string/btn_generar_qr"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/color_principal"
-                    app:cornerRadius="20dp"
-                    app:elevation="4dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnCalificacionPedido"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:padding="14dp"
-                    android:text="@string/btn_califica"
-                    android:textColor="@color/white"
-                    android:textColorLink="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:backgroundTint="@color/color_principal"
-                    app:cornerRadius="20dp"
-                    app:elevation="2dp" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@+id/cdResumen" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

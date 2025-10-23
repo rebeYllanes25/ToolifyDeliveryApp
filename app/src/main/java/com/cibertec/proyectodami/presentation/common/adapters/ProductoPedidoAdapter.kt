@@ -1,0 +1,40 @@
+package com.cibertec.proyectodami.presentation.common.adapters
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.cibertec.proyectodami.R
+import com.cibertec.proyectodami.databinding.CardSeguimientoItemsBinding
+import com.cibertec.proyectodami.domain.model.dtos.ProductoPedidoDTO
+
+class ProductoPedidoAdapter(
+    private val productos : List<ProductoPedidoDTO>
+): RecyclerView.Adapter<ProductoPedidoAdapter.VH>() {
+    inner class VH(private val binding: CardSeguimientoItemsBinding):
+            RecyclerView.ViewHolder(binding.root){
+
+                fun bind(producto:ProductoPedidoDTO){
+                    binding.apply {
+                        Log.d("Adapter", "Producto: ${producto.nombreProducto}, Cantidad: ${producto.cantidad}, Subtotal: ${producto.subTotal}")
+                        tvNombreProducto.text = producto.nombreProducto
+                        tvDescripcion.text = producto.descripcionProducto
+                        tvCantidadTotal.text = itemView.context.getString(R.string.seguimiento_card_cantidad, producto.cantidad)
+                        tvPrecioTotal.text = itemView.context.getString(R.string.seguimiento_card_precio_total, producto.subTotal.toDouble())
+                    }
+                    }
+                }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val binding = CardSeguimientoItemsBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,false
+        )
+        return VH(binding)
+    }
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        holder.bind(productos[position])
+    }
+
+    override fun getItemCount(): Int = productos.size
+}

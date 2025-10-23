@@ -7,9 +7,10 @@
     app:cardUseCompatPadding="true">
 
     <LinearLayout
-        android:layout_width="400dp"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/imageView2"
@@ -20,8 +21,9 @@
             app:srcCompat="@drawable/ic_launcher_background" />
 
         <LinearLayout
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:layout_margin="5dp"
             android:gravity="center"
             android:orientation="vertical">
@@ -30,32 +32,40 @@
                 android:id="@+id/tvNombreProducto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:textColor="@color/black_leve"
+                android:textSize="12sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/tvDescripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center_vertical|end"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvCantidadTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:textColor="@color/color_principal"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/tvPrecioTotal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:textColor="@color/color_principal"
+                android:textSize="12sp" />
         </LinearLayout>
 
 
