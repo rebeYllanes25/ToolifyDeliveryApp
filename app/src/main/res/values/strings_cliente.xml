@@ -45,10 +45,12 @@
     <string name="seguimiento_campo_coste">Coste de Envio: </string>
     <string name="seguimiento_campo_propina">Propina para el repartidor: </string>
     <string name="seguimiento_campo_total">Total a pagar: </string>
-    <string name="seguimiento_fmt_subtotal"> S/ %1$s %2$s</string>
-    <string name="seguimiento_fmt_coste"> S/ %1$s %2$s</string>
-    <string name="seguimiento_fmt_propina"> S/ %1$s %2$s</string>
-    <string name="seguimiento_fmt_total"> S/ %1$s %2$s</string>
+    <string name="seguimiento_fmt_subtotal">S/ %1$.2f</string>
+    <string name="seguimiento_fmt_coste">S/ %1$.2f</string>
+    <string name="seguimiento_fmt_propina">S/ %1$.2f</string>
+    <string name="seguimiento_fmt_total">S/ %1$.2f</string>
+    <string name="seguimiento_card_cantidad">Cantidad: %1$d</string>
+    <string name="seguimiento_card_precio_total">S/ %1$.2f</string>
 
     <string name="btn_call_repartidor">Llamar al repartidor</string>
     <string name="btn_message_repartidor">Mandar mensaje al repartidor</string>

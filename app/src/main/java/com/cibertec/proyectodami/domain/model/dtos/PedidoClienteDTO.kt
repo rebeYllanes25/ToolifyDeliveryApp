@@ -20,6 +20,8 @@ data class PedidoClienteDTO(
     val productos: List<ProductoPedidoDTO>,
 
     val nomRepartidor: String?,
+    val apePaternoRepartidor: String?,
+    val telefonoRepartido: String?,
     val especificaciones: String?,
     val estado: String, // PE, AS, EC, EN, FA
 

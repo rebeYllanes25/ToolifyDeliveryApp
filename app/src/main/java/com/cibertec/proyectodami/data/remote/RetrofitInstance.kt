@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
     /* Cambiar el local IP de tu red de wifi cuando uses dispositivo físico */
-    private const val LOCAL_IP = "192.168.1.17"
+        private const val LOCAL_IP = "PON_TU_IP_BORRA_DESPUES"
     private const val PORT = "8080"
 
     fun create(userPreferences: UserPreferences): Retrofit {

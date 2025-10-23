@@ -16,6 +16,7 @@ import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.detallepedido.DetallePedidoFragment
 import com.cibertec.proyectodami.presentation.features.cliente.rastreo.RastreoActivity
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -111,10 +112,17 @@ class InicioFragment : Fragment() {
     private fun abrirRastreo(pedido: PedidoClienteDTO) {
         Log.d(TAG, "Abriendo rastreo para pedido #${pedido.numPedido}")
         val intent = Intent(requireContext(), RastreoActivity::class.java).apply {
+            putExtra("PEDIDO_ID_INT",pedido.idPedido)
             putExtra("PEDIDO_ID", pedido.numPedido)
             putExtra("ESTADO", pedido.estado)
             putExtra("REPARTIDOR", pedido.nomRepartidor)
+            putExtra("APE_PATERNO", pedido.apePaternoRepartidor)
+            putExtra("TELEFONO_REPARTIDOR", pedido.telefonoRepartido)
             putExtra("TIEMPO_ENTREGA", pedido.tiempoEntregaMinutos)
+            putExtra("QR_VERIFICATE_PEDIDO",pedido.qrVerificationCode)
+            putExtra("PRODUCTOS", Gson().toJson(pedido.productos))
+            putExtra("TOTAL", pedido.total)
+
         }
         startActivity(intent)
     }
