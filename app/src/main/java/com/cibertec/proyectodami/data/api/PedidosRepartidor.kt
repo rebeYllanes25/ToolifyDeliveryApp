@@ -15,4 +15,10 @@ interface PedidosRepartidor {
         @Path("idPedido") idPedido: Int,
         @Query("idRepartidor") idRepartidor: Int
     ): PedidoRepartidorDTO
+
+    @PUT("repartidor/encamino/{idPedido}")
+    suspend fun caminoPedido(
+        @Path("idPedido") idPedido: Int,
+        @Query("idRepartidor") idRepartidor: Int
+    ): PedidoRepartidorDTO
 }

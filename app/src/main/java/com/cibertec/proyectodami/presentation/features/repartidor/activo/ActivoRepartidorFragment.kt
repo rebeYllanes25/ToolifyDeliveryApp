@@ -1,5 +1,6 @@
 package com.cibertec.proyectodami.presentation.features.repartidor.activo
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +10,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.R
+import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.databinding.FragmentActivoRepartidorBinding
 import com.cibertec.proyectodami.presentation.common.adapters.ActivoPedidoAdapter
+import kotlinx.coroutines.runBlocking
 
 class ActivoRepartidorFragment : Fragment() {
 
@@ -37,7 +40,19 @@ class ActivoRepartidorFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        adapter = ActivoPedidoAdapter(requireActivity(), mutableListOf())
+        adapter = ActivoPedidoAdapter(
+            requireActivity(),
+            mutableListOf()
+        ) { pedido ->
+            val idRepartidor = obtenerIdRepartidor()
+            viewModel.marcarEnCamino(pedido.idPedido, idRepartidor)
+
+            Toast.makeText(
+                requireContext(),
+                "Pedido marcado como En Camino",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
 
         binding.recyclerViewActivo.apply {
             layoutManager = LinearLayoutManager(context)
@@ -49,6 +64,13 @@ class ActivoRepartidorFragment : Fragment() {
     private fun setupEmptyView() {
         binding.buttonView.setOnClickListener {
             navegarAPestanaDisponibles()
+        }
+    }
+
+    private fun obtenerIdRepartidor(): Int {
+        val userPreferences = UserPreferences(requireContext())
+        return runBlocking() {
+            userPreferences.obtenerIdUsuario()
         }
     }
 
@@ -72,10 +94,16 @@ class ActivoRepartidorFragment : Fragment() {
                 if (isLoading) View.VISIBLE else View.GONE
         }
 
+        viewModel.error.observe(viewLifecycleOwner) { errorMsg ->
+            errorMsg?.let {
+                Toast.makeText(requireContext(), it, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         viewModel.pedidoCompletado.observe(viewLifecycleOwner) { completado ->
             if (completado) {
                 Toast.makeText(
-                    context,
+                    requireContext(),
                     "Pedido completado exitosamente",
                     Toast.LENGTH_SHORT
                 ).show()

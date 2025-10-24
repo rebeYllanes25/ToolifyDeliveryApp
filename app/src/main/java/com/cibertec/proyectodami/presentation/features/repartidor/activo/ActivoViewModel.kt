@@ -18,8 +18,26 @@ class ActivoViewModel : ViewModel() {
     private val _pedidoCompletado = MutableLiveData<Boolean>()
     val pedidoCompletado: LiveData<Boolean> = _pedidoCompletado
 
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
+    fun marcarEnCamino(idPedido: Int, idRepartidor: Int) {
+        viewModelScope.launch {
+            try {
+                _loading.value = true
+                PedidoRepartidorRepository.caminoPedido(idPedido, idRepartidor)
+
+                _error.value = null
+            } catch (e: Exception) {
+                _error.value = "Error al actualizar el estado: ${e.message}"
+            } finally {
+                _loading.value = false
+            }
+        }
+    }
+
     fun completarPedido() {
-        viewModelScope.launch() {
+        viewModelScope.launch {
             _loading.value = true
 
             delay(1000) // Simular llamada a API

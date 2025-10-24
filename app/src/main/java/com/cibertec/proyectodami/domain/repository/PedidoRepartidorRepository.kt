@@ -54,6 +54,17 @@ object PedidoRepartidorRepository {
         }
     }
 
+    suspend fun caminoPedido(pedido: Int, idRepartidor: Int) {
+        try {
+            val pedidoActualizado = pedidoApi.caminoPedido(pedido, idRepartidor)
+            _pedidoActivo.postValue(pedidoActualizado)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
     fun completarPedido() {
         _pedidoActivo.value = null
     }

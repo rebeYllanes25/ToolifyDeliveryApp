@@ -84,6 +84,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                 }
                 userPreferences.guardarIdUsuario(usuario.idUsuario)
                 userPreferences.guardarNombreUsuario(usuario.nombres)
+                userPreferences.guardarRol(usuario.rol.idRol)
                 when (usuario.rol.idRol) {
                     2 -> {
                         startActivity(Intent(this@LoginActivity, ClienteMainActivity::class.java))
