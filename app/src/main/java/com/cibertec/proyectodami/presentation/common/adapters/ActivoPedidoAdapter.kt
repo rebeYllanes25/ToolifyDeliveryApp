@@ -14,7 +14,8 @@ import com.cibertec.proyectodami.presentation.features.repartidor.localizacion.L
 
 class ActivoPedidoAdapter(
     private val activity: FragmentActivity,
-    private val items: MutableList<PedidoRepartidorDTO>
+    private val items: MutableList<PedidoRepartidorDTO>,
+    private val onNavigateClick: ((PedidoRepartidorDTO) -> Unit)? = null
 ) : RecyclerView.Adapter<ActivoPedidoAdapter.VH>() {
 
     inner class VH(val binding: ItemPedidoActivoBinding) :
@@ -48,36 +49,26 @@ class ActivoPedidoAdapter(
         val progress = ((pedido.tiempoEntrega ?: 0) * 100 / 30).coerceIn(0, 100)
         b.progressBar.progress = progress
 
-        // Botón para navegar (abrir Google Maps)
+        // Botón para navegar
         b.buttonNavigate.setOnClickListener {
-            // TODO: Reemplazar con coordenadas reales
-            val gmmIntentUri = Uri.parse("google.navigation:q=${pedido.direccionEntrega}")
-            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-            mapIntent.setPackage("com.google.android.apps.maps")
+            // Primero actualizar el estado a "En Camino"
+            onNavigateClick?.invoke(pedido)
 
-            if (mapIntent.resolveActivity(ctx.packageManager) != null) {
-                ctx.startActivity(mapIntent)
-            }
-        }
-
-        // Botón para ver detalles (o llamar)
-        b.buttonDetail.setOnClickListener {
-            val bottomSheet = PedidoDetailBottom(pedido)
-            bottomSheet.show(activity.supportFragmentManager, "PedidoDetailBottom")
-        }
-
-        b.buttonNavigate.setOnClickListener {
+            // Luego abrir la actividad de localización
             val intent = Intent(ctx, LocalizacionActivity::class.java)
-            // Opcional: pasar datos del pedido
-
             intent.putExtra("PEDIDO_ID", pedido.idPedido)
             intent.putExtra("DIRECCION", pedido.direccionEntrega)
             intent.putExtra("NOMBRE", pedido.nomCliente)
             intent.putExtra("TOTAL", pedido.total)
             intent.putExtra("LATITUD", pedido.latitud)
             intent.putExtra("LONGITUD", pedido.longitud)
-
             ctx.startActivity(intent)
+        }
+
+        // Botón para ver detalles
+        b.buttonDetail.setOnClickListener {
+            val bottomSheet = PedidoDetailBottom(pedido)
+            bottomSheet.show(activity.supportFragmentManager, "PedidoDetailBottom")
         }
     }
 
