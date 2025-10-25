@@ -41,10 +41,10 @@ class PedidoClienteRepository(context: Context) {
 
     suspend fun obtenerPedidosEnCamino(idCliente: Int) {
         Log.d(TAG, "═══════════════════════════════")
-        Log.d(TAG, "📡 obtenerPedidosEnCamino - ID Cliente: $idCliente")
+        Log.d(TAG, "📡 obtenerPedidosInicio - ID Cliente: $idCliente")
 
         try {
-            val pedidos = pedidoApi.obtenerPedidosEC(idCliente, "EC")
+            val pedidos = pedidoApi.obtenerPedidosInicio(idCliente)
             _pedidosEnCamino.postValue(pedidos)
 
         } catch (e: HttpException) {
