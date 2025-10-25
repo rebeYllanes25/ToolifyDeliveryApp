@@ -44,4 +44,12 @@ interface PedidosCliente {
     suspend fun  perfilDetalle(
         @Path("idUsuario") idUsuario: Int
     ):PerfilDetalleComprasDto
+
+    //VERIFICAR SI YA EL PEDIDO ESTA ASOCIADO A UNA CALIFICACION
+
+    @GET("calificacion/verificar/{idPedido}")
+    suspend fun verificarCalificacion(
+        @Path("idPedido") idPedido: Int
+    ): Response<Map<String, Boolean>>
+
 }

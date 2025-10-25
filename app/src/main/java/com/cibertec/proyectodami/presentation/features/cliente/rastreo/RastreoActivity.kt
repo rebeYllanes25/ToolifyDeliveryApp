@@ -2,6 +2,7 @@ package com.cibertec.proyectodami.presentation.features.cliente.rastreo
 
 import android.Manifest
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
@@ -20,6 +21,9 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cibertec.proyectodami.data.api.PedidosCliente
+import com.cibertec.proyectodami.data.dataStore.UserPreferences
+import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.domain.model.dtos.ProductoPedidoDTO
 import com.cibertec.proyectodami.presentation.common.adapters.ProductoPedidoAdapter
 import com.cibertec.proyectodami.presentation.features.cliente.calificacion.CalificacionClientActivity
@@ -27,6 +31,10 @@ import com.google.gson.Gson
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RastreoActivity : AppCompatActivity() {
 
@@ -46,12 +54,56 @@ class RastreoActivity : AppCompatActivity() {
 
     private lateinit var productosAdapter : ProductoPedidoAdapter
 
+    private var yaCalificado: Boolean = false;
+    private var verificacionCompletada: Boolean = false
+    private lateinit var pedidosClienteApi: PedidosCliente
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityRastreoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        IniciarApi()
+        obtenerDatosIntent()
+
+        val btnBack: ImageView = findViewById(R.id.btnBack)
+        btnBack.setOnClickListener {
+            finish()
+        }
+
+
+        //ACCIONES PARA LLAMAR/ENVIAR AL REPARTIDOR
+        llamarTelefonoRepartidor()
+        enviarMensajeRepartidorBtn()
+
+        //DATOS DE LA VISTA INICIALES
+        cargarDatosVista()
+        cargarRecycleView()
+        generarcionDeQr()
+
+        //SIMULACION DE CAMBIOS DE ESTADO
+        inicializarEstados()
+        simularCambiosEstado()
+
+        //RECARGAR EL ESTADO DEL API
+        recargarDatosPedido()
+
+        binding.btnReloadPage.setOnClickListener {
+            verificacionCompletada = false;
+            Toast.makeText(this, "ACTUALIZANDO PAGINA", Toast.LENGTH_SHORT).show()
+            recargarDatosPedido()
+        }
+
+    }
+
+    private fun  IniciarApi(){
+        val userPreferences = UserPreferences(this)
+        val retrofit = RetrofitInstance.create(userPreferences)
+        pedidosClienteApi = retrofit.create(PedidosCliente::class.java)
+    }
+
+    private fun obtenerDatosIntent(){
 
         pedidoId = intent.getStringExtra("PEDIDO_ID")
         pedidoIdInt = intent.getIntExtra("PEDIDO_ID_INT",0)
@@ -69,84 +121,6 @@ class RastreoActivity : AppCompatActivity() {
         } else {
             emptyList()
         }
-
-
-        Log.d("RastreoActivity", "Pedido ID: $pedidoId")
-        Log.d("RastreoActivity", "Estado: $estado")
-        Log.d("RastreoActivity", "Repartidor: $nombreRepartidor")
-        Log.d("RastreoActivity", "Teléfono: $telefonoRepartidor")
-        Log.d("RastreoActivity", "Tiempo: $tiempoEntrega min")
-        Log.d("RastreoActivity", "Monto total: $total min")
-        Log.d("RastreoActivity", "APELLIDO PATERNO  $apePaternoRepartidor ")
-        Log.d("RastreoActivity", "QR CODIGO  $stringqr ")
-
-        val btnBack: ImageView = findViewById(R.id.btnBack)
-        btnBack.setOnClickListener {
-            finish()
-        }
-
-        binding.btnCallRepartidor.setOnClickListener{
-            if(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CALL_PHONE) ==
-                PackageManager.PERMISSION_GRANTED) {
-
-                val miIntent = Intent(
-                    Intent.ACTION_CALL,
-                    Uri.parse("tel:${telefonoRepartidor}")
-                )
-                startActivity(miIntent)
-            }else {
-                Toast.makeText( this,"No hay permiso para realizar la llamda", Toast.LENGTH_SHORT).show()
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.CALL_PHONE),
-                    123
-                )
-            }
-        }
-
-        fun enviarMensaje(numero:String, mensaje:String){
-            try {
-                val sms = SmsManager.getDefault()
-                sms.sendTextMessage(numero,null,mensaje,null,null)
-                Toast.makeText(this, "Mensaje enviado Correctamente", Toast.LENGTH_SHORT).show()
-            }catch (ex:Exception){
-                Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        binding.btnMessageRepartidor.setOnClickListener{
-
-            val mensajePredeterminado = "¡Hola! ¿Están cerca con el pedido?"
-            if(ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.SEND_SMS)
-                != PackageManager.PERMISSION_GRANTED
-            ){
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.SEND_SMS),
-                    1234
-                )
-            }else{
-                telefonoRepartidor?.let { telefono ->
-                    enviarMensaje(telefono, mensajePredeterminado)
-                }
-            }
-        }
-
-        cargarDatosVista()
-        cargarRecycleView()
-        inicializarEstados()
-        simularCambiosEstado()
-
-
-        binding.btnGenerarQr.setOnClickListener{
-        val bitMapQR = generarQR(stringqr.toString())
-        val bottomSheet = QrBottomSheet(stringqr.toString(),bitMapQR)
-
-        bottomSheet.show(supportFragmentManager,"QrBottomSheet")
-        }
-
     }
 
     private fun generarQR(texto:String,ancho:Int = 500, alto:Int=500): Bitmap{
@@ -167,9 +141,64 @@ class RastreoActivity : AppCompatActivity() {
         return bitmap
     }
 
-    private fun abrirCalificacion(){
-        Log.d("CALIFICACION", "Abriendo calificacion con numero pedido #${pedidoId}")
+    private fun generarcionDeQr(){
+        binding.btnGenerarQr.setOnClickListener{
+            val bitMapQR = generarQR(stringqr.toString())
+            val bottomSheet = QrBottomSheet(stringqr.toString(),bitMapQR)
+            bottomSheet.show(supportFragmentManager,"QrBottomSheet")
+        }
+    }
 
+    private fun verificarEstadoCalificacion(){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                Log.d("CALIFICACION", "🔍 Verificando calificación para pedido #$pedidoIdInt")
+                val response = this@RastreoActivity.pedidosClienteApi.verificarCalificacion(pedidoIdInt)
+
+                    withContext(Dispatchers.Main){
+                        if(response.isSuccessful){
+                            yaCalificado = response.body()?.get("yaCalificado") ?: false
+                            verificacionCompletada = true;
+                            Log.d("CALIFICACION", "✅ Pedido #$pedidoId ya calificado: $yaCalificado")
+                        }else{
+                            Log.e("CALIFICACION","ERROR : ${response.code()}")
+                        }
+                    }
+            }catch (e:Exception)
+            {
+                    withContext(Dispatchers.Main){
+                       Log.e("CALIFICACION", "ERROR AL VERIFICAR EL PEDIDO ${pedidoIdInt}, error: ${e.message}")
+                    }
+            }
+        }
+    }
+
+    private fun abrirCalificacion(){
+        if (!verificacionCompletada ) {
+            Log.d("CALIFICACION", " Esperando verificación...")
+            Handler(Looper.getMainLooper()).postDelayed({
+                abrirCalificacion()
+            }, 500)
+            return
+        }
+
+        if (estado != "EN"){
+            Toast.makeText(this,"Error el pedido debe ser entragado para calificar",Toast.LENGTH_SHORT).show()
+            Log.d("CALIFICACION", "Estado no válido. Actual: $estado, Requerido: EN")
+            return
+        }
+
+        if (yaCalificado){
+            Toast.makeText(
+                this,
+                " Este pedido ya fue calificado anteriormente",
+                Toast.LENGTH_LONG
+            ).show()
+            Log.d("CALIFICACION", " Pedido #$pedidoId ya tiene calificación")
+            return
+        }
+
+        Log.d("CALIFICACION", "Abriendo calificacion con numero pedido #${pedidoId}")
         val intent = Intent(this, CalificacionClientActivity::class.java).apply {
             putExtra("ID_PEDIDO",pedidoIdInt)
             putExtra("NUM_PEDIDO",pedidoId)
@@ -177,6 +206,38 @@ class RastreoActivity : AppCompatActivity() {
             putExtra("NOMBRE_REPARTIDOR",nombreRepartidor)
         }
         startActivity(intent)
+    }
+
+    private fun recargarDatosPedido(){
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                Log.d("RELOAD", "🔄 Recargando datos del pedido #$pedidoIdInt")
+                val datosPedido = pedidosClienteApi.obtenerPedidoPorId(pedidoIdInt)
+                val responseCalificacion = pedidosClienteApi.verificarCalificacion(pedidoIdInt)
+
+                withContext(Dispatchers.Main){
+
+                    estado = datosPedido.estado
+                    Log.d("RELOAD", "✅ Estado actualizado: $estado")
+
+                    if (responseCalificacion.isSuccessful){
+                        yaCalificado = responseCalificacion.body()?.get("yaCalificado") ?: false
+                        Log.d("RELOAD", "✅ Ya calificado: $yaCalificado")
+                    }
+
+                    verificacionCompletada = true
+
+                    cargarDatosVista()
+                }
+
+            } catch (e:Exception)
+            {
+                withContext(Dispatchers.Main) {
+                    Log.e("RELOAD", "❌ Error recargando: ${e.message}")
+                    Toast.makeText(this@RastreoActivity, "Error al recargar datos", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun cargarDatosVista(){
@@ -285,7 +346,10 @@ class RastreoActivity : AppCompatActivity() {
         }
 
         if(nuevoEstado ==4){
-            abrirCalificacion()
+            Log.d("ESTADO_UI", "✅ Pedido entregado, verificando para abrir calificación")
+            Handler(Looper.getMainLooper()).postDelayed({
+                abrirCalificacion()
+            }, 500)
         }
     }
 
@@ -317,6 +381,55 @@ class RastreoActivity : AppCompatActivity() {
         rotation.start()
     }
 
+    private fun llamarTelefonoRepartidor(){
+        binding.btnCallRepartidor.setOnClickListener{
+            if(ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CALL_PHONE) ==
+                PackageManager.PERMISSION_GRANTED) {
 
+                val miIntent = Intent(
+                    Intent.ACTION_CALL,
+                    Uri.parse("tel:${telefonoRepartidor}")
+                )
+                startActivity(miIntent)
+            }else {
+                Toast.makeText( this,"No hay permiso para realizar la llamda", Toast.LENGTH_SHORT).show()
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.CALL_PHONE),
+                    123
+                )
+            }
+        }
+    }
 
+    private fun enviarMensaje(numero:String, mensaje:String){
+        try {
+            val sms = SmsManager.getDefault()
+            sms.sendTextMessage(numero,null,mensaje,null,null)
+            Toast.makeText(this, "Mensaje enviado Correctamente", Toast.LENGTH_SHORT).show()
+        }catch (ex:Exception){
+            Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun enviarMensajeRepartidorBtn(){
+        binding.btnMessageRepartidor.setOnClickListener{
+
+            val mensajePredeterminado = "¡Hola! ¿Están cerca con el pedido?"
+            if(ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED
+            ){
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.SEND_SMS),
+                    1234
+                )
+            }else{
+                telefonoRepartidor?.let { telefono ->
+                    enviarMensaje(telefono, mensajePredeterminado)
+                }
+            }
+        }
+    }
 }
