@@ -113,7 +113,8 @@
     <string name="perfil_tv_fecha">Fecha con mayor compra: </string>
     <string name="perfil_tv_total">Total de productos comprados:  </string>
     <string name="perfil_tv_inversion">Inversion total de compras:  </string>
-    <string name="perfil_tv_categoria">Categoria mas comprada </string>
+    <string name="perfil_tv_categoria">Categoria mas comprada: </string>
+    <string name="perfil_tv_pedidos">Total de pedidos realizados:</string>
 
 
 
