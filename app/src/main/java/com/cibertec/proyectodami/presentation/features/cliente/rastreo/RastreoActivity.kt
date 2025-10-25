@@ -214,6 +214,7 @@ class RastreoActivity : AppCompatActivity() {
             binding.rvResumen.apply {
                 layoutManager = LinearLayoutManager(this@RastreoActivity)
                 adapter = productosAdapter
+                isNestedScrollingEnabled = true
                 setHasFixedSize(true)
             }
         }

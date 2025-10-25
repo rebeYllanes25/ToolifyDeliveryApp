@@ -14,38 +14,38 @@
         app:cardCornerRadius="0dp"
         app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="16dp">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp">
 
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@color/color_texto_normal" android:contentDescription="@string/desc_boton_atras"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <ImageView
+                android:id="@+id/btnBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_back"
+                app:tint="@color/color_texto_normal" android:contentDescription="@string/desc_boton_atras"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/titulo_rastreo"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/color_texto_normal" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/titulo_rastreo"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/color_texto_normal" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -133,7 +133,6 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- CONTENEDOR DE ICONOS Y LÍNEAS -->
                     <LinearLayout
                         android:id="@+id/contenedor_estados"
                         android:layout_width="match_parent"
@@ -141,7 +140,6 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <!-- ESTADO 1: ACEPTADO -->
                         <ImageView
                             android:id="@+id/icEstadoAceptado"
                             android:layout_width="32dp"
@@ -151,7 +149,6 @@
                             android:src="@drawable/ic_checkmark"
                             app:tint="@color/white" />
 
-                        <!-- LÍNEA DIVISORA 1 -->
                         <View
                             android:layout_width="0dp"
                             android:layout_height="2dp"
@@ -159,7 +156,6 @@
                             android:layout_weight="1"
                             android:background="@color/color_principal" />
 
-                        <!-- ESTADO 2: PREPARANDO -->
                         <ImageView
                             android:id="@+id/icEstadoPreparando"
                             android:layout_width="32dp"
@@ -169,7 +165,6 @@
                             android:src="@drawable/ic_checkmark"
                             app:tint="@color/white" />
 
-                        <!-- LÍNEA DIVISORA 2 -->
                         <View
                             android:layout_width="0dp"
                             android:layout_height="2dp"
@@ -177,7 +172,6 @@
                             android:layout_weight="1"
                             android:background="@color/gris_claro" />
 
-                        <!-- ESTADO 3: EN TRÁNSITO -->
                         <ImageView
                             android:id="@+id/icEstadoTransito"
                             android:layout_width="32dp"
@@ -186,7 +180,6 @@
                             android:src="@drawable/ic_truck"
                             app:tint="@color/gris_claro" />
 
-                        <!-- LÍNEA DIVISORA 3 -->
                         <View
                             android:layout_width="0dp"
                             android:layout_height="2dp"
@@ -194,7 +187,6 @@
                             android:layout_weight="1"
                             android:background="@color/gris_claro" />
 
-                        <!-- ESTADO 4: CERCA -->
                         <ImageView
                             android:id="@+id/icEstadoCerca"
                             android:layout_width="32dp"
@@ -203,7 +195,6 @@
                             android:src="@drawable/ic_location"
                             app:tint="@color/gris_claro" />
 
-                        <!-- LÍNEA DIVISORA 4 -->
                         <View
                             android:layout_width="0dp"
                             android:layout_height="2dp"
@@ -211,7 +202,6 @@
                             android:layout_weight="1"
                             android:background="@color/gris_claro" />
 
-                        <!-- ESTADO 5: ENTREGADO -->
                         <ImageView
                             android:id="@+id/icEstadoEntregado"
                             android:layout_width="32dp"
@@ -223,7 +213,6 @@
 
                     </LinearLayout>
 
-                    <!-- CONTENEDOR DE ETIQUETAS -->
                     <LinearLayout
                         android:id="@+id/contenedor_etiqueta"
                         android:layout_width="match_parent"
@@ -232,7 +221,6 @@
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
-                        <!-- ETIQUETA 1: ACEPTADO -->
                         <LinearLayout
                             android:id="@+id/etq_aceptado"
                             android:layout_width="0dp"
@@ -253,7 +241,6 @@
 
                         </LinearLayout>
 
-                        <!-- ETIQUETA 2: PREPARANDO -->
                         <LinearLayout
                             android:id="@+id/etq_preparado"
                             android:layout_width="0dp"
@@ -517,11 +504,30 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvResumen"
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp" />
+                        android:layout_marginBottom="15dp">
+
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvResumen"
+                            android:layout_width="match_parent"
+                            android:layout_height="340dp"
+                            android:layout_marginBottom="15dp"
+                            android:nestedScrollingEnabled="true" >
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                        <View
+                            android:id="@+id/shadowBottom"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:layout_gravity="bottom"
+                            android:background="@drawable/gradient_shadow_bottom"
+                            android:clickable="false"
+                            android:focusable="false" />
+                    </FrameLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -636,6 +642,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cdResumen" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

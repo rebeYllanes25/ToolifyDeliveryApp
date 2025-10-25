@@ -21,7 +21,7 @@ data class PedidoClienteDTO(
 
     val nomRepartidor: String?,
     val apePaternoRepartidor: String?,
-    val telefonoRepartido: String?,
+    val telefonoRepartidor: String?,
     val especificaciones: String?,
     val estado: String, // PE, AS, EC, EN, FA
 
