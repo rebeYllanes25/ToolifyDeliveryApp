@@ -23,8 +23,8 @@
     <color name="color_subtitulos">#BDBDBD</color>
     <color name="color_fondo">#F5F5F5</color>
     <color name="color_texto_normal">#1A1A1A</color>
-    <color name="color_badge_rojo">#F44336</color>
-    <color name="rojo_light">#F44336</color>
+    <color name="color_badge_rojo">#BA3A14</color>
+    <color name="rojo_light">#E09592</color>
     <color name="color_iconos_vacios">#BDBDBD</color>
     <color name="color_status_fondo">#FFEDE0</color>
     <color name="color_status_texto">#FF9800</color>

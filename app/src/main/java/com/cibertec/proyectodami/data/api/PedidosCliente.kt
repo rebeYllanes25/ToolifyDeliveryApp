@@ -18,6 +18,11 @@ interface PedidosCliente {
         @Query("estado") estado: String
     ): List<PedidoClienteDTO>
 
+    @GET("pedido/inicio/{idCliente}")
+    suspend fun obtenerPedidosInicio(
+        @Path("idCliente") idCliente: Int
+    ): List<PedidoClienteDTO>
+
     @GET("pedido/historial/{idCliente}")
     suspend fun obtenerPedidosHistorial(
         @Path("idCliente") idCliente: Int
