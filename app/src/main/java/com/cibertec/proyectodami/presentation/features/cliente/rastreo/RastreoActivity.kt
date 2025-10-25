@@ -62,7 +62,7 @@ class RastreoActivity : AppCompatActivity() {
         tiempoEntrega = intent.getIntExtra("TIEMPO_ENTREGA",0)
         stringqr = intent.getStringExtra("QR_VERIFICATE_PEDIDO")
         val productosJson = intent.getStringExtra("PRODUCTOS")
-        val total = intent.getIntExtra("TOTAL",0)
+        total = intent.getDoubleExtra("TOTAL",0.0)
 
         productos = if (!productosJson.isNullOrEmpty()) {
             Gson().fromJson(productosJson, Array<ProductoPedidoDTO>::class.java).toList()

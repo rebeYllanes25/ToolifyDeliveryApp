@@ -98,6 +98,17 @@
 
     <!-- Perfil -->
 
+    <string name="perfil_titulo_scroll">Informacion del Cliente</string>
+    <string name="perfil_datos_personles">Datos  Personales</string>
+    <string name="perfil_ventas_cliente">Compras Personales</string>
+
+    <string name="perfil_tv_email">Correo Electronico:</string>
+    <string name="perfil_tv_dni">N° DNI</string>
+    <string name="perfil_tv_direccion">Dirección</string>
+    <string name="perfil_tv_distrito">Distrito</string>
+    <string name="perfil_tv_celular">N° de Celular</string>
+    <string name="perfil_tv_registrado">Registrado desde </string>
+
     <!-- Notificaciones -->
     <string name="notificaciones_titulo">Notificaciones</string>
     <string name="notificaciones_sin_leer">%1$d sin leer</string>
@@ -142,4 +153,7 @@
     <string name="notificaciones_todas_marcadas_leidas">Todas las notificaciones marcadas como leídas</string>
     <string name="notificaciones_todas_eliminadas">Todas las notificaciones eliminadas</string>
     <string name="notificaciones_eliminada">Notificación eliminada</string>
+
+
+
 </resources>
