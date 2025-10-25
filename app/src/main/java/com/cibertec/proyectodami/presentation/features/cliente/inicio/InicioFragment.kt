@@ -117,7 +117,7 @@ class InicioFragment : Fragment() {
             putExtra("ESTADO", pedido.estado)
             putExtra("REPARTIDOR", pedido.nomRepartidor)
             putExtra("APE_PATERNO", pedido.apePaternoRepartidor)
-            putExtra("TELEFONO_REPARTIDOR", pedido.telefonoRepartido)
+            putExtra("TELEFONO_REPARTIDOR", pedido.telefonoRepartidor)
             putExtra("TIEMPO_ENTREGA", pedido.tiempoEntregaMinutos)
             putExtra("QR_VERIFICATE_PEDIDO",pedido.qrVerificationCode)
             putExtra("PRODUCTOS", Gson().toJson(pedido.productos))
