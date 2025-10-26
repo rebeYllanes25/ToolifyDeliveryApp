@@ -2,6 +2,7 @@ package com.cibertec.proyectodami.data.api
 
 import com.cibertec.proyectodami.domain.model.dtos.CalificacionDTO
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
+import com.cibertec.proyectodami.domain.model.dtos.PerfilDetalleComprasDto
 import com.cibertec.proyectodami.domain.model.dtos.requests.CalificarRequest
 import retrofit2.Response
 import retrofit2.http.Body
@@ -38,4 +39,17 @@ interface PedidosCliente {
         @Path("idPedido") idPedido: Int,
         @Body request: CalificarRequest?
     ): Response<CalificacionDTO>
+
+    @GET("cliente/perfilDetalle/{idUsuario}")
+    suspend fun  perfilDetalle(
+        @Path("idUsuario") idUsuario: Int
+    ):PerfilDetalleComprasDto
+
+    //VERIFICAR SI YA EL PEDIDO ESTA ASOCIADO A UNA CALIFICACION
+
+    @GET("calificacion/verificar/{idPedido}")
+    suspend fun verificarCalificacion(
+        @Path("idPedido") idPedido: Int
+    ): Response<Map<String, Boolean>>
+
 }
