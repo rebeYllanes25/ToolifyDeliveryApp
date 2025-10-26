@@ -159,7 +159,7 @@
                             android:layout_height="32dp"
                             android:background="@drawable/ic_border_status"
                             android:contentDescription="Aceptado"
-                            android:src="@drawable/ic_checkmark"
+                            android:src="@drawable/ic_clock"
                             app:tint="@color/white" />
 
                         <View
@@ -221,7 +221,7 @@
                             android:layout_height="32dp"
                             android:background="@drawable/ic_border_status_off"
                             android:contentDescription="Entregado"
-                            android:src="@drawable/ic_checkmark"
+                            android:src="@drawable/ic_star_2"
                             app:tint="@color/white" />
 
                     </LinearLayout>

@@ -20,6 +20,9 @@ import android.telephony.SmsManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.data.api.PedidosCliente
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
@@ -124,29 +127,73 @@ class RastreoActivity : AppCompatActivity() {
         }
     }
 
-    private fun generarQR(texto:String,ancho:Int = 500, alto:Int=500): Bitmap{
-        val bitMatrix:BitMatrix = MultiFormatWriter().encode(
-            texto,
-            BarcodeFormat.QR_CODE,
-            ancho,
-            alto
-        )
 
-        val bitmap = Bitmap.createBitmap(ancho,alto,Bitmap.Config.RGB_565)
 
-        for (x in 0 until ancho){
-                for (y in 0 until alto){
-                    bitmap.setPixel(x,y, if (bitMatrix[x,y]) Color.BLACK else Color.WHITE)
-                }
+    private fun actualizarEstadoApi(){
+        val estadoIndex = when(estado){
+            "PE" -> 0
+            "AS" -> 1
+            "EC" -> 2
+            "CR" -> 3
+            "EN" -> 4
+            else -> 0
         }
-        return bitmap
+        Log.d("ESTADO_UI", "🎨 Actualizando UI al estado: $estado (índice: $estadoIndex)")
+        actualizarEstado(estadoIndex)
     }
 
-    private fun generarcionDeQr(){
-        binding.btnGenerarQr.setOnClickListener{
-            val bitMapQR = generarQR(stringqr.toString())
-            val bottomSheet = QrBottomSheet(stringqr.toString(),bitMapQR)
-            bottomSheet.show(supportFragmentManager,"QrBottomSheet")
+    private fun actualizarEstado(nuevoEstado: Int) {
+        var estadoActual = nuevoEstado
+
+        val iconos = listOf(
+            binding.icEstadoAceptado,
+            binding.icEstadoPreparando,
+            binding.icEstadoTransito,
+            binding.icEstadoCerca,
+            binding.icEstadoEntregado
+        )
+
+        val labels = listOf(
+            binding.lblAceptado,
+            binding.lblPreparando,
+            binding.lblEnTransito,
+            binding.lblCerca,
+            binding.lblEntregado
+        )
+
+        for (i in 0 until iconos.size) {
+            val icono = (iconos[i])
+            val label = (labels[i])
+
+            if (i < nuevoEstado) {
+                icono.setColorFilter(getColor(R.color.white))
+                icono.setBackgroundResource(R.drawable.ic_border_status)
+                label.setTextColor(getColor(R.color.color_principal))
+                label.setTypeface(null, android.graphics.Typeface.NORMAL)
+
+                animarCheckmark(icono)
+
+            } else if (i == nuevoEstado) {
+                icono.setColorFilter(getColor(R.color.white))
+                icono.setBackgroundResource(R.drawable.ic_border_status)
+                label.setTextColor(getColor(R.color.color_principal))
+                label.setTypeface(null, android.graphics.Typeface.NORMAL)
+
+                animarCheckmark(icono)
+
+            } else {
+                icono.setColorFilter(getColor(R.color.white))
+                icono.setBackgroundResource(R.drawable.ic_border_status_off)
+                label.setTextColor(getColor(R.color.color_subtitulos))
+                label.setTypeface(null, android.graphics.Typeface.NORMAL)
+            }
+        }
+
+        if(nuevoEstado == 4){
+            Log.d("ESTADO_UI", "✅ Pedido entregado, verificando para abrir calificación")
+            Handler(Looper.getMainLooper()).postDelayed({
+                abrirCalificacion()
+            }, 500)
         }
     }
 
@@ -198,6 +245,35 @@ class RastreoActivity : AppCompatActivity() {
             Log.d("CALIFICACION", " Pedido #$pedidoId ya tiene calificación")
             return
         }
+        mostrarDialogConfirmacion()
+    }
+
+    private fun mostrarDialogConfirmacion(){
+        val dialogView = layoutInflater.inflate(R.layout.mensaje_calificacion_confirmacion,null)
+
+        val dialog = AlertDialog.Builder(this).setView(dialogView).setCancelable(false).create()
+
+        val btnCalificarAhora = dialogView.findViewById<Button>(R.id.btnCalificarAhora)
+        val btnCalificarDespues = dialogView.findViewById<Button>(R.id.btnCalificarDespues)
+
+        btnCalificarAhora.setOnClickListener {
+            dialog.dismiss()
+
+            mostrarVistaCalificacion()
+        }
+
+        btnCalificarDespues.setOnClickListener{
+            dialog.dismiss()
+
+            Toast.makeText(this, "Puedes calificar luego desde tu historial", Toast.LENGTH_SHORT).show()
+        }
+
+        dialog.show()
+
+    }
+
+    private fun mostrarVistaCalificacion(){
+        Log.d("CALIFICACION", "Abriendo calificación para pedido #$pedidoId")
 
         Log.d("CALIFICACION", "Abriendo calificacion con numero pedido #${pedidoId}")
         val intent = Intent(this, CalificacionClientActivity::class.java).apply {
@@ -282,90 +358,6 @@ class RastreoActivity : AppCompatActivity() {
         }
     }
 
-    private fun inicializarEstados() {
-        actualizarEstado(2)
-    }
-    private fun simularCambiosEstado() {
-        val handler = Handler(Looper.getMainLooper())
-
-        handler.postDelayed({ actualizarEstado(0) }, 500)
-
-        handler.postDelayed({ actualizarEstado(1) }, 3000)
-
-        handler.postDelayed({ actualizarEstado(2) }, 6000)
-
-        handler.postDelayed({ actualizarEstado(3) }, 9000)
-
-        handler.postDelayed({ actualizarEstado(4) }, 12000)
-    }
-
-    private fun actualizarEstado(nuevoEstado: Int) {
-        var estadoActual = nuevoEstado
-
-        val iconos = listOf(
-            binding.icEstadoAceptado,
-            binding.icEstadoPreparando,
-            binding.icEstadoTransito,
-            //binding.icEstadoCerca,
-            binding.icEstadoEntregado
-        )
-
-        val labels = listOf(
-            binding.lblAceptado,
-            binding.lblPreparando,
-            binding.lblEnTransito,
-            //binding.lblCerca,
-            binding.lblEntregado
-        )
-
-        for (i in 0 until iconos.size) {
-            val icono = (iconos[i])
-            val label = (labels[i])
-
-            if (i < nuevoEstado) {
-                icono.setColorFilter(getColor(R.color.white))
-                icono.setBackgroundResource(R.drawable.ic_border_status)
-                label.setTextColor(getColor(R.color.color_principal))
-                label.setTypeface(null, android.graphics.Typeface.NORMAL)
-
-                animarCheckmark(icono)
-
-            } else if (i == nuevoEstado) {
-                icono.setColorFilter(getColor(R.color.white))
-                icono.setBackgroundResource(R.drawable.ic_border_status)
-                label.setTextColor(getColor(R.color.color_principal))
-                label.setTypeface(null, android.graphics.Typeface.NORMAL)
-
-                animarCheckmark(icono)
-
-            } else {
-                icono.setColorFilter(getColor(R.color.white))
-                icono.setBackgroundResource(R.drawable.ic_border_status_off)
-                label.setTextColor(getColor(R.color.color_subtitulos))
-                label.setTypeface(null, android.graphics.Typeface.NORMAL)
-            }
-        }
-
-        if(nuevoEstado ==3){
-            Log.d("ESTADO_UI", "✅ Pedido entregado, verificando para abrir calificación")
-            Handler(Looper.getMainLooper()).postDelayed({
-                abrirCalificacion()
-            }, 500)
-        }
-    }
-
-    private fun actualizarEstadoApi(){
-        val estadoIndex = when(estado){
-           "PE" -> 0
-           "AS" -> 1
-           "EC" -> 2
-           "EN" -> 3
-            else -> 0
-        }
-        Log.d("ESTADO_UI", "🎨 Actualizando UI al estado: $estado (índice: $estadoIndex)")
-        actualizarEstado(estadoIndex)
-    }
-
     private fun animarCheckmark(imageView: ImageView) {
 
         val scaleX = ObjectAnimator.ofFloat(imageView, "scaleX", 0.8f, 1.2f, 1f)
@@ -376,22 +368,6 @@ class RastreoActivity : AppCompatActivity() {
 
         scaleX.start()
         scaleY.start()
-    }
-
-    private fun animarEstadoActual(imageView: ImageView) {
-
-        val scaleX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.4f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.4f, 1f)
-
-        val rotation = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f)
-
-        scaleX.duration = 600
-        scaleY.duration = 600
-        rotation.duration = 800
-
-        scaleX.start()
-        scaleY.start()
-        rotation.start()
     }
 
     private fun llamarTelefonoRepartidor(){
@@ -425,6 +401,7 @@ class RastreoActivity : AppCompatActivity() {
             Toast.makeText(this, "Error al enviar el mensaje", Toast.LENGTH_SHORT).show()
         }
     }
+
     private fun enviarMensajeRepartidorBtn(){
         binding.btnMessageRepartidor.setOnClickListener{
 
@@ -445,4 +422,61 @@ class RastreoActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun generarQR(texto:String,ancho:Int = 500, alto:Int=500): Bitmap{
+        val bitMatrix:BitMatrix = MultiFormatWriter().encode(
+            texto,
+            BarcodeFormat.QR_CODE,
+            ancho,
+            alto
+        )
+
+        val bitmap = Bitmap.createBitmap(ancho,alto,Bitmap.Config.RGB_565)
+
+        for (x in 0 until ancho){
+            for (y in 0 until alto){
+                bitmap.setPixel(x,y, if (bitMatrix[x,y]) Color.BLACK else Color.WHITE)
+            }
+        }
+        return bitmap
+    }
+
+    private fun generarcionDeQr(){
+        binding.btnGenerarQr.setOnClickListener{
+            val bitMapQR = generarQR(stringqr.toString())
+            val bottomSheet = QrBottomSheet(stringqr.toString(),bitMapQR)
+            bottomSheet.show(supportFragmentManager,"QrBottomSheet")
+        }
+    }
+
+    /*
+    private fun simularCambiosEstado() {
+        val handler = Handler(Looper.getMainLooper())
+
+        handler.postDelayed({ actualizarEstado(0) }, 500)
+
+        handler.postDelayed({ actualizarEstado(1) }, 3000)
+
+        handler.postDelayed({ actualizarEstado(2) }, 6000)
+
+        handler.postDelayed({ actualizarEstado(3) }, 9000)
+
+        handler.postDelayed({ actualizarEstado(4) }, 12000)
+    }
+    private fun animarEstadoActual(imageView: ImageView) {
+
+        val scaleX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.4f, 1f)
+        val scaleY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.4f, 1f)
+
+        val rotation = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f)
+
+        scaleX.duration = 600
+        scaleY.duration = 600
+        rotation.duration = 800
+
+        scaleX.start()
+        scaleY.start()
+        rotation.start()
+    }
+*/
 }

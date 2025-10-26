@@ -51,6 +51,11 @@
     <string name="seguimiento_fmt_total">S/ %1$.2f</string>
     <string name="seguimiento_card_cantidad">Cantidad: %1$d</string>
     <string name="seguimiento_card_precio_total">S/ %1$.2f</string>
+    <string name="seguimiento_alerts_titulo">¿Quieres Calificar este pedido?</string>
+    <string name="seguimiento_alerts_subtitulo">Este pedido fue entregado y no cuenta con una calificacion</string>
+    <string name="seguimiento_alerts_subtitulo2">Deseas calificar este pedido ahora</string>
+    <string name="seguimiento_alerts_btn_si">¡Si! Calificar ahora</string>
+    <string name="seguimiento_alerts_btn_no">No, calificar despues</string>
 
     <string name="btn_call_repartidor">Llamar al repartidor</string>
     <string name="btn_message_repartidor">Mandar mensaje al repartidor</string>
