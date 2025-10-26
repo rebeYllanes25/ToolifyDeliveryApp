@@ -82,9 +82,10 @@ class RastreoActivity : AppCompatActivity() {
         cargarRecycleView()
         generarcionDeQr()
 
-        //SIMULACION DE CAMBIOS DE ESTADO
+        /*
         inicializarEstados()
         simularCambiosEstado()
+        */
 
         //RECARGAR EL ESTADO DEL API
         recargarDatosPedido()
@@ -226,7 +227,7 @@ class RastreoActivity : AppCompatActivity() {
                     }
 
                     verificacionCompletada = true
-
+                    actualizarEstadoApi()
                     cargarDatosVista()
                 }
 
@@ -305,7 +306,7 @@ class RastreoActivity : AppCompatActivity() {
             binding.icEstadoAceptado,
             binding.icEstadoPreparando,
             binding.icEstadoTransito,
-            binding.icEstadoCerca,
+            //binding.icEstadoCerca,
             binding.icEstadoEntregado
         )
 
@@ -313,11 +314,11 @@ class RastreoActivity : AppCompatActivity() {
             binding.lblAceptado,
             binding.lblPreparando,
             binding.lblEnTransito,
-            binding.lblCerca,
+            //binding.lblCerca,
             binding.lblEntregado
         )
 
-        for (i in 0..4) {
+        for (i in 0 until iconos.size) {
             val icono = (iconos[i])
             val label = (labels[i])
 
@@ -345,12 +346,24 @@ class RastreoActivity : AppCompatActivity() {
             }
         }
 
-        if(nuevoEstado ==4){
+        if(nuevoEstado ==3){
             Log.d("ESTADO_UI", "✅ Pedido entregado, verificando para abrir calificación")
             Handler(Looper.getMainLooper()).postDelayed({
                 abrirCalificacion()
             }, 500)
         }
+    }
+
+    private fun actualizarEstadoApi(){
+        val estadoIndex = when(estado){
+           "PE" -> 0
+           "AS" -> 1
+           "EC" -> 2
+           "EN" -> 3
+            else -> 0
+        }
+        Log.d("ESTADO_UI", "🎨 Actualizando UI al estado: $estado (índice: $estadoIndex)")
+        actualizarEstado(estadoIndex)
     }
 
     private fun animarCheckmark(imageView: ImageView) {
