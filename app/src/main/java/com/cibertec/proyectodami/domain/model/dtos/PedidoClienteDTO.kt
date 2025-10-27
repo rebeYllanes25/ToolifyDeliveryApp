@@ -19,6 +19,7 @@ data class PedidoClienteDTO(
     @SerializedName("detalles")
     val productos: List<ProductoPedidoDTO>,
 
+    val idRepartidor:Int,
     val nomRepartidor: String?,
     val apePaternoRepartidor: String?,
     val telefonoRepartidor: String?,

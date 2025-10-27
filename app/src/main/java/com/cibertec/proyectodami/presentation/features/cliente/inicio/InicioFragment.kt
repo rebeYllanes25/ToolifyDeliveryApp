@@ -122,6 +122,7 @@ class InicioFragment : Fragment() {
             putExtra("QR_VERIFICATE_PEDIDO",pedido.qrVerificationCode)
             putExtra("PRODUCTOS", Gson().toJson(pedido.productos))
             putExtra("TOTAL", pedido.total)
+            putExtra("ID_REPARTIDOR",pedido.idRepartidor)
 
         }
         startActivity(intent)
