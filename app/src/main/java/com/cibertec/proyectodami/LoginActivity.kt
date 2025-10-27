@@ -10,6 +10,7 @@ import com.cibertec.proyectodami.data.api.UserAuth
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.databinding.ActivityLoginBinding
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
+import com.cibertec.proyectodami.domain.util.FcmTokenHelper
 import com.cibertec.proyectodami.presentation.features.cliente.ClienteMainActivity
 import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
 import kotlinx.coroutines.*
@@ -79,23 +80,29 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     return@launch
                 }
 
-                // ✅ Guardar token Y ESPERAR a que se complete
+                // Guardar token JWT
                 withContext(Dispatchers.IO) {
                     userPreferences.guardarToken(token)
                 }
 
-                // ✅ Recrear la instancia de API con el token actualizado
+                // Recrear API con el nuevo token
                 authApi = RetrofitInstance.create(userPreferences).create(UserAuth::class.java)
 
-                // Ahora sí pedir info del usuario
+                // Obtener información del usuario
                 val usuario = withContext(Dispatchers.IO) { authApi.getUsuarioInfo() }
 
-                // Guardar datos
+                // Guardar datos del usuario
                 withContext(Dispatchers.IO) {
                     userPreferences.guardarIdUsuario(usuario.idUsuario)
                     userPreferences.guardarNombreUsuario(usuario.nombres)
                     userPreferences.guardarRol(usuario.rol.idRol)
                 }
+
+                // Registrar token FCM en el backend
+                FcmTokenHelper.obtenerYEnviarToken(
+                    context = this@LoginActivity,
+                    userPreferences = userPreferences
+                )
 
                 // Redirigir según rol
                 when (usuario.rol.idRol) {
@@ -103,6 +110,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     4 -> startActivity(Intent(this@LoginActivity, RepartidorMainActivity::class.java))
                     else -> Toast.makeText(this@LoginActivity, "Rol no reconocido", Toast.LENGTH_SHORT).show()
                 }
+
                 finish()
 
             } catch (e: Exception) {
@@ -111,6 +119,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
             }
         }
     }
+
 
     private fun iraRegistro() {
         val intent = Intent(this, RegistroActivity::class.java)

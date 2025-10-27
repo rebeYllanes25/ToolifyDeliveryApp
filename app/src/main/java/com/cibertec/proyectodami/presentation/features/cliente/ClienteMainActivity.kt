@@ -1,5 +1,6 @@
 package com.cibertec.proyectodami.presentation.features.cliente
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -19,7 +20,7 @@ import com.cibertec.proyectodami.presentation.features.cliente.carro.CarroFragme
 import com.cibertec.proyectodami.presentation.features.cliente.carro.CarroRepository
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.InicioFragment
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialFragment
-import com.cibertec.proyectodami.presentation.features.cliente.notificaciones.NotificacionesFragment
+import com.cibertec.proyectodami.presentation.features.cliente.notificaciones.NotificacionesActivity
 import com.cibertec.proyectodami.presentation.features.cliente.perfil.PerfilFragment
 import com.cibertec.proyectodami.presentation.features.cliente.productos.ProductosFragment
 import kotlinx.coroutines.launch
@@ -95,8 +96,13 @@ class ClienteMainActivity : AppCompatActivity() {
         }
 
         binding.btnNotificaciones.setOnClickListener {
-            cargarFragment(NotificacionesFragment(), ApartadoType.NOTIFICACIONES)
+            abrirNotificacionesActivity()
         }
+    }
+
+    private fun abrirNotificacionesActivity() {
+        val intent = Intent(this, NotificacionesActivity::class.java)
+        startActivity(intent)
     }
 
     private fun cargarFragment(fragment: Fragment, tipo: ApartadoType) {
@@ -109,7 +115,7 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun actualizarEstiloApartados(apartadoSeleccionado: ApartadoType) {
-        if (apartadoSeleccionado == ApartadoType.NOTIFICACIONES || apartadoSeleccionado == ApartadoType.CARRO) {
+        if (apartadoSeleccionado == ApartadoType.CARRO) {
             binding.layoutApartados.visibility = View.GONE
             resetearBotonProducto()
             resetearApartado(binding.apartadoPedido)
@@ -182,7 +188,7 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (apartadoActual == ApartadoType.NOTIFICACIONES || apartadoActual == ApartadoType.CARRO) {
+        if (apartadoActual == ApartadoType.CARRO) {
             cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
         } else if (apartadoActual != ApartadoType.PRODUCTOS) {
             cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
@@ -192,7 +198,7 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     enum class ApartadoType {
-        INICIO, PRODUCTOS, HISTORIAL, PERFIL, NOTIFICACIONES, CARRO
+        INICIO, PRODUCTOS, HISTORIAL, PERFIL, CARRO
     }
 
     private fun setupCarritoButton() {
