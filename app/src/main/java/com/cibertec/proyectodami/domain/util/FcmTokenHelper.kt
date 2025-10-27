@@ -14,17 +14,24 @@ import kotlinx.coroutines.tasks.await
 
 object FcmTokenHelper {
 
-    // Obtiene el token FCM actual y lo envía al backend
-    fun obtenerYEnviarToken(context: Context, usuarioId: Int, rolUsuario: String, userPreferences: UserPreferences) {
-        if (rolUsuario.uppercase() != "C") {
-            Log.d("FCM", "Usuario no es cliente, no se envía token")
-            return
-        }
-
+    fun obtenerYEnviarToken(context: Context, userPreferences: UserPreferences) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val usuarioId = userPreferences.obtenerIdUsuario()
+                val rolUsuario = userPreferences.obtenerRol()
+
+                if (usuarioId == -1 || rolUsuario == null) {
+                    Log.e("FCM", "No se pudo obtener el usuario o rol desde DataStore")
+                    return@launch
+                }
+
+                if (rolUsuario != 2) {
+                    Log.d("FCM", "Usuario no es cliente, no se envía token")
+                    return@launch
+                }
+
                 val token = FirebaseMessaging.getInstance().token.await()
-                Log.d("FCM", "Token obtenido: $token")
+                Log.d("FCM", "Token FCM obtenido: $token")
 
                 guardarTokenLocal(context, token)
 
@@ -37,7 +44,7 @@ object FcmTokenHelper {
                 )
 
                 if (response.isSuccessful) {
-                    Log.d("FCM", "Token registrado en backend exitosamente")
+                    Log.d("FCM", "Token registrado exitosamente en backend")
                 } else {
                     Log.e("FCM", "Error al registrar token: ${response.code()} ${response.message()}")
                 }
@@ -48,18 +55,24 @@ object FcmTokenHelper {
         }
     }
 
-    fun eliminarToken(context: Context, usuarioId: Int, userPreferences: UserPreferences) {
+    fun eliminarToken(context: Context, userPreferences: UserPreferences) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
+                val usuarioId = userPreferences.obtenerIdUsuario()
+                if (usuarioId == -1) {
+                    Log.e("FCM", "No se encontró un ID de usuario válido para eliminar token")
+                    return@launch
+                }
+
                 val retrofit = RetrofitInstance.create(userPreferences)
-                val api = retrofit.create(com.cibertec.proyectodami.data.api.Notificaciones::class.java)
+                val api = retrofit.create(Notificaciones::class.java)
 
                 val response = api.eliminarTokenFcm(usuarioId)
                 if (response.isSuccessful) {
-                    Log.d("FCM", "Token eliminado del backend")
+                    Log.d("FCM", "Token eliminado del backend correctamente")
                     borrarTokenLocal(context)
                 } else {
-                    Log.e("FCM", "Error al eliminar token: ${response.code()}")
+                    Log.e("FCM", "Error al eliminar token: ${response.code()} ${response.message()}")
                 }
 
             } catch (e: Exception) {
@@ -68,6 +81,7 @@ object FcmTokenHelper {
         }
     }
 
+    // Guarda el token FCM en SharedPreferences (solo visible por la app)
     private fun guardarTokenLocal(context: Context, token: String) {
         val prefs = context.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
         prefs.edit().putString("fcm_token", token).apply()

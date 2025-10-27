@@ -38,6 +38,9 @@
         android:theme="@style/Theme.ProyectoDAMI"
         tools:targetApi="31">
         <activity
+            android:name=".presentation.features.cliente.notificaciones.NotificacionesActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegistroActivity"
             android:exported="false" />
 
@@ -81,7 +84,7 @@
         </activity>
 
         <service
-            android:name=".services.MyFirebaseMessagingService"
+            android:name=".domain.services.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
