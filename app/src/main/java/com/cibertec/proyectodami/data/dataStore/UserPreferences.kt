@@ -17,12 +17,15 @@ class UserPreferences(private val context: Context) {
         val TOKEN_KEY = stringPreferencesKey("jwt_token")
         val USER_ID_KEY = intPreferencesKey("user_id")
         private val USER_NOMBRE_KEY = stringPreferencesKey("user_nombre")
+        private val USER_CORREO_KEY = stringPreferencesKey("user_correo")
+        private val USER_TELEFONO_KEY = stringPreferencesKey("user_telefono")
         private val ROL_KEY = intPreferencesKey("rol")
     }
 
     suspend fun guardarToken(token: String) {
         context.dataStore.edit { it[TOKEN_KEY] = token }
     }
+    private val dataStore = context.dataStore
 
     val token: Flow<String?> = context.dataStore.data.map { it[TOKEN_KEY] }
 
@@ -55,13 +58,25 @@ class UserPreferences(private val context: Context) {
     suspend fun obtenerNombreUsuario(): String? {
         return nombreUsuario.first()
     }
+    // Teléfono
+    suspend fun guardarTelefono(telefono: String) {
+        dataStore.edit { it[USER_TELEFONO_KEY] = telefono }
+    }
+
+    val telefono: Flow<String?> = dataStore.data.map { it[USER_TELEFONO_KEY] }
+    suspend fun obtenerTelefono(): String? = telefono.first()
 
     suspend fun guardarRol(rol: Int) {
         context.dataStore.edit { prefs ->
             prefs[ROL_KEY] = rol
         }
     }
+    suspend fun guardarCorreo(correo: String) {
+        dataStore.edit { it[USER_CORREO_KEY] = correo }
+    }
 
+    val correo: Flow<String?> = dataStore.data.map { it[USER_CORREO_KEY] }
+    suspend fun obtenerCorreo(): String? = correo.first()
     val rol: Flow<Int?> = context.dataStore.data
         .map { prefs -> prefs[ROL_KEY] }
 

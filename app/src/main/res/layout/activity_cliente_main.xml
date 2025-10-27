@@ -31,7 +31,7 @@
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btnNotificaciones" />
+                app:layout_constraintEnd_toStartOf="@id/btnCarrito" />
 
             <TextView
                 android:id="@+id/tvSubtitulo"
@@ -43,8 +43,48 @@
                 android:layout_marginTop="4dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvSaludo"
-                app:layout_constraintEnd_toStartOf="@id/btnNotificaciones" />
+                app:layout_constraintEnd_toStartOf="@id/btnCarrito" />
 
+            <androidx.cardview.widget.CardView
+                android:id="@+id/btnCarrito"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnNotificaciones"
+                android:layout_marginEnd="8dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imgCarrito"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_cart"
+                        app:tint="@color/color_texto_normal"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <View
+                        android:id="@+id/insigniaCarrito"
+                        android:layout_width="10dp"
+                        android:layout_height="10dp"
+                        android:background="@drawable/ic_badge_circle"
+                        android:visibility="gone"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.cardview.widget.CardView>
             <androidx.cardview.widget.CardView
                 android:id="@+id/btnNotificaciones"
                 android:layout_width="40dp"
@@ -82,8 +122,8 @@
                         android:layout_marginEnd="4dp" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
-
             </androidx.cardview.widget.CardView>
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -99,8 +139,9 @@
         android:paddingHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/tarjetaCabecera">
 
+        <!-- Inicio Producto -->
         <LinearLayout
-            android:id="@+id/apartadoInicio"
+            android:id="@+id/inicioProducto"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -122,10 +163,41 @@
                 android:textColor="@color/color_principal"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:layout_marginStart="8dp" />
-
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"/>
         </LinearLayout>
 
+        <!-- Apartado Pedido -->
+        <LinearLayout
+            android:id="@+id/apartadoPedido"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_camion_g"
+                app:tint="@color/color_principal" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tab_pedido"
+                android:textColor="@color/color_principal"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <!-- Apartado Historial -->
         <LinearLayout
             android:id="@+id/apartadoHistorial"
             android:layout_width="0dp"
@@ -148,10 +220,12 @@
                 android:text="@string/tab_historial"
                 android:textColor="@color/color_subtitulos"
                 android:textSize="14sp"
-                android:layout_marginStart="8dp" />
-
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"/>
         </LinearLayout>
 
+        <!-- Apartado Perfil -->
         <LinearLayout
             android:id="@+id/apartadoPerfil"
             android:layout_width="0dp"
@@ -175,11 +249,13 @@
                 android:text="@string/tab_usuario"
                 android:textColor="@color/color_subtitulos"
                 android:textSize="14sp"
-                android:layout_marginStart="8dp" />
-
+                android:layout_marginStart="4dp"
+                android:ellipsize="end"
+                android:singleLine="true"/>
         </LinearLayout>
 
     </LinearLayout>
+
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/contenedorFragmento"

@@ -66,10 +66,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
     private fun login(correo: String, clave: String) {
         launch {
             try {
-                val response = withContext(Dispatchers.IO) {
-                    authApi.login(correo, clave)
-                }
-
+                val response = withContext(Dispatchers.IO) { authApi.login(correo, clave) }
                 val token = response.token
 
                 if (token.isNullOrEmpty()) {
@@ -77,31 +74,35 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     return@launch
                 }
 
-                userPreferences.guardarToken(token)
-                // Obtener datos del usuario
-                val usuario = withContext(Dispatchers.IO) {
-                    authApi.getUsuarioInfo()
+                // ✅ Guardar token Y ESPERAR a que se complete
+                withContext(Dispatchers.IO) {
+                    userPreferences.guardarToken(token)
                 }
-                userPreferences.guardarIdUsuario(usuario.idUsuario)
-                userPreferences.guardarNombreUsuario(usuario.nombres)
-                userPreferences.guardarRol(usuario.rol.idRol)
+
+                // ✅ Recrear la instancia de API con el token actualizado
+                authApi = RetrofitInstance.create(userPreferences).create(UserAuth::class.java)
+
+                // Ahora sí pedir info del usuario
+                val usuario = withContext(Dispatchers.IO) { authApi.getUsuarioInfo() }
+
+                // Guardar datos
+                withContext(Dispatchers.IO) {
+                    userPreferences.guardarIdUsuario(usuario.idUsuario)
+                    userPreferences.guardarNombreUsuario(usuario.nombres)
+                    userPreferences.guardarRol(usuario.rol.idRol)
+                }
+
+                // Redirigir según rol
                 when (usuario.rol.idRol) {
-                    2 -> {
-                        startActivity(Intent(this@LoginActivity, ClienteMainActivity::class.java))
-                        finish()
-                    }
-                    4 -> {
-                        startActivity(Intent(this@LoginActivity, RepartidorMainActivity::class.java))
-                        finish()
-                    }
-                    else -> {
-                        Toast.makeText(this@LoginActivity, "Rol no reconocido", Toast.LENGTH_SHORT).show()
-                    }
+                    2 -> startActivity(Intent(this@LoginActivity, ClienteMainActivity::class.java))
+                    4 -> startActivity(Intent(this@LoginActivity, RepartidorMainActivity::class.java))
+                    else -> Toast.makeText(this@LoginActivity, "Rol no reconocido", Toast.LENGTH_SHORT).show()
                 }
+                finish()
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@LoginActivity, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity, "Error al iniciar sesión: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
     }

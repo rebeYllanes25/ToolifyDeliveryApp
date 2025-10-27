@@ -4,6 +4,8 @@ import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
 }
 
 val secrets = Properties()
@@ -86,7 +88,8 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
-
+    implementation(libs.glide)
+    kapt(libs.glide.compiler)
     implementation(libs.zxing.core)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

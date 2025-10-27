@@ -1,6 +1,7 @@
 package com.cibertec.proyectodami.presentation.features.cliente
 
 import android.os.Bundle
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -14,16 +15,19 @@ import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.databinding.ActivityClienteMainBinding
 import com.cibertec.proyectodami.domain.repository.PedidoClienteRepository
+import com.cibertec.proyectodami.presentation.features.cliente.carro.CarroFragment
+import com.cibertec.proyectodami.presentation.features.cliente.carro.CarroRepository
 import com.cibertec.proyectodami.presentation.features.cliente.inicio.InicioFragment
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialFragment
 import com.cibertec.proyectodami.presentation.features.cliente.notificaciones.NotificacionesFragment
 import com.cibertec.proyectodami.presentation.features.cliente.perfil.PerfilFragment
+import com.cibertec.proyectodami.presentation.features.cliente.productos.ProductosFragment
 import kotlinx.coroutines.launch
 
 class ClienteMainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClienteMainBinding
-    private var apartadoActual: ApartadoType = ApartadoType.INICIO
+    private var apartadoActual: ApartadoType = ApartadoType.PRODUCTOS
 
     lateinit var pedidoRepository: PedidoClienteRepository
 
@@ -35,9 +39,11 @@ class ClienteMainActivity : AppCompatActivity() {
         inicializarRepositorio()
         configurarSaludo()
         configurarApartados()
+        setupCarritoButton()
+        observeCarrito()
 
         if (savedInstanceState == null) {
-            cargarFragment(InicioFragment(), ApartadoType.INICIO)
+            cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
         }
     }
 
@@ -56,7 +62,6 @@ class ClienteMainActivity : AppCompatActivity() {
 
     private fun configurarSaludo() {
         val userPreferences = UserPreferences(applicationContext)
-
         lifecycleScope.launch {
             userPreferences.nombreUsuario.collect { nombre ->
                 binding.tvSaludo.text = nombre ?: getString(R.string.user_name)
@@ -65,7 +70,13 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun configurarApartados() {
-        binding.apartadoInicio.setOnClickListener {
+        binding.inicioProducto.setOnClickListener {
+            if (apartadoActual != ApartadoType.PRODUCTOS) {
+                cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
+            }
+        }
+
+        binding.apartadoPedido.setOnClickListener {
             if (apartadoActual != ApartadoType.INICIO) {
                 cargarFragment(InicioFragment(), ApartadoType.INICIO)
             }
@@ -98,24 +109,52 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun actualizarEstiloApartados(apartadoSeleccionado: ApartadoType) {
-        if (apartadoSeleccionado == ApartadoType.NOTIFICACIONES) {
-            binding.layoutApartados.visibility = android.view.View.GONE
-            resetearApartado(binding.apartadoInicio)
+        if (apartadoSeleccionado == ApartadoType.NOTIFICACIONES || apartadoSeleccionado == ApartadoType.CARRO) {
+            binding.layoutApartados.visibility = View.GONE
+            resetearBotonProducto()
+            resetearApartado(binding.apartadoPedido)
             resetearApartado(binding.apartadoHistorial)
             resetearApartado(binding.apartadoPerfil)
         } else {
-            binding.layoutApartados.visibility = android.view.View.VISIBLE
-            resetearApartado(binding.apartadoInicio)
+            binding.layoutApartados.visibility = View.VISIBLE
+
+            resetearBotonProducto()
+            resetearApartado(binding.apartadoPedido)
             resetearApartado(binding.apartadoHistorial)
             resetearApartado(binding.apartadoPerfil)
 
             when (apartadoSeleccionado) {
-                ApartadoType.INICIO -> activarApartado(binding.apartadoInicio)
+                ApartadoType.PRODUCTOS -> activarBotonProducto()
+                ApartadoType.INICIO -> activarApartado(binding.apartadoPedido)
                 ApartadoType.HISTORIAL -> activarApartado(binding.apartadoHistorial)
                 ApartadoType.PERFIL -> activarApartado(binding.apartadoPerfil)
                 else -> {}
             }
         }
+    }
+
+    private fun resetearBotonProducto() {
+        val imageView = binding.inicioProducto.getChildAt(0) as? ImageView
+        val textView = binding.inicioProducto.getChildAt(1) as? TextView
+
+        imageView?.setColorFilter(
+            ContextCompat.getColor(this, R.color.color_subtitulos),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        )
+        textView?.setTextColor(ContextCompat.getColor(this, R.color.color_subtitulos))
+        textView?.setTypeface(null, android.graphics.Typeface.NORMAL)
+    }
+
+    private fun activarBotonProducto() {
+        val imageView = binding.inicioProducto.getChildAt(0) as? ImageView
+        val textView = binding.inicioProducto.getChildAt(1) as? TextView
+
+        imageView?.setColorFilter(
+            ContextCompat.getColor(this, R.color.color_principal),
+            android.graphics.PorterDuff.Mode.SRC_IN
+        )
+        textView?.setTextColor(ContextCompat.getColor(this, R.color.color_principal))
+        textView?.setTypeface(null, android.graphics.Typeface.BOLD)
     }
 
     private fun resetearApartado(apartado: LinearLayout) {
@@ -143,14 +182,37 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if (apartadoActual == ApartadoType.NOTIFICACIONES) {
-            cargarFragment(InicioFragment(), ApartadoType.INICIO)
+        if (apartadoActual == ApartadoType.NOTIFICACIONES || apartadoActual == ApartadoType.CARRO) {
+            cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
+        } else if (apartadoActual != ApartadoType.PRODUCTOS) {
+            cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
         } else {
             super.onBackPressed()
         }
     }
 
     enum class ApartadoType {
-        INICIO, HISTORIAL, PERFIL, NOTIFICACIONES
+        INICIO, PRODUCTOS, HISTORIAL, PERFIL, NOTIFICACIONES, CARRO
+    }
+
+    private fun setupCarritoButton() {
+        val btnCarrito = binding.btnCarrito
+
+        btnCarrito?.setOnClickListener {
+            cargarFragment(CarroFragment(), ApartadoType.CARRO)
+        }
+    }
+
+    private fun observeCarrito() {
+        lifecycleScope.launch {
+            CarroRepository.cantidadTotal.collect { cantidad ->
+                actualizarInsigniaCarrito(cantidad)
+            }
+        }
+    }
+
+    private fun actualizarInsigniaCarrito(cantidad: Int) {
+        val insigniaCarrito = binding.insigniaCarrito
+        insigniaCarrito?.visibility = if (cantidad > 0) View.VISIBLE else View.GONE
     }
 }
