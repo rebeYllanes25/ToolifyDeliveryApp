@@ -20,7 +20,6 @@ class DisponiblesViewModel : ViewModel() {
     val navegarAActivos: LiveData<Boolean> = _navegarAActivos
 
     private val _pedidoAceptado = MutableLiveData<Boolean>()
-    val pedidoAceptado: LiveData<Boolean> = _pedidoAceptado
 
     init {
         cargarPedidosDisponibles()
@@ -33,7 +32,6 @@ class DisponiblesViewModel : ViewModel() {
                 PedidoRepartidorRepository.cargarPedidosDisponibles()
             } catch (e: Exception) {
                 e.printStackTrace()
-                // Aquí podrías mostrar un mensaje de error si deseas
             } finally {
                 _loading.value = false
             }
@@ -56,7 +54,7 @@ class DisponiblesViewModel : ViewModel() {
             _pedidoAceptado.value = true
 
             try {
-                PedidoRepartidorRepository.aceptarPedido(pedido, idRepartidor)
+                PedidoRepartidorRepository.caminoPedido(pedido.idPedido, idRepartidor)
                 _navegarAActivos.value = true
             } catch (e: Exception) {
                 e.printStackTrace()

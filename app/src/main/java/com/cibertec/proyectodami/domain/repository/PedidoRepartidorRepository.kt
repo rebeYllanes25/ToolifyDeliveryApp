@@ -24,7 +24,7 @@ object PedidoRepartidorRepository {
 
     suspend fun cargarPedidosDisponibles() {
         try {
-            val pedidos = pedidoApi.obtenerPedidosPendientes()
+            val pedidos = pedidoApi.obtenerPedidosAceptados()
 
             val pedidoActivo = _pedidoActivo.value
             val pedidosFiltrados = if (pedidoActivo != null) {
@@ -36,21 +36,6 @@ object PedidoRepartidorRepository {
             _pedidosDisponibles.postValue(pedidosFiltrados)
         } catch (e: Exception) {
             e.printStackTrace()
-        }
-    }
-
-    suspend fun aceptarPedido(pedido: PedidoRepartidorDTO, idRepartidor: Int) {
-        try {
-            val pedidoActualizado = pedidoApi.asignarRepartidor(pedido.idPedido, idRepartidor)
-            _pedidoActivo.postValue(pedidoActualizado)
-
-            val disponibles = _pedidosDisponibles.value?.toMutableList() ?: mutableListOf()
-            disponibles.remove(pedido)
-            _pedidosDisponibles.postValue(disponibles)
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
         }
     }
 
