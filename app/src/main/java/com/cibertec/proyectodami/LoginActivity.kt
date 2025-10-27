@@ -36,6 +36,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
         val etCorreo = binding.etCorreo
         val etPassword = binding.etContrasenia
         val btnLogin = binding.btnLogin
+        val linkRegistro = binding.linkRegistro
 
         fun checkFields() {
             val emailFilled = !etCorreo.text.isNullOrBlank()
@@ -60,6 +61,10 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
             val correo = etCorreo.text.toString()
             val clave = etPassword.text.toString()
             login(correo, clave)
+        }
+
+        linkRegistro.setOnClickListener {
+            iraRegistro()
         }
     }
 
@@ -105,6 +110,11 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                 Toast.makeText(this@LoginActivity, "Error al iniciar sesión: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    private fun iraRegistro() {
+        val intent = Intent(this, RegistroActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onDestroy() {
