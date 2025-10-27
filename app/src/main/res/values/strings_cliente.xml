@@ -4,7 +4,7 @@
     <string name="saludo_usuario">¡Hola, %1$s!</string>
     <string name="subtitlo_seguimiento">Rastrea tus pedidos en tiempo real</string>
     <string name="tab_inicio">Inicio</string>
-    <string name="tab_pedido">Pedido</string>
+    <string name="tab_pedido">Pedidos</string>
     <string name="tab_historial">Historial</string>
     <string name="tab_usuario">Perfil</string>
 

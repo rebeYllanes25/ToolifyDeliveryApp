@@ -103,6 +103,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
         setupServices()
         setupRecyclerView()
         setupSpinners()
+        sincronizarEstadoInicial()
         setupRadioButtons()
         setupButtons()
         observeCarrito()
@@ -112,7 +113,18 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
 
         setupMapButtons()
     }
-
+    private fun sincronizarEstadoInicial() {
+        when (binding.rgMetodoEntrega.checkedRadioButtonId) {
+            R.id.rbSucursal -> {
+                metodoEntrega = "S"
+                mostrarSeccionDelivery(false)
+            }
+            R.id.rbDelivery -> {
+                metodoEntrega = "D"
+                mostrarSeccionDelivery(true)
+            }
+        }
+    }
     private fun setupServices() {
         userPreferences = UserPreferences(requireContext())
         compraApiService = RetrofitInstance.create(userPreferences).create(CompraCliente::class.java)
@@ -146,7 +158,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
         binding.rgMetodoEntrega.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbSucursal -> {
-                    metodoEntrega = "P"
+                    metodoEntrega = "S"
                     mostrarSeccionDelivery(false)
                 }
                 R.id.rbDelivery -> {
@@ -547,7 +559,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
                     usuario = UsuarioVentaDTO(idUsuario = idUsuario),
                     total = totalCompra,
                     estado = "P", // Pendiente
-                    tipoVenta = if (metodoEntrega == "D") "D" else "S",
+                    tipoVenta = if (metodoEntrega == "D") "P" else "R",
                     metodoEntrega = metodoEntrega,
                     especificaciones = binding.etEspecificaciones.text.toString().ifBlank { null },
                     detalles = items.map { item ->
