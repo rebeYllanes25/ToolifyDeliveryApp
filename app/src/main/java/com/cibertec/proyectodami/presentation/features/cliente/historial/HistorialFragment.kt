@@ -1,5 +1,6 @@
 package com.cibertec.proyectodami.presentation.features.cliente.historial
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.databinding.FragmentHistorialBinding
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
+import com.cibertec.proyectodami.presentation.features.cliente.historial.detalleHistorial.DetalleHistorialActivity
 import com.cibertec.proyectodami.presentation.features.cliente.historial.filtros.FiltrosFragment
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -39,11 +41,11 @@ class HistorialFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-
-
         setupViews()
         observeViewModel()
         cargarDatosUsuario()
+
+
     }
 
     private fun setupRecyclerView() {
@@ -97,6 +99,7 @@ class HistorialFragment : Fragment() {
             mostrarEstadoVacio(false)
             binding.recyclerViewPedidosHistorial.adapter =
                 HistorialPedidoAdapter(lista) { pedido ->
+                    abrirDetalleHistorial(pedido)
                 }
         }
     }
@@ -110,6 +113,21 @@ class HistorialFragment : Fragment() {
         val filtrosFragment = FiltrosFragment.newInstance()
         filtrosFragment.show(childFragmentManager, FiltrosFragment.TAG)
     }
+
+    private fun abrirDetalleHistorial(pedido:PedidoClienteDTO){
+        val intent = Intent(requireContext(), DetalleHistorialActivity::class.java).apply {
+            putExtra("ID_PEDIDO", pedido.idPedido)
+            putExtra("NUM_PEDIDO", pedido.numPedido)
+            putExtra("ESTADO_PEDIDO", pedido.estado)
+            putExtra("TOTAL_PEDIDO", pedido.total)
+            putExtra("FECHA_PEDIDO", pedido.fecha)
+
+            putExtra("ID_CLIENTE", pedido.idCliente)
+            putExtra("ID_REPARTIDOR", pedido.idRepartidor)
+        }
+        startActivity(intent)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

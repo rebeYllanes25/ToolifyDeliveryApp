@@ -168,6 +168,26 @@
     <string name="notificaciones_todas_eliminadas">Todas las notificaciones eliminadas</string>
     <string name="notificaciones_eliminada">Notificación eliminada</string>
 
+    <string name="historial_detalle_titulo_pedido">Pedido N°: </string>
+    <string name="historial_detalle_titulo_detalle">Detalle Compras  </string>
+    <string name="historial_detalle_titulo_calificacion">Calificacion Pedido</string>
+
+    <string name="historial_detalle_fragment_titulo_calificacion">Resumen de tu pedido: </string>
+    <string name="historial_detalle_fragment_titulo_numero">Numero ID:  </string>
+    <string name="historial_detalle_fragment_titulo_productos">Productos Totales: </string>
+    <string name="historial_detalle_fragment_titulo_direccion">Direccion de entrega: </string>
+    <string name="historial_detalle_fragment_titulo_fecha">Fecha Emitida: </string>
+    <string name="historial_detalle_fragment_titulo_total">Total Compra: </string>
+    <string name="historial_detalle_fragment_titulo_coste">Coste de envio: </string>
+    <string name="historial_detalle_fragment_titulo_propina">Propina: </string>
+    <string name="historial_detalle_fragment_titulo_Total">Total Pagado: </string>
+
+    <string name="historial_detalle_fragment_titulo_repartidor">Resumen del repartidor: </string>
+    <string name="historial_detalle_fragment_titulo_nombres">Nombres Completos:  </string>
+    <string name="historial_detalle_fragment_titulo_telefono">Telefono del repartidor:  </string>
+    <string name="historial_detalle_fragment_titulo_especificaciones">Especificaciones:  </string>
+    <string name="historial_detalle_fragment_titulo_movilidad">Movilidad:  </string>
+
 
 
 </resources>
