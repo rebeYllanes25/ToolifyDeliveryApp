@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.animation.AnimationUtils
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -15,6 +16,7 @@ import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.databinding.ActivitySplashBinding
 import com.cibertec.proyectodami.presentation.features.cliente.ClienteMainActivity
 import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -49,6 +51,10 @@ class SplashActivity : AppCompatActivity(), CoroutineScope {
         Handler(Looper.getMainLooper()).postDelayed({
             checkSession()
         }, 2000)
+
+
+        FirebaseApp.initializeApp(this)
+        Log.d("FirebaseTest", "Firebase inicializado correctamente")
     }
 
     private fun startAnimations() {
