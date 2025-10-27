@@ -547,7 +547,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
                     usuario = UsuarioVentaDTO(idUsuario = idUsuario),
                     total = totalCompra,
                     estado = "P", // Pendiente
-                    tipoVenta = if (metodoEntrega == "D") "D" else "R",
+                    tipoVenta = if (metodoEntrega == "D") "D" else "S",
                     metodoEntrega = metodoEntrega,
                     especificaciones = binding.etEspecificaciones.text.toString().ifBlank { null },
                     detalles = items.map { item ->

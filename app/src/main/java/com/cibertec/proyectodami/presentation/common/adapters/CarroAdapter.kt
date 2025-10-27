@@ -25,33 +25,25 @@ class CarroAdapter(
         fun bind(item: CarroItem) {
             binding.apply {
                 tvNombre.text = item.producto.nombre
-                item.producto.categoria?.let { tvCategoria.text = it.descripcion }
+                tvCategoria.text = item.producto.categoria?.descripcion ?: ""
                 tvPrecio.text = "S/ ${String.format("%.2f", item.producto.precio)}"
                 tvCantidad.text = item.cantidad.toString()
                 tvSubtotal.text = "S/ ${String.format("%.2f", item.subtotal)}"
 
+                // Limpiar Glide anterior
                 Glide.with(imgProducto.context).clear(imgProducto)
 
-                val imageToLoad: Any = when {
-                    !item.producto.base64Img.isNullOrEmpty() -> {
-                        try {
-                            Base64.decode(item.producto.base64Img, Base64.DEFAULT)
-                        } catch (e: Exception) {
-                            R.drawable.no_imagen
-                        }
-                    }
-                    item.producto.imagenBytes != null -> item.producto.imagenBytes
-                    drawableMap[item.producto.idProducto] != null ->
-                        drawableMap[item.producto.idProducto]!!
-                    else -> R.drawable.no_imagen
-                }
+                // Usar solo URL de imagen
+                val imageUrl = item.producto.imagen.takeIf { !it.isNullOrEmpty() }
+                    ?: "https://res.cloudinary.com/dheqy208f/image/upload/v1761518343/TooLifyWeb/Products/qun2e14i1zkmahdyyung.png"
 
                 Glide.with(imgProducto.context)
-                    .load(imageToLoad)
+                    .load(imageUrl)
                     .placeholder(R.drawable.no_imagen)
                     .error(R.drawable.no_imagen)
                     .into(imgProducto)
 
+                // Configurar botones
                 btnIncrementar.isEnabled = item.cantidad < item.producto.stock
                 btnIncrementar.alpha = if (item.cantidad < item.producto.stock) 1f else 0.5f
 
@@ -61,6 +53,7 @@ class CarroAdapter(
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarritoViewHolder {
         if (!::drawableMap.isInitialized) {

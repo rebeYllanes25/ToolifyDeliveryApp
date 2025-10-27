@@ -55,40 +55,39 @@ class ProductoAdapter(
             }
         }
     }*/
-    inner class ProductoViewHolder(private val binding: ItemProductoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+inner class ProductoViewHolder(private val binding: ItemProductoBinding) :
+    RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(producto: Producto) {
-            binding.apply {
-                tvNombre.text = producto.nombre
-                tvCategoria.text = producto.categoria?.descripcion ?: ""
-                tvPrecio.text = "S/ ${String.format("%.2f", producto.precio)}"
-                tvStockBajo.visibility = if (producto.stock < 10) View.VISIBLE else View.GONE
-                btnAgregar.isEnabled = producto.stock > 0
-                root.alpha = if (producto.stock > 0) 1f else 0.5f
+    fun bind(producto: Producto) {
+        binding.apply {
+            tvNombre.text = producto.nombre
+            tvCategoria.text = producto.categoria?.descripcion ?: ""
+            tvPrecio.text = "S/ ${String.format("%.2f", producto.precio)}"
+            tvStockBajo.visibility = if (producto.stock < 10) View.VISIBLE else View.GONE
+            btnAgregar.isEnabled = producto.stock > 0
+            root.alpha = if (producto.stock > 0) 1f else 0.5f
 
-                root.setOnClickListener { onProductoClick(producto) }
-                btnAgregar.setOnClickListener { onAgregarClick(producto) }
+            // Eventos de click
+            root.setOnClickListener { onProductoClick(producto) }
+            btnAgregar.setOnClickListener { onAgregarClick(producto) }
 
-                // Limpiar Glide anterior
-                Glide.with(imgProducto.context).clear(imgProducto)
+            // Limpiar Glide anterior (importante al reciclar vistas)
+            Glide.with(imgProducto.context).clear(imgProducto)
 
-                // Asegurarse que haya URL válida
-                val imageUrl = producto.url.takeIf { !it.isNullOrEmpty() }
-                    ?: "https://res.cloudinary.com/dheqy208f/image/upload/v1761518343/TooLifyWeb/Products/qun2e14i1zkmahdyyung.png"
+            // Obtener URL de imagen (usa campo 'imagen' del modelo)
+            val imageUrl = producto.imagen.takeIf { !it.isNullOrEmpty() }
+                ?: "https://res.cloudinary.com/dheqy208f/image/upload/v1761518343/TooLifyWeb/Products/qun2e14i1zkmahdyyung.png"
 
-                Log.d("ProductoViewHolder", "URL a cargar: $imageUrl")
+            Log.d("ProductoViewHolder", "Cargando imagen: $imageUrl")
 
-                Glide.with(imgProducto.context)
-                    .load(imageUrl)
-                    .placeholder(R.drawable.no_imagen)
-                    .error(R.drawable.no_imagen)
-                    .into(imgProducto)
-            }
+            Glide.with(imgProducto.context)
+                .load(imageUrl)
+                .placeholder(R.drawable.no_imagen)
+                .error(R.drawable.no_imagen)
+                .into(imgProducto)
         }
     }
-
-
+}
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductoViewHolder {
         if (!::drawableMap.isInitialized) {
@@ -115,22 +114,8 @@ class ProductoAdapter(
     override fun getItemCount() = productos.size
 
     fun submitList(newProductos: List<Producto>) {
-        CoroutineScope(Dispatchers.IO).launch {
-            newProductos.forEach { producto ->
-                if (!producto.base64Img.isNullOrEmpty() && producto.decodedImage == null) {
-                    try {
-                        producto.decodedImage = Base64.decode(producto.base64Img, Base64.DEFAULT)
-                    } catch (e: Exception) {
-                        producto.decodedImage = null
-                    }
-                }
-            }
-
-            withContext(Dispatchers.Main) {
-                productos.clear()
-                productos.addAll(newProductos)
-                notifyDataSetChanged()
-            }
-        }
+        productos.clear()
+        productos.addAll(newProductos)
+        notifyDataSetChanged()
     }
 }

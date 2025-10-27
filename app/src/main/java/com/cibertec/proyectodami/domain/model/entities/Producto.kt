@@ -12,11 +12,7 @@ data class Producto(
     val categoria: Categoria? = null,
     val precio: Double,
     val stock: Int,
-    val imagenBytes: String? = null,
-    val base64Img: String? = null,
+    val imagen: String? = null,
     val fechaRegistro: String? = null,
     val estado: Boolean? = null,
-    @Transient
-    var decodedImage: ByteArray? = null,
-    var url:String? = "https://res.cloudinary.com/dheqy208f/image/upload/v1761518343/TooLifyWeb/Products/qun2e14i1zkmahdyyung.png"
 ) : Parcelable
