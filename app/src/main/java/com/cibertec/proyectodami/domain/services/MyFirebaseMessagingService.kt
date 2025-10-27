@@ -51,11 +51,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         Log.d("FCM", "Mensaje recibido de: ${message.from}")
 
+        // Extraer datos (ahora incluye título y mensaje desde el backend)
         val titulo = message.notification?.title ?: "Nueva Notificación"
         val cuerpo = message.notification?.body ?: ""
         val notificacionId = message.data["notificacionId"]
         val pedidoId = message.data["pedidoId"]
+        val tipo = message.data["tipo"]
+        val clienteId = message.data["clienteId"]
 
+        // Mostrar notificación
         mostrarNotificacion(titulo, cuerpo, notificacionId, pedidoId)
     }
 

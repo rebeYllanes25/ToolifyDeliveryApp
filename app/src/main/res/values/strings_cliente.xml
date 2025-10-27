@@ -127,6 +127,12 @@
     <!-- Notificaciones -->
     <string name="notificaciones_titulo">Notificaciones</string>
     <string name="notificaciones_sin_leer">%1$d sin leer</string>
+    <string name="notificacione_titulo"></string>
+    <string name="notificacion_mensaje"></string>
+    <string name="notificacion_tiempo"></string>
+
+
+
     <string name="notificaciones_marcar_todas_leidas">Marcar todas como leídas</string>
     <string name="notificaciones_eliminar_todas">Eliminar todas</string>
 
@@ -150,8 +156,6 @@
     <string name="notificaciones_tipo_pedido_en_camino">Pedido en camino</string>
     <string name="notificaciones_tipo_pedido_entregado">Pedido entregado</string>
     <string name="notificaciones_tipo_pedido_fallido">Entrega fallida</string>
-    <string name="notificaciones_tipo_promocion">Promoción especial</string>
-    <string name="notificaciones_tipo_sistema">Notificación del sistema</string>
 
     <string name="notificaciones_tiempo_ahora">Ahora mismo</string>
     <string name="notificaciones_tiempo_minutos">Hace %1$d min</string>

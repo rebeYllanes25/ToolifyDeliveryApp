@@ -55,9 +55,6 @@ object FcmTokenHelper {
         }
     }
 
-    /**
-     * Elimina el token FCM tanto local como en backend
-     */
     fun eliminarToken(context: Context, userPreferences: UserPreferences) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

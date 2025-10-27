@@ -1,132 +1,137 @@
 package com.cibertec.proyectodami.presentation.common.adapters
 
-import com.cibertec.proyectodami.domain.model.entities.Notificacion
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.PopupMenu
+import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ItemNotificacionBinding
+import com.cibertec.proyectodami.domain.model.dtos.NotificacionDTO
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
 class NotificacionesAdapter(
-    private val onNotificacionClick: (Notificacion) -> Unit,
-    private val onMarcarLeida: (Notificacion) -> Unit,
-    private val onEliminar: (Notificacion) -> Unit
-) : ListAdapter<Notificacion, NotificacionesAdapter.NotificacionViewHolder>(NotificacionDiffCallback()) {
+    private var notificaciones: MutableList<NotificacionDTO>,
+    private val onNotificacionClick: (NotificacionDTO) -> Unit,
+    private val onMarcarLeida: (NotificacionDTO) -> Unit,
+    private val onDescartar: (NotificacionDTO) -> Unit
+) : RecyclerView.Adapter<NotificacionesAdapter.NotificacionViewHolder>() {
+
+    inner class NotificacionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val cardNotificacion: CardView = view.findViewById(R.id.cardNotificacion)
+        val indicadorNoLeida: View = view.findViewById(R.id.indicadorNoLeida)
+        val ivIcono: ImageView = view.findViewById(R.id.ivIconoNotificacion)
+        val tvTitulo: TextView = view.findViewById(R.id.tvTituloNotificacion)
+        val tvMensaje: TextView = view.findViewById(R.id.tvMensaje)
+        val tvFecha: TextView = view.findViewById(R.id.tvFecha)
+        val btnOpciones: ImageButton = view.findViewById(R.id.btnOpciones)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificacionViewHolder {
-        val binding = ItemNotificacionBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
-        return NotificacionViewHolder(binding)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_notificacion, parent, false)
+        return NotificacionViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: NotificacionViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+        val notificacion = notificaciones[position]
+        val context = holder.itemView.context
 
-    inner class NotificacionViewHolder(
-        private val binding: ItemNotificacionBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+        // Mostrar indicador de no leída
+        holder.indicadorNoLeida.visibility = if (notificacion.leida) View.GONE else View.VISIBLE
 
-        fun bind(notificacion: Notificacion) {
-            with(binding) {
-                indicadorNoLeida.visibility = if (notificacion.leida) View.GONE else View.VISIBLE
-
-                val tipo = notificacion.tipo
-                ivIconoTipo.setImageResource(tipo.getIconoResId())
-                cardIcono.setCardBackgroundColor(
-                    ContextCompat.getColor(itemView.context, tipo.getColorFondo())
-                )
-                ivIconoTipo.setColorFilter(
-                    ContextCompat.getColor(itemView.context, tipo.getColorIcono())
-                )
-
-                tvTitulo.text = notificacion.titulo
-                tvMensaje.text = notificacion.mensaje
-                tvFechaHora.text = formatearTiempoTranscurrido(notificacion.fechaCreacion)
-
-                val alphaTexto = if (notificacion.leida) 0.6f else 1.0f
-                tvTitulo.alpha = alphaTexto
-                tvMensaje.alpha = alphaTexto
-
-                if (notificacion.pedidoId != null) {
-                    tvBadgeEstado.visibility = View.VISIBLE
-                    tvBadgeEstado.text = itemView.context.getString(tipo.getTituloString())
-                } else {
-                    tvBadgeEstado.visibility = View.GONE
-                }
-
-                cardNotificacion.setOnClickListener {
-                    onNotificacionClick(notificacion)
-                }
-
-                btnOpciones.setOnClickListener {
-                    mostrarMenuOpciones(it, notificacion)
-                }
-            }
+        // Estilo de texto según si está leída o no
+        if (!notificacion.leida) {
+            holder.tvTitulo.setTypeface(null, Typeface.BOLD)
+            holder.tvMensaje.setTypeface(null, Typeface.NORMAL)
+            holder.cardNotificacion.setCardBackgroundColor(
+                ContextCompat.getColor(context, R.color.white)
+            )
+        } else {
+            holder.tvTitulo.setTypeface(null, Typeface.NORMAL)
+            holder.tvMensaje.setTypeface(null, Typeface.NORMAL)
+            holder.cardNotificacion.setCardBackgroundColor(
+                ContextCompat.getColor(context, R.color.gris_claro)
+            )
         }
 
-        private fun mostrarMenuOpciones(view: View, notificacion: Notificacion) {
-            val popup = PopupMenu(view.context, view)
-            popup.menuInflater.inflate(R.menu.menu_notificacion_opciones, popup.menu)
+        val (icono, colorFondo) = obtenerIconoYColor(notificacion.tipo)
+        holder.ivIcono.setImageResource(icono)
+        holder.ivIcono.setBackgroundResource(colorFondo)
 
-            val itemMarcar = popup.menu.findItem(R.id.action_marcar_leida)
-            if (notificacion.leida) {
-                itemMarcar.title = view.context.getString(R.string.notificaciones_marcar_no_leida)
-            } else {
-                itemMarcar.title = view.context.getString(R.string.notificaciones_marcar_leida)
-            }
+        holder.tvTitulo.text = notificacion.titulo
+        holder.tvMensaje.text = notificacion.mensaje
+        holder.tvFecha.text = notificacion.getTiempoRelativo()
 
-            popup.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.action_marcar_leida -> {
-                        onMarcarLeida(notificacion)
-                        true
-                    }
-                    R.id.action_eliminar -> {
-                        onEliminar(notificacion)
-                        true
-                    }
-                    else -> false
-                }
-            }
-            popup.show()
+        holder.cardNotificacion.setOnClickListener {
+            onNotificacionClick(notificacion)
         }
 
-        private fun formatearTiempoTranscurrido(fecha: Date): String {
-            val ahora = Date()
-            val diff = ahora.time - fecha.time
-
-            val minutos = TimeUnit.MILLISECONDS.toMinutes(diff)
-            val horas = TimeUnit.MILLISECONDS.toHours(diff)
-            val dias = TimeUnit.MILLISECONDS.toDays(diff)
-
-            return when {
-                minutos < 1 -> itemView.context.getString(R.string.notificaciones_tiempo_ahora)
-                minutos < 60 -> itemView.context.getString(R.string.notificaciones_tiempo_minutos, minutos)
-                horas < 24 -> itemView.context.getString(R.string.notificaciones_tiempo_horas, horas)
-                dias < 7 -> itemView.context.getString(R.string.notificaciones_tiempo_dias, dias)
-                else -> itemView.context.getString(R.string.notificaciones_tiempo_semanas, dias / 7)
-            }
+        holder.btnOpciones.setOnClickListener {
+            mostrarMenu(holder.btnOpciones, notificacion, position)
         }
     }
 
-    class NotificacionDiffCallback : DiffUtil.ItemCallback<Notificacion>() {
-        override fun areItemsTheSame(oldItem: Notificacion, newItem: Notificacion): Boolean {
-            return oldItem.id == newItem.id
+    override fun getItemCount(): Int = notificaciones.size
+
+    private fun obtenerIconoYColor(tipo: String): Pair<Int, Int> {
+        return when (tipo) {
+            "PEDIDO_PENDIENTE" -> Pair(R.drawable.ic_notification, R.drawable.circle_background_orange)
+            "PEDIDO_ACEPTADO" -> Pair(R.drawable.ic_person_assigned, R.drawable.circle_background_blue)
+            "PEDIDO_EN_CAMINO" -> Pair(R.drawable.ic_delivery_truck, R.drawable.circle_background_purple)
+            "PEDIDO_CERCA" -> Pair(R.drawable.ic_gift, R.drawable.circle_background_yellow)
+            "PEDIDO_ENTREGADO" -> Pair(R.drawable.ic_check_circle, R.drawable.circle_background_green)
+            "PEDIDO_FALLIDO" -> Pair(R.drawable.ic_error, R.drawable.circle_background_red)
+            else -> Pair(R.drawable.ic_notification, R.drawable.circle_background)
+        }
+    }
+
+    private fun mostrarMenu(view: View, notificacion: NotificacionDTO, position: Int) {
+        val popup = PopupMenu(view.context, view)
+        popup.inflate(R.menu.menu_notificacion_opciones)
+
+        // Ocultar opción "Marcar como leída" si ya está leída
+        if (notificacion.leida) {
+            popup.menu.findItem(R.id.menu_marcar_leida)?.isVisible = false
         }
 
-        override fun areContentsTheSame(oldItem: Notificacion, newItem: Notificacion): Boolean {
-            return oldItem == newItem
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.menu_marcar_leida -> {
+                    onMarcarLeida(notificacion)
+                    notificaciones[position] = notificacion.copy(leida = true)
+                    notifyItemChanged(position)
+                    true
+                }
+                R.id.menu_descartar -> {
+                    onDescartar(notificacion)
+                    notificaciones.removeAt(position)
+                    notifyItemRemoved(position)
+                    true
+                }
+                else -> false
+            }
         }
+        popup.show()
+    }
+
+    fun actualizarNotificaciones(nuevasNotificaciones: List<NotificacionDTO>) {
+        notificaciones.clear()
+        notificaciones.addAll(nuevasNotificaciones)
+        notifyDataSetChanged()
+    }
+
+    fun agregarNotificacion(notificacion: NotificacionDTO) {
+        notificaciones.add(0, notificacion)
+        notifyItemInserted(0)
     }
 }
