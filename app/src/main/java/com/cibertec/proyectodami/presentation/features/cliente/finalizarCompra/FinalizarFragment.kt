@@ -20,17 +20,12 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.data.api.CompraCliente
-import com.cibertec.proyectodami.data.api.UserAuth
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
-import com.cibertec.proyectodami.databinding.DialogFullscreenMapBinding
 import com.cibertec.proyectodami.databinding.FragmentFinalizarBinding
 import com.cibertec.proyectodami.domain.model.dtos.CarroItem
 import com.cibertec.proyectodami.domain.model.dtos.PedidoCompra
-import com.cibertec.proyectodami.domain.model.dtos.UsuarioDTO
 import com.cibertec.proyectodami.domain.model.entities.DetalleVenta
-import com.cibertec.proyectodami.domain.model.entities.Pedido
-import com.cibertec.proyectodami.domain.model.entities.Producto
 import com.cibertec.proyectodami.domain.model.entities.ProductoVenta
 import com.cibertec.proyectodami.domain.model.entities.UsuarioVentaDTO
 import com.cibertec.proyectodami.domain.model.entities.Venta
@@ -68,8 +63,10 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
     private var direccionObtenida: String = ""
     private var marcadorSeleccionado: Marker? = null
 
+    // MÉTODO DE ENTREGA FIJO EN DELIVERY ('D')
     private var metodoEntrega: String = "D"
-    private var tipoMovilidad: String? = null
+    // TIPO DE MOVILIDAD PREDETERMINADO
+    private var tipoMovilidad: String? = "M"
 
     private var items = listOf<CarroItem>()
     private var total: Double = 0.0
@@ -113,18 +110,17 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
 
         setupMapButtons()
     }
+
+    // CORRECCIÓN: Se establece el estado inicial fijo en Delivery con Moto
     private fun sincronizarEstadoInicial() {
-        when (binding.rgMetodoEntrega.checkedRadioButtonId) {
-            R.id.rbSucursal -> {
-                metodoEntrega = "S"
-                mostrarSeccionDelivery(false)
-            }
-            R.id.rbDelivery -> {
-                metodoEntrega = "D"
-                mostrarSeccionDelivery(true)
-            }
-        }
+        // El método de entrega es fijo: Delivery ("D")
+        metodoEntrega = "D"
+        mostrarSeccionDelivery(true)
+
+        // Asegurar que 'rbMoto' esté marcado y la variable tipoMovilidad sea 'M' (Por defecto en el XML)
+        tipoMovilidad = "M"
     }
+
     private fun setupServices() {
         userPreferences = UserPreferences(requireContext())
         compraApiService = RetrofitInstance.create(userPreferences).create(CompraCliente::class.java)
@@ -152,25 +148,9 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
         binding.spinnerAnio.setAdapter(anioAdapter)
     }
 
-
+    // CORRECCIÓN: Se elimina la lógica de rgMetodoEntrega
     private fun setupRadioButtons() {
-        // Radio buttons de método de entrega
-        binding.rgMetodoEntrega.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.rbSucursal -> {
-                    metodoEntrega = "S"
-                    mostrarSeccionDelivery(false)
-                }
-                R.id.rbDelivery -> {
-                    metodoEntrega = "D"
-                    mostrarSeccionDelivery(true)
-                    if (ubicacionSeleccionada == null) {
-                        solicitarPermisoUbicacion()
-                    }
-                }
-            }
-            calcularTotal()
-        }
+        // Radio buttons de método de entrega (eliminado del XML, por lo tanto se elimina el listener)
 
         // Radio buttons de tipo de movilidad
         binding.rgTipoMovilidad.setOnCheckedChangeListener { _, checkedId ->
@@ -180,6 +160,11 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
                 else -> null
             }
             calcularTotal()
+        }
+
+        // Ya que el Delivery es fijo, solicitamos ubicación apenas se inicia el Fragment
+        if (ubicacionSeleccionada == null) {
+            solicitarPermisoUbicacion()
         }
     }
 
@@ -202,24 +187,26 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
             }
         }
     }
+
     private fun mostrarSeccionDelivery(mostrar: Boolean) {
+        // En este caso, siempre se mostrará, ya que se eliminó la lógica de selección.
         binding.layoutDelivery.visibility = if (mostrar) View.VISIBLE else View.GONE
     }
 
+    // CORRECCIÓN: La lógica de cálculo ya no considera 'S' (Sucursal)
     private fun calcularTotal() {
         viewLifecycleOwner.lifecycleScope.launch {
             CarroRepository.total.collect { subtotal ->
                 total = subtotal
 
                 var costoDelivery = 0.0
-                if (metodoEntrega == "D") {
-                    costoDelivery = when (tipoMovilidad) {
-                        "M" -> 10.0
-                        "A" -> 15.0
-                        else -> 0.0
-                    }
-                    total += costoDelivery
+                // Como metodoEntrega es siempre "D", siempre se calcula el costo
+                costoDelivery = when (tipoMovilidad) {
+                    "M" -> 10.0
+                    "A" -> 15.0
+                    else -> 0.0
                 }
+                total += costoDelivery
 
                 binding.tvTotal.text = "S/ ${String.format("%.2f", total)}"
                 binding.tvSubtotal.text = "S/ ${String.format("%.2f", subtotal)}"
@@ -234,6 +221,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
         }
     }
 
+    // CORRECCIÓN: onMapReady ahora siempre solicita la ubicación
     override fun onMapReady(map: GoogleMap) {
         googleMap = map
 
@@ -272,9 +260,8 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
             })
         }
 
-        if (metodoEntrega == "D") {
-            solicitarPermisoUbicacion()
-        }
+        // Ya no es condicional, siempre solicitamos la ubicación ya que es Delivery
+        solicitarPermisoUbicacion()
     }
 
     private fun seleccionarUbicacion(latLng: LatLng, animate: Boolean = true) {
@@ -418,12 +405,12 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
 
         mapDialogFragment.show(childFragmentManager, "MapaFullscreenDialogFragment")
     }
-    // Esta función será llamada desde el DialogFragment para obtener la dirección
+
+    // Esta función es usada por el DialogFragment
     fun obtenerDireccionParaDialogo(latLng: LatLng, onResult: (String) -> Unit) {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val geocoder = Geocoder(requireContext(), Locale.getDefault())
-                // Usamos requireContext() que debe ser seguro porque el fragmento está agregado
                 val addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1)
 
                 withContext(Dispatchers.Main) {
@@ -484,27 +471,24 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
             return false
         }
 
-        if (metodoEntrega == "D") {
-            if (ubicacionSeleccionada == null) {
-                Toast.makeText(
-                    requireContext(),
-                    "Seleccione una ubicación en el mapa",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return false
-            }
-
-            if (tipoMovilidad == null) {
-                Toast.makeText(
-                    requireContext(),
-                    "Seleccione el tipo de movilidad",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return false
-            }
+        if (ubicacionSeleccionada == null) {
+            Toast.makeText(
+                requireContext(),
+                "Seleccione una ubicación en el mapa",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
         }
 
-        // Validar datos de tarjeta
+        if (tipoMovilidad == null) {
+            Toast.makeText(
+                requireContext(),
+                "Seleccione el tipo de movilidad",
+                Toast.LENGTH_SHORT
+            ).show()
+            return false
+        }
+
         if (binding.etNumeroTarjeta.text.isNullOrBlank() ||
             binding.etNumeroTarjeta.text.toString().length < 16) {
             binding.etNumeroTarjeta.error = "Número de tarjeta inválido"
@@ -517,11 +501,10 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
             return false
         }
 
-        // Validación de fecha (básica)
         val mes = binding.spinnerMes.text.toString().toIntOrNull()
         val anio = binding.spinnerAnio.text.toString().toIntOrNull()
         val calendar = Calendar.getInstance()
-        val mesActual = calendar.get(Calendar.MONTH) + 1 // Enero es 0
+        val mesActual = calendar.get(Calendar.MONTH) + 1
         val anioActual = calendar.get(Calendar.YEAR)
 
         if (mes == null || anio == null ||
@@ -540,7 +523,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
             return
         }
 
-        if (metodoEntrega == "D" && ubicacionSeleccionada == null) {
+        if (ubicacionSeleccionada == null) {
             Toast.makeText(requireContext(), "Debes seleccionar tu ubicación.", Toast.LENGTH_LONG).show()
             return
         }
@@ -559,8 +542,8 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
                     usuario = UsuarioVentaDTO(idUsuario = idUsuario),
                     total = totalCompra,
                     estado = "P", // Pendiente
-                    tipoVenta = if (metodoEntrega == "D") "P" else "R",
-                    metodoEntrega = metodoEntrega,
+                    tipoVenta = "P", // Fijo en Pedido
+                    metodoEntrega = "D", // Fijo en Delivery
                     especificaciones = binding.etEspecificaciones.text.toString().ifBlank { null },
                     detalles = items.map { item ->
                         DetalleVenta(
@@ -568,14 +551,12 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
                             cantidad = item.cantidad
                         )
                     },
-                    pedido = if (metodoEntrega == "D") {
-                        PedidoCompra(
-                            direccionEntrega = direccionObtenida,
-                            latitud = ubicacionSeleccionada?.latitude?.let { BigDecimal.valueOf(it) },
-                            longitud = ubicacionSeleccionada?.longitude?.let { BigDecimal.valueOf(it) },
-                            movilidad = tipoMovilidad
-                        )
-                    } else null
+                    pedido = PedidoCompra(
+                        direccionEntrega = direccionObtenida,
+                        latitud = ubicacionSeleccionada?.latitude?.let { BigDecimal.valueOf(it) },
+                        longitud = ubicacionSeleccionada?.longitude?.let { BigDecimal.valueOf(it) },
+                        movilidad = tipoMovilidad
+                    )
                 )
 
                 val response = compraApiService.guardarVentaDelivery(ventaRequest)

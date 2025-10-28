@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
->
+    >
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -17,7 +17,6 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- Header -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -27,7 +26,6 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Resumen del carrito -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -62,8 +60,12 @@
             </com.google.android.material.card.MaterialCardView>
 
 
-            <!-- Método de entrega -->
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
+                android:id="@+id/layoutDelivery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="visible"> <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
@@ -79,30 +81,30 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/txt_method"
+                        android:text="@string/txt_type_delivery"
                         android:textColor="@android:color/black"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="12dp" />
 
                     <RadioGroup
-                        android:id="@+id/rgMetodoEntrega"
+                        android:id="@+id/rgTipoMovilidad"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <RadioButton
-                            android:id="@+id/rbSucursal"
+                            android:id="@+id/rbMoto"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/option_sale_store"
+                            android:text="@string/option_bike"
                             android:checked="true"
                             android:padding="12dp" />
 
                         <RadioButton
-                            android:id="@+id/rbDelivery"
+                            android:id="@+id/rbAuto"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/option_sale_delivery"
+                            android:text="@string/option_car"
                             android:padding="12dp" />
 
                     </RadioGroup>
@@ -111,61 +113,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <LinearLayout
-                android:id="@+id/layoutDelivery"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="2dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:padding="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/txt_type_delivery"
-                            android:textColor="@android:color/black"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            android:layout_marginBottom="12dp" />
-
-                        <RadioGroup
-                            android:id="@+id/rgTipoMovilidad"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <RadioButton
-                                android:id="@+id/rbMoto"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/option_bike"
-                                android:padding="12dp" />
-
-                            <RadioButton
-                                android:id="@+id/rbAuto"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="@string/option_car"
-                                android:padding="12dp" />
-
-                        </RadioGroup>
-
-                    </LinearLayout>
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <!-- Mapa -->
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -197,8 +144,6 @@
                             android:textSize="14sp"
                             android:layout_marginBottom="12dp" />
 
-                        <!-- AQUÍ VA EL NUEVO CÓDIGO DEL MAPA -->
-                        <!-- En tu layout existente, reemplaza el FragmentContainerView con esto -->
                         <com.google.android.material.card.MaterialCardView
                             android:layout_width="match_parent"
                             android:layout_height="300dp"
@@ -210,14 +155,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent">
 
-                                <!-- Mapa -->
                                 <androidx.fragment.app.FragmentContainerView
                                     android:id="@+id/mapFragment"
                                     android:name="com.google.android.gms.maps.SupportMapFragment"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent" />
 
-                                <!-- Botón pantalla completa (arriba derecha) -->
                                 <com.google.android.material.card.MaterialCardView
                                     android:layout_width="40dp"
                                     android:layout_height="40dp"
@@ -238,7 +181,6 @@
                                         app:tint="#424242" />
                                 </com.google.android.material.card.MaterialCardView>
 
-                                <!-- Botón ubicación actual (abajo izquierda para evitar los controles de zoom) -->
                                 <com.google.android.material.card.MaterialCardView
                                     android:layout_width="48dp"
                                     android:layout_height="48dp"
@@ -268,7 +210,6 @@
 
             </LinearLayout>
 
-            <!-- Especificaciones -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -311,7 +252,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Datos de tarjeta -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -412,7 +352,6 @@
 
             </com.google.android.material.card.MaterialCardView>
 
-            <!-- Resumen de totales -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -509,7 +448,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- Botones flotantes -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -538,7 +476,6 @@
 
     </LinearLayout>
 
-    <!-- Progress bar -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"

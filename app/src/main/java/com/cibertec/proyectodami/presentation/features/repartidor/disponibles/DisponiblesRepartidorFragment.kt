@@ -25,18 +25,19 @@ import kotlinx.coroutines.launch
 class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
     private var _binding: FragmentDisponiblesRepartidorBinding? = null
     private val binding get() = _binding!!
-    private lateinit var userPreferences: UserPreferences
+    private val userPreferences: UserPreferences by lazy {
+        UserPreferences(requireContext().applicationContext)
+    }
     private val viewModel: DisponiblesViewModel by viewModels()
     private lateinit var adapter: DisponiblesPedidoAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val context = requireContext().applicationContext
-        userPreferences = UserPreferences(context)
+        val userPreferences = UserPreferences(context)
         val pedidoApi = RetrofitInstance.create(userPreferences).create(PedidosRepartidor::class.java)
-        PedidoRepartidorRepository.init(pedidoApi)
+        PedidoRepartidorRepository.init(pedidoApi, userPreferences)
     }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -128,11 +129,14 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
                     Toast.LENGTH_SHORT
                 ).show()
 
+                viewModel.cargarPedidosDisponibles()
+
                 navegarAPestanaActivos()
 
                 viewModel.navegacionCompletada()
             }
         }
+
 
         PedidoRepartidorRepository.pedidoActivo.observe(viewLifecycleOwner) { pedidoActivo ->
             if (pedidoActivo != null) {

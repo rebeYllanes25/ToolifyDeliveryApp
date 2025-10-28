@@ -40,38 +40,30 @@ class DisponiblesPedidoAdapter(
         val b = holder.binding
         val ctx = b.root.context
 
-        // Asignación de datos básicos
         b.tvPedidoId.text = ctx.getString(R.string.order_id_prefix, pedido.numPedido)
         b.tvCliente.text = pedido.nomCliente
         b.tvDireccion.text = pedido.direccionEntrega
         b.tvTotal.text = ctx.getString(R.string.value_price, pedido.total)
 
-        // LÓGICA DE CÁLCULO DE DISTANCIA Y TIEMPO
-        // 1. Coordenadas del Repartidor (DEBE SER DINÁMICO/REAL)
-        // **IMPORTANTE: Reemplaza estos valores fijos con la ubicación actual del usuario.**
         val repartidorLatitud = -12.10
         val repartidorLongitud = -77.05
 
-        // 2. Coordenadas de Destino (Asumimos que están en el DTO)
-        val destinoLatitud = pedido.latitud // Necesitas este campo en PedidoRepartidorDTO
-        val destinoLongitud = pedido.longitud // Necesitas este campo en PedidoRepartidorDTO
+        val destinoLatitud = pedido.latitud
+        val destinoLongitud = pedido.longitud
 
         val distanciaKm = calcularDistancia(
             repartidorLatitud, repartidorLongitud,
             destinoLatitud, destinoLongitud
         )
 
-        // 4. Calcular Tiempo Estimado (min)
         val tiempoEstimadoHoras = distanciaKm / VELOCIDAD_PROMEDIO_KMH
         val tiempoEstimadoMinutos = (tiempoEstimadoHoras * 60).roundToInt()
 
-        // 5. Asignar al TextView
         val distanciaFormateada = String.format("%.1f", distanciaKm)
-        b.tvDistancia.text = ctx.getString(R.string.distance_km, distanciaFormateada) // Muestra el valor en el formato de tu recurso string
+        b.tvDistancia.text = ctx.getString(R.string.distance_km, distanciaFormateada)
 
         val tiempoFormateado = tiempoEstimadoMinutos.toString()
-        b.tvTiempo.text = ctx.getString(R.string.time_label, tiempoFormateado) // Muestra el valor en el formato de tu recurso string
-
+        b.tvTiempo.text = ctx.getString(R.string.time_label, tiempoFormateado)
         b.btnAceptarPedido.isEnabled = !bloqueado
 
         b.btnAceptarPedido.setOnClickListener {

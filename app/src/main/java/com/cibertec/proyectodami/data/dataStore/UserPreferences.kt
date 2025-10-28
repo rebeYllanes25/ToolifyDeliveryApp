@@ -20,12 +20,17 @@ class UserPreferences(private val context: Context) {
         private val USER_CORREO_KEY = stringPreferencesKey("user_correo")
         private val USER_TELEFONO_KEY = stringPreferencesKey("user_telefono")
         private val ROL_KEY = intPreferencesKey("rol")
+        private val PEDIDO_ACTIVO_ID = intPreferencesKey("pedido_activo_id")
+        private val PEDIDO_ACTIVO_NUM = stringPreferencesKey("pedido_activo_num")
+        private val PEDIDO_ACTIVO_ESTADO = stringPreferencesKey("pedido_activo_estado")
+        private val PEDIDO_ACTIVO_JSON = stringPreferencesKey("pedido_activo_json")
     }
+
+    private val dataStore = context.dataStore
 
     suspend fun guardarToken(token: String) {
         context.dataStore.edit { it[TOKEN_KEY] = token }
     }
-    private val dataStore = context.dataStore
 
     val token: Flow<String?> = context.dataStore.data.map { it[TOKEN_KEY] }
 
@@ -58,30 +63,74 @@ class UserPreferences(private val context: Context) {
     suspend fun obtenerNombreUsuario(): String? {
         return nombreUsuario.first()
     }
-    // Teléfono
+
     suspend fun guardarTelefono(telefono: String) {
         dataStore.edit { it[USER_TELEFONO_KEY] = telefono }
     }
 
     val telefono: Flow<String?> = dataStore.data.map { it[USER_TELEFONO_KEY] }
+
     suspend fun obtenerTelefono(): String? = telefono.first()
+
+    suspend fun guardarCorreo(correo: String) {
+        dataStore.edit { it[USER_CORREO_KEY] = correo }
+    }
+
+    val correo: Flow<String?> = dataStore.data.map { it[USER_CORREO_KEY] }
+
+    suspend fun obtenerCorreo(): String? = correo.first()
 
     suspend fun guardarRol(rol: Int) {
         context.dataStore.edit { prefs ->
             prefs[ROL_KEY] = rol
         }
     }
-    suspend fun guardarCorreo(correo: String) {
-        dataStore.edit { it[USER_CORREO_KEY] = correo }
-    }
 
-    val correo: Flow<String?> = dataStore.data.map { it[USER_CORREO_KEY] }
-    suspend fun obtenerCorreo(): String? = correo.first()
     val rol: Flow<Int?> = context.dataStore.data
         .map { prefs -> prefs[ROL_KEY] }
 
     suspend fun obtenerRol(): Int? {
         return rol.first()
+    }
+
+
+    val tienePedidoActivo: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[PEDIDO_ACTIVO_ID] != null
+        }
+
+    val pedidoActivoJson: Flow<String?> = context.dataStore.data
+        .map { preferences ->
+            preferences[PEDIDO_ACTIVO_JSON]
+        }
+
+    suspend fun guardarPedidoActivo(
+        idPedido: Int,
+        numPedido: String,
+        estado: String,
+        pedidoJson: String
+    ) {
+        context.dataStore.edit { preferences ->
+            preferences[PEDIDO_ACTIVO_ID] = idPedido
+            preferences[PEDIDO_ACTIVO_NUM] = numPedido
+            preferences[PEDIDO_ACTIVO_ESTADO] = estado
+            preferences[PEDIDO_ACTIVO_JSON] = pedidoJson
+        }
+    }
+
+    suspend fun limpiarPedidoActivo() {
+        context.dataStore.edit { preferences ->
+            preferences.remove(PEDIDO_ACTIVO_ID)
+            preferences.remove(PEDIDO_ACTIVO_NUM)
+            preferences.remove(PEDIDO_ACTIVO_ESTADO)
+            preferences.remove(PEDIDO_ACTIVO_JSON)
+        }
+    }
+
+    suspend fun obtenerIdPedidoActivo(): Int? {
+        return context.dataStore.data.map { preferences ->
+            preferences[PEDIDO_ACTIVO_ID]
+        }.first()
     }
 
     suspend fun limpiarDatos() {

@@ -3,7 +3,13 @@ package com.cibertec.proyectodami.domain.repository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cibertec.proyectodami.data.api.PedidosRepartidor
+import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.google.gson.Gson
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 object PedidoRepartidorRepository {
 
@@ -13,11 +19,35 @@ object PedidoRepartidorRepository {
     private val _pedidosDisponibles = MutableLiveData<List<PedidoRepartidorDTO>>(emptyList())
     val pedidosDisponibles: LiveData<List<PedidoRepartidorDTO>> = _pedidosDisponibles
 
+    private lateinit var userPreferences: UserPreferences
+    private val gson = Gson()
     private lateinit var pedidoApi: PedidosRepartidor
 
-    fun init(api: PedidosRepartidor) {
-        this.pedidoApi = api
+    fun init(api: PedidosRepartidor, preferences: UserPreferences) {
+        pedidoApi = api
+        userPreferences = preferences
+
+        // Cargar pedido activo al inicializar
+        cargarPedidoActivoDesdePreferences()
     }
+
+    private fun cargarPedidoActivoDesdePreferences() {
+        CoroutineScope(Dispatchers.IO).launch {
+            userPreferences.pedidoActivoJson.collect { json ->
+                if (json != null) {
+                    try {
+                        val pedido = gson.fromJson(json, PedidoRepartidorDTO::class.java)
+                        withContext(Dispatchers.Main) {
+                            _pedidoActivo.value = pedido
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
+    }
+
     fun setPedidosDisponibles(pedidos: List<PedidoRepartidorDTO>) {
         _pedidosDisponibles.value = pedidos
     }
@@ -44,14 +74,46 @@ object PedidoRepartidorRepository {
             val pedidoActualizado = pedidoApi.caminoPedido(pedido, idRepartidor)
             _pedidoActivo.postValue(pedidoActualizado)
 
+            // ✨ GUARDAR EN DATASTORE
+            guardarPedidoActivoEnPreferences(pedidoActualizado)
+
         } catch (e: Exception) {
             e.printStackTrace()
             throw e
         }
     }
 
+    // ✨ NUEVA: Establecer pedido activo y guardarlo
+    fun setPedidoActivo(pedido: PedidoRepartidorDTO) {
+        _pedidoActivo.value = pedido
+        guardarPedidoActivoEnPreferences(pedido)
+    }
+
+    // ✨ NUEVA: Guardar en DataStore
+    private fun guardarPedidoActivoEnPreferences(pedido: PedidoRepartidorDTO) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val pedidoJson = gson.toJson(pedido)
+                userPreferences.guardarPedidoActivo(
+                    idPedido = pedido.idPedido,
+                    numPedido = pedido.numPedido,
+                    estado = pedido.estado,
+                    pedidoJson = pedidoJson
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    // ✨ ACTUALIZADA: Limpiar pedido activo
     fun completarPedido() {
         _pedidoActivo.value = null
+
+        // Limpiar de DataStore
+        CoroutineScope(Dispatchers.IO).launch {
+            userPreferences.limpiarPedidoActivo()
+        }
     }
 
     fun tienePedidoActivo(): Boolean {
