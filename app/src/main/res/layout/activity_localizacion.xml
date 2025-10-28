@@ -78,10 +78,27 @@
             android:drawablePadding="8dp"
             android:paddingStart="16dp"
             android:paddingEnd="20dp"
-            android:text="En Ruta"
+            android:text="Abrir GoogleMaps"
             android:textColor="#FFFFFF"
             android:textSize="14sp"
             app:cornerRadius="24dp" />
+
+    <Button
+        android:id="@+id/btnCerca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#FF7043"
+        android:drawableStart="@drawable/ic_navigation"
+        android:drawablePadding="8dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="20dp"
+        android:text="Cerca"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        app:cornerRadius="24dp" />
+
 
 
     <!-- Bottom Sheet -->
@@ -138,10 +155,11 @@
                             app:tint="#FF7043" />
 
                         <TextView
+                            android:id="@+id/distancia"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Calculando..."
+                            android:text=""
                             android:textColor="#FF7043"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -150,7 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="En Distancia"
+                            android:text=""
                             android:textColor="#FF7043"
                             android:textSize="10sp" />
                     </LinearLayout>
@@ -179,19 +197,21 @@
                             app:tint="#4CAF50" />
 
                         <TextView
+                            android:id="@+id/tvTiempo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:text="Calculando..."
+                            android:text=""
                             android:textColor="#4CAF50"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <TextView
+
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="Tiempo Est."
+                            android:text=""
                             android:textColor="#4CAF50"
                             android:textSize="10sp" />
                     </LinearLayout>
@@ -307,7 +327,7 @@
                 android:layout_marginTop="8dp"
                 android:background="#FFF9C4"
                 android:padding="12dp"
-                android:text="Llamar al timbre del segundo piso. Entregar en mano."
+                android:text="Instrucciones"
                 android:textColor="#F57C00"
                 android:textSize="13sp" />
 
@@ -320,7 +340,7 @@
                 android:backgroundTint="#BDBDBD"
                 android:drawableStart="@drawable/ic_check"
                 android:drawablePadding="8dp"
-                android:text="Llegada (9518.7 km)"
+                android:text="Llegada"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:textStyle="bold"

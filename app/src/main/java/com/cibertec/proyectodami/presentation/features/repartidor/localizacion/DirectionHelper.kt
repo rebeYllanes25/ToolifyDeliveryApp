@@ -17,7 +17,7 @@ class DirectionHelper(private val context: Context) {
 
 
     companion object {
-        // Reemplaza con tu API Key de Google Maps
+
         private const val API_KEY = "AIzaSyDAgXOgDEHZwlwq9XeABKmgbHy-5bNYuOg"
     }
 

@@ -2,10 +2,15 @@ package com.cibertec.proyectodami.presentation.common.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.databinding.ItemPedidoRepartidorBinding
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
+import kotlinx.coroutines.launch
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -15,8 +20,11 @@ import kotlin.math.sqrt
 
 class DisponiblesPedidoAdapter(
     private val items: MutableList<PedidoRepartidorDTO>,
-    private val onAceptarClick: (PedidoRepartidorDTO) -> Unit
-) : RecyclerView.Adapter<DisponiblesPedidoAdapter.VH>() {
+    private val onAceptarClick: (PedidoRepartidorDTO) -> Unit,
+    private val lifecycleOwner: LifecycleOwner, // <-- agregamos
+    private val idRepartidor: Int,
+
+    ) : RecyclerView.Adapter<DisponiblesPedidoAdapter.VH>() {
     private val RADIO_TIERRA_KM = 6371.0
     private val VELOCIDAD_PROMEDIO_KMH = 20.0
     private var bloqueado = false
@@ -74,9 +82,28 @@ class DisponiblesPedidoAdapter(
 
         b.btnAceptarPedido.isEnabled = !bloqueado
 
-        b.btnAceptarPedido.setOnClickListener {
+
+
+       b.btnAceptarPedido.setOnClickListener {
             if (!bloqueado) {
-                onAceptarClick(pedido)
+                bloqueado = true
+                b.btnAceptarPedido.isEnabled = false
+
+                // Usamos lifecycleScope del Activity/Fragment
+                lifecycleOwner.lifecycleScope.launch {
+                    try {
+                        // Llamada a tu repository para asignar el pedido al repartidor
+                        PedidoRepartidorRepository.asignarRepartidor(pedido.idPedido, pedido.idRepartidor)
+
+                        // Notificar al Activity/Fragment si quieres actualizar UI
+                        onAceptarClick(pedido)
+
+                    } catch (e: Exception) {
+                        Toast.makeText(ctx, "Error al aceptar pedido: ${e.message}", Toast.LENGTH_LONG).show()
+                        bloqueado = false
+                        b.btnAceptarPedido.isEnabled = true
+                    }
+                }
             }
         }
     }

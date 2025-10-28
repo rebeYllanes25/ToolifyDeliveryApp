@@ -22,6 +22,25 @@ object PedidoRepartidorRepository {
         _pedidosDisponibles.value = pedidos
     }
 
+    suspend fun asignarRepartidor(idPedido: Int, idRepartidor: Int) {
+        try {
+            // Llamamos al endpoint que asigna el repartidor al pedido
+            val pedidoAsignado = pedidoApi.asignarRepartidor(idPedido, idRepartidor)
+
+            // Actualizamos el pedido activo
+            _pedidoActivo.postValue(pedidoAsignado)
+
+            // También podrías refrescar la lista de pedidos disponibles
+            cargarPedidosDisponibles()
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+
+
     suspend fun cargarPedidosDisponibles() {
         try {
             val pedidos = pedidoApi.obtenerPedidosAceptados()
@@ -49,6 +68,38 @@ object PedidoRepartidorRepository {
             throw e
         }
     }
+
+    suspend fun marcarPedidoCerca(idPedido: Int) {
+        try {
+            val pedidoActualizado = pedidoApi.cercaPedido(idPedido)
+
+            // Actualizar el pedido activo con el nuevo estado
+            _pedidoActivo.postValue(pedidoActualizado)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+    suspend fun entregarPedido(idPedido: Int, codigoQR: String, idRepartidor: Int) {
+        try {
+            val pedidoEntregado = pedidoApi.entregadoPedido(
+                idPedido = idPedido,
+                codigoQr = codigoQR,
+                idRepartidor = idRepartidor
+            )
+
+            // Actualizamos el pedido activo con el estado de entrega
+            _pedidoActivo.postValue(pedidoEntregado)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+
 
     fun completarPedido() {
         _pedidoActivo.value = null

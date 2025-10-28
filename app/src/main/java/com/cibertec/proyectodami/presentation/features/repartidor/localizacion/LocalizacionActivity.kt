@@ -17,8 +17,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ActivityLocalizacionBinding
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
+import com.cibertec.proyectodami.presentation.features.repartidor.escaner.EscanerActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -28,6 +32,9 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.firebase.appdistribution.gradle.ApiService
+import kotlinx.coroutines.launch
+import kotlin.math.roundToInt
 
 class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
    private lateinit var binding: ActivityLocalizacionBinding
@@ -35,13 +42,18 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
+    private lateinit var apiService: ApiService
 
     //Datos del pedido
+    private var pedidoId: Int = 0
     private var latitud: Double = 0.0
     private var longitud: Double = 0.0
     private var nombre: String = ""
     private var direccion: String = ""
     private var total: Double = 0.0
+    private var especificaciones: String = ""
+    private var estadoPedido: String = ""
+    private var repartidorId: Int = 0
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST = 1001
@@ -91,7 +103,9 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         mapView.getMapAsync(this)
 
 
-
+        binding.btnCerca.setOnClickListener {
+            marcarPedidoCerca()
+        }
 
 
         setupUI()
@@ -100,12 +114,15 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
 
     private fun obtenerDatosPedido(){
 
+        pedidoId = intent.getIntExtra("PEDIDO_ID", 0)
+        repartidorId = intent.getIntExtra("REAPRTIDOR",0)
         direccion = intent.getStringExtra("DIRECCION")?: ""
         nombre = intent.getStringExtra("NOMBRE")?:""
         total = intent.getDoubleExtra("TOTAL", 0.0)
-        latitud = intent.getDoubleExtra("LATITUD", -12.0464) // Lima por defecto
+        latitud = intent.getDoubleExtra("LATITUD", -12.0464)
         longitud = intent.getDoubleExtra("LONGITUD", -77.0428)
-
+        especificaciones = intent.getStringExtra("ESPECIFICACIONES")?:""
+        estadoPedido = intent.getStringExtra("ESTADO")?:""
 
     }
     private fun setupUI() {
@@ -116,6 +133,8 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         binding.tvClienteNombre.text = nombre
         binding.tvClienteDireccion.text = direccion
         binding.tvPrecio.text = getString(R.string.value_price, total)
+
+        binding.tvInstrucciones.text = especificaciones
 
         //boton regresar
         binding.fabBack.setOnClickListener {
@@ -288,15 +307,13 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         val distanciaMetros = miUbicacion.distanceTo(destino)
         val distanciaKm = distanciaMetros / 1000
 
-        // Actualizar UI
-        binding.btnLlegada.text = String.format("Llegada (%.2f km)", distanciaKm)
 
-        // Calcular tiempo estimado (asumiendo velocidad promedio de 30 km/h)
-        val tiempoMinutos = (distanciaKm / 30.0) * 60
+        binding.distancia.text = String.format("Llegada (%.2f km)", distanciaKm)
 
-        // Aquí podrías actualizar los cards de distancia y tiempo
-        // binding.tvDistancia.text = String.format("%.2f km", distanciaKm)
-        // binding.tvTiempo.text = String.format("%.0f min", tiempoMinutos)
+        val tiempoEstimadoHoras = distanciaKm / 60
+        val tiempoEstimadoMinutos = (tiempoEstimadoHoras * 60).roundToInt()
+
+         binding.tvTiempo.text = String.format("%d min", tiempoEstimadoMinutos)
     }
 
     private fun centrarEnUbicacionActual() {
@@ -336,13 +353,49 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
+    private fun marcarPedidoCerca() {
+        binding.btnCerca.isEnabled = false
+
+        lifecycleScope.launch {
+            try {
+
+                PedidoRepartidorRepository.marcarPedidoCerca(pedidoId)
+
+                Toast.makeText(
+                    this@LocalizacionActivity,
+                    "Pedido marcado como cerca. Cliente notificado.",
+                    Toast.LENGTH_LONG
+                ).show()
+
+
+
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@LocalizacionActivity,
+                    "Error: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                binding.btnCerca.isEnabled = true
+            }
+        }
+    }
+
     private fun marcarLlegada() {
-        // Aquí implementarías la lógica para marcar la llegada
-        // Por ejemplo, actualizar el estado del pedido en el servidor
-        android.widget.Toast.makeText(
+
+        val intent = Intent(this, EscanerActivity::class.java)
+
+        intent.putExtra("idPedido", pedidoId)
+        intent.putExtra("idRepartidor", repartidorId)
+
+        startActivity(intent)
+
+
+        Toast.makeText(
             this,
-            "Marcando llegada al destino...",
-            android.widget.Toast.LENGTH_SHORT
+            "confirmar llegada",
+            Toast.LENGTH_SHORT
         ).show()
     }
 
