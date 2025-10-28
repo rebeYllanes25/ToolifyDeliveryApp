@@ -15,7 +15,6 @@ object RetrofitInstance {
     /* Cambiar el local IP de tu red de wifi*/
 
     private const val LOCAL_IP = "192.168.1.2"
-
     private const val PORT = "8080"
 
     fun create(userPreferences: UserPreferences): Retrofit {

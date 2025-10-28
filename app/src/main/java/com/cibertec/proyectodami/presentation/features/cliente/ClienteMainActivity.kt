@@ -43,7 +43,11 @@ class ClienteMainActivity : AppCompatActivity() {
         setupCarritoButton()
         observeCarrito()
 
-        if (savedInstanceState == null) {
+        val abrirFragment = intent.getStringExtra("abrirFragment")
+
+        if (abrirFragment == "inicio") {
+            cargarFragment(InicioFragment(), ApartadoType.INICIO)
+        } else if (savedInstanceState == null) {
             cargarFragment(ProductosFragment(), ApartadoType.PRODUCTOS)
         }
     }

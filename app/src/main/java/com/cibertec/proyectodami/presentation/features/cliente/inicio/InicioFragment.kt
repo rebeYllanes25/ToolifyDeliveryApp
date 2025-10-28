@@ -54,6 +54,7 @@ class InicioFragment : Fragment() {
 
         // LUEGO cargar los datos
         cargarDatosUsuario()
+
     }
 
     private fun cargarDatosUsuario() {
