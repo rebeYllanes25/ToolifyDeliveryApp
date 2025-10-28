@@ -16,6 +16,9 @@ if (secretsFile.exists()) {
 }
 
 android {
+
+
+
     namespace = "com.cibertec.proyectodami"
     compileSdk = 35
 
@@ -50,6 +53,19 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+    }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/DEPENDENCIES")
+            excludes.add("META-INF/INDEX.LIST")
+            excludes.add("META-INF/NOTICE")
+            excludes.add("META-INF/LICENSE")
+            excludes.add("META-INF/LICENSE.txt")
+            excludes.add("META-INF/NOTICE.txt")
+            excludes.add("META-INF/ASL2.0")
+            excludes.add("META-INF/io.netty.versions.properties")
+        }
     }
 
     compileOptions {
@@ -90,6 +106,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
     implementation(libs.glide)
+    implementation(libs.firebase.appdistribution.gradle)
     kapt(libs.glide.compiler)
     implementation(libs.zxing.core)
     implementation(platform(libs.firebase.bom))

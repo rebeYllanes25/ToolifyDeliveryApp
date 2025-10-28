@@ -62,40 +62,49 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
     }
 
     private fun setupRecyclerView() {
-        adapter = DisponiblesPedidoAdapter(mutableListOf()) { pedido ->
-            if (PedidoRepartidorRepository.tienePedidoActivo()) {
-                Toast.makeText(
-                    context,
-                    "Ya tienes un pedido activo. Complétalo primero.",
-                    Toast.LENGTH_LONG
-                ).show()
-                return@DisponiblesPedidoAdapter
-            }
+        // Primero obtén el ID del repartidor
+        lifecycleScope.launch {
+            userPreferences.idUsuario.collect { idRepartidor ->
+                if (idRepartidor != -1) {
+                    // Inicializar el adaptador con todos los parámetros requeridos
+                    adapter = DisponiblesPedidoAdapter(
+                        items = mutableListOf(),
+                        onAceptarClick = { pedido ->
+                            // Callback cuando se acepta un pedido
+                            if (PedidoRepartidorRepository.tienePedidoActivo()) {
+                                Toast.makeText(
+                                    context,
+                                    "Ya tienes un pedido activo. Complétalo primero.",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "Pedido #${pedido.numPedido} aceptado",
+                                    Toast.LENGTH_SHORT
+                                ).show()
 
-            lifecycleScope.launch {
-                userPreferences.idUsuario.collect { idRepartidor ->
-                    if (idRepartidor != -1) {
-                        viewModel.aceptarPedido(pedido, idRepartidor)
-                        Toast.makeText(
-                            context,
-                            "Aceptando pedido #${pedido.numPedido}...",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "No se pudo obtener el ID del repartidor.",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                                // Actualizar el viewModel si es necesario
+                                viewModel.cargarPedidosDisponibles()
+                            }
+                        },
+                        lifecycleOwner = viewLifecycleOwner, // ← Para Fragment
+                        idRepartidor = idRepartidor
+                    )
+
+                    binding.recyclerViewPedidos.apply {
+                        layoutManager = LinearLayoutManager(context)
+                        adapter = this@DisponiblesRepartidorFragment.adapter
+                        setHasFixedSize(true)
                     }
+                } else {
+                    Toast.makeText(
+                        context,
+                        "No se pudo obtener el ID del repartidor.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-        }
-
-        binding.recyclerViewPedidos.apply {
-            layoutManager = LinearLayoutManager(context)
-            adapter = this@DisponiblesRepartidorFragment.adapter
-            setHasFixedSize(true)
         }
     }
 
