@@ -39,6 +39,8 @@
         android:theme="@style/Theme.ProyectoDAMI"
         tools:targetApi="31">
         <activity
+
+            android:name=".presentation.features.cliente.historial.detalleHistorial.DetalleHistorialActivity"
             android:name=".presentation.features.cliente.notificaciones.NotificacionesActivity"
             android:exported="false" />
         <activity

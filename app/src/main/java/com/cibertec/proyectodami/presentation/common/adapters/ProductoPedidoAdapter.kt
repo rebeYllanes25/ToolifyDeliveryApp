@@ -4,6 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.CardSeguimientoItemsBinding
 import com.cibertec.proyectodami.domain.model.dtos.ProductoPedidoDTO
@@ -13,6 +15,7 @@ class ProductoPedidoAdapter(
 ) : RecyclerView.Adapter<ProductoPedidoAdapter.VH>() {
     inner class VH(private val binding: CardSeguimientoItemsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
 
         fun bind(producto: ProductoPedidoDTO) {
             binding.apply {

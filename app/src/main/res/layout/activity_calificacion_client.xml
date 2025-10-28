@@ -5,32 +5,46 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/gris"
     tools:context=".presentation.features.cliente.calificacion.CalificacionClientActivity">
+
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginEnd="25dp"
+        android:layout_marginTop="18dp"
+        android:gravity="center"
         android:text="@string/calificacion_titulo"
         android:textColor="@color/black"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <!-- SCROLL VIEW -->
+        app:layout_constraintTop_toTopOf="@+id/toolbar2" />
+
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="427dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,7 +52,6 @@
             android:orientation="vertical"
             android:paddingBottom="20dp">
 
-            <!-- CARD PEDIDO -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cdCalificaPedido"
                 android:layout_width="match_parent"
@@ -54,7 +67,6 @@
                     android:orientation="horizontal"
                     android:padding="15dp">
 
-                    <!-- ETIQUETAS -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -79,7 +91,6 @@
 
                     </LinearLayout>
 
-                    <!-- VALORES -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -109,7 +120,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- CARD REPARTIDOR INFO -->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cdCalificaInfoRepartidor"
                 android:layout_width="match_parent"
@@ -127,7 +137,6 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
-                    <!-- IMAGEN REPARTIDOR -->
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/imageView4"
                         android:layout_width="80dp"
@@ -137,7 +146,6 @@
                         app:shapeAppearanceOverlay="@style/radius35dp"
                         app:srcCompat="@drawable/ic_person" />
 
-                    <!-- NOMBRE REPARTIDOR -->
                     <TextView
                         android:id="@+id/tvCalificaNameRepartidor"
                         android:layout_width="wrap_content"
@@ -148,7 +156,6 @@
                         android:textStyle="bold"
                         tools:text="Carlos Rodriguez" />
 
-                    <!-- ROL -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -160,11 +167,7 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- TÍTULO CALIFICACIÓN -->
 
-            <!-- SUBTÍTULO CALIFICACIÓN -->
-
-            <!-- TÍTULO CALIFICACIÓN -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -175,7 +178,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- SUBTÍTULO CALIFICACIÓN -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,10 +186,9 @@
                 android:layout_marginBottom="20dp"
                 android:gravity="center"
                 android:text="@string/calificacion_subtitulo_dos"
-                android:textColor="@color/color_subtitulos"
+                android:textColor="@color/color_texto_normal"
                 android:textSize="14sp" />
 
-            <!-- CARD STARS RATING -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -204,7 +205,6 @@
                     android:orientation="vertical"
                     android:padding="25dp">
 
-                    <!-- RATING BAR -->
                     <RatingBar
                         android:id="@+id/rbCalificacion"
                         android:layout_width="wrap_content"
@@ -212,11 +212,10 @@
                         android:layout_gravity="center"
                         android:numStars="5"
                         android:rating="0"
-                        android:scaleX="1.5"
-                        android:scaleY="1.5"
+                        android:scaleX="1.3"
+                        android:scaleY="1.3"
                         android:stepSize="1" />
 
-                    <!-- TEXTO DINÁMICO SEGÚN RATING -->
                     <TextView
                         android:id="@+id/tvMensajeRating"
                         android:layout_width="wrap_content"
@@ -232,7 +231,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- TÍTULO EXPERIENCIA -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -244,7 +242,6 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <!-- TEXT INPUT EXPERIENCIA -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/tilExperiencia"
                 android:layout_width="match_parent"
@@ -267,7 +264,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- BOTÓN ENVIAR -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnEnviarCalificacion"
                 android:layout_width="match_parent"
@@ -281,9 +277,19 @@
                 app:backgroundTint="@color/color_principal"
                 app:cornerRadius="10dp" />
 
-            <!-- BOTÓN OMITIR -->
 
         </LinearLayout>
 
     </ScrollView>
+
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolbar2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_arrow_back" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

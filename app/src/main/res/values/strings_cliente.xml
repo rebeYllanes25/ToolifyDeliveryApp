@@ -174,6 +174,38 @@
     <string name="notificaciones_eliminada">Notificación eliminada</string>
 
 
+    <!--  HISTORIAL DETALLE -->
+
+    <string name="historial_detalle_titulo_pedido">Pedido N°: </string>
+    <string name="historial_detalle_titulo_detalle">Detalle Compras  </string>
+    <string name="historial_detalle_titulo_calificacion">Calificacion Pedido</string>
+
+    <string name="historial_detalle_fragment_titulo_calificacion">Resumen de tu pedido: </string>
+    <string name="historial_detalle_fragment_titulo_numero">Numero ID:  </string>
+    <string name="historial_detalle_fragment_titulo_productos">Productos Totales: </string>
+    <string name="historial_detalle_fragment_titulo_direccion">Direccion de entrega: </string>
+    <string name="historial_detalle_fragment_titulo_fecha">Fecha Emitida: </string>
+    <string name="historial_detalle_fragment_titulo_total">Total Compra: </string>
+    <string name="historial_detalle_fragment_titulo_coste">Coste de envio: </string>
+    <string name="historial_detalle_fragment_titulo_propina">Propina: </string>
+    <string name="historial_detalle_fragment_titulo_Total">Total Pagado: </string>
+
+    <string name="historial_detalle_fragment_titulo_repartidor">Resumen del repartidor: </string>
+    <string name="historial_detalle_fragment_titulo_nombres">Nombres Completos:  </string>
+    <string name="historial_detalle_fragment_titulo_telefono">Telefono del repartidor:  </string>
+    <string name="historial_detalle_fragment_titulo_especificaciones">Especificaciones:  </string>
+    <string name="historial_detalle_fragment_titulo_movilidad">Movilidad:  </string>
+
+    <string name="historial_detalle_fragment_titulo_pedido">Productos comprados:</string>
+
+    <string name="historial_detalle_fragement_califica_titulo">Tu ranking de este pedido</string>
+    <string name="historial_detalle_fragement_califica_comentario">Tu comentario para este pedido</string>
+
+    <string name="historial_detalle_fragement_califica_feedback">Palabras de la empresa</string>
+    <string name="historial_detalle_fragement_califica_comme">¡Gracias por tu preferencia! Nos alegra que hayas disfrutado de nuestro servicio</string>
+
+
+
     <!--Productos y Carro-->
     <string name="all_categories">Todos</string>
     <string name="nothing_products">Sin Productos</string>
@@ -223,4 +255,5 @@
     <string name="location_selected">Ubicación seleccionada</string>
     <string name="loading_direction">Cargando dirección...</string>
     <string name="close">Cerrar</string>
+
 </resources>
