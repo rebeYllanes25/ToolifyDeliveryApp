@@ -4,6 +4,9 @@ import java.io.FileInputStream
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
+    id("kotlin-kapt")
+    id("com.google.gms.google-services")
 }
 
 val secrets = Properties()
@@ -13,6 +16,9 @@ if (secretsFile.exists()) {
 }
 
 android {
+
+
+
     namespace = "com.cibertec.proyectodami"
     compileSdk = 35
 
@@ -47,6 +53,19 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+    }
+
+    packaging {
+        resources {
+            excludes.add("META-INF/DEPENDENCIES")
+            excludes.add("META-INF/INDEX.LIST")
+            excludes.add("META-INF/NOTICE")
+            excludes.add("META-INF/LICENSE")
+            excludes.add("META-INF/LICENSE.txt")
+            excludes.add("META-INF/NOTICE.txt")
+            excludes.add("META-INF/ASL2.0")
+            excludes.add("META-INF/io.netty.versions.properties")
+        }
     }
 
     compileOptions {
@@ -86,13 +105,20 @@ dependencies {
     implementation(libs.camera.view)
     implementation(libs.play.services.maps)
     implementation(libs.play.services.location)
-
+    implementation(libs.glide)
+    implementation(libs.firebase.appdistribution.gradle)
+    kapt(libs.glide.compiler)
     implementation(libs.zxing.core)
     implementation(libs.glide)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.analytics.ktx)
+    implementation(libs.firebase.auth.ktx)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
     annotationProcessor(libs.glide.compiler)
+
 }

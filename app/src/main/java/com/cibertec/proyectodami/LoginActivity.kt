@@ -10,6 +10,7 @@ import com.cibertec.proyectodami.data.api.UserAuth
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.databinding.ActivityLoginBinding
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
+import com.cibertec.proyectodami.domain.util.FcmTokenHelper
 import com.cibertec.proyectodami.presentation.features.cliente.ClienteMainActivity
 import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
 import kotlinx.coroutines.*
@@ -36,6 +37,7 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
         val etCorreo = binding.etCorreo
         val etPassword = binding.etContrasenia
         val btnLogin = binding.btnLogin
+        val linkRegistro = binding.linkRegistro
 
         fun checkFields() {
             val emailFilled = !etCorreo.text.isNullOrBlank()
@@ -61,15 +63,16 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
             val clave = etPassword.text.toString()
             login(correo, clave)
         }
+
+        linkRegistro.setOnClickListener {
+            iraRegistro()
+        }
     }
 
     private fun login(correo: String, clave: String) {
         launch {
             try {
-                val response = withContext(Dispatchers.IO) {
-                    authApi.login(correo, clave)
-                }
-
+                val response = withContext(Dispatchers.IO) { authApi.login(correo, clave) }
                 val token = response.token
 
                 if (token.isNullOrEmpty()) {
@@ -77,33 +80,50 @@ class LoginActivity : AppCompatActivity(), CoroutineScope {
                     return@launch
                 }
 
-                userPreferences.guardarToken(token)
-                // Obtener datos del usuario
-                val usuario = withContext(Dispatchers.IO) {
-                    authApi.getUsuarioInfo()
+                // Guardar token JWT
+                withContext(Dispatchers.IO) {
+                    userPreferences.guardarToken(token)
                 }
-                userPreferences.guardarIdUsuario(usuario.idUsuario)
-                userPreferences.guardarNombreUsuario(usuario.nombres)
-                userPreferences.guardarRol(usuario.rol.idRol)
+
+                // Recrear API con el nuevo token
+                authApi = RetrofitInstance.create(userPreferences).create(UserAuth::class.java)
+
+                // Obtener información del usuario
+                val usuario = withContext(Dispatchers.IO) { authApi.getUsuarioInfo() }
+
+                // Guardar datos del usuario
+                withContext(Dispatchers.IO) {
+                    userPreferences.guardarIdUsuario(usuario.idUsuario)
+                    userPreferences.guardarNombreUsuario(usuario.nombres)
+                    userPreferences.guardarRol(usuario.rol.idRol)
+                }
+
+                // Registrar token FCM en el backend
+                FcmTokenHelper.obtenerYEnviarToken(
+                    context = this@LoginActivity,
+                    userPreferences = userPreferences
+                )
+
+                // Redirigir según rol
                 when (usuario.rol.idRol) {
-                    2 -> {
-                        startActivity(Intent(this@LoginActivity, ClienteMainActivity::class.java))
-                        finish()
-                    }
-                    4 -> {
-                        startActivity(Intent(this@LoginActivity, RepartidorMainActivity::class.java))
-                        finish()
-                    }
-                    else -> {
-                        Toast.makeText(this@LoginActivity, "Rol no reconocido", Toast.LENGTH_SHORT).show()
-                    }
+                    2 -> startActivity(Intent(this@LoginActivity, ClienteMainActivity::class.java))
+                    4 -> startActivity(Intent(this@LoginActivity, RepartidorMainActivity::class.java))
+                    else -> Toast.makeText(this@LoginActivity, "Rol no reconocido", Toast.LENGTH_SHORT).show()
                 }
+
+                finish()
 
             } catch (e: Exception) {
                 e.printStackTrace()
-                Toast.makeText(this@LoginActivity, "Error al iniciar sesión", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@LoginActivity, "Error al iniciar sesión: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+
+    private fun iraRegistro() {
+        val intent = Intent(this, RegistroActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onDestroy() {

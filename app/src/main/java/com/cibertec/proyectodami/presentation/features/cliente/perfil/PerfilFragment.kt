@@ -1,5 +1,6 @@
 package com.cibertec.proyectodami.presentation.features.cliente.perfil
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,7 @@ import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.databinding.FragmentPerfilBinding
 import com.cibertec.proyectodami.domain.model.dtos.PerfilDetalleComprasDto
+import com.cibertec.proyectodami.domain.util.FcmTokenHelper
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
@@ -55,9 +57,20 @@ class PerfilFragment : Fragment() {
         binding.btnLogout.setOnClickListener {
             lifecycleScope.launch {
                 userPreferences.limpiarDatos()
+
+                val userPreferences = UserPreferences(requireContext())
+
+                FcmTokenHelper.eliminarToken(requireContext(), userPreferences)
+                userPreferences.limpiarDatos()
+
+                val prefs = requireContext().getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+                prefs.edit().clear().apply()
+
+
                 val intent = Intent(requireContext(), LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+                requireActivity().finish()
             }
         }
     }

@@ -4,6 +4,7 @@
     <string name="saludo_usuario">¡Hola, %1$s!</string>
     <string name="subtitlo_seguimiento">Rastrea tus pedidos en tiempo real</string>
     <string name="tab_inicio">Inicio</string>
+    <string name="tab_pedido">Pedidos</string>
     <string name="tab_historial">Historial</string>
     <string name="tab_usuario">Perfil</string>
 
@@ -126,6 +127,12 @@
     <!-- Notificaciones -->
     <string name="notificaciones_titulo">Notificaciones</string>
     <string name="notificaciones_sin_leer">%1$d sin leer</string>
+    <string name="notificacione_titulo"></string>
+    <string name="notificacion_mensaje"></string>
+    <string name="notificacion_tiempo"></string>
+
+
+
     <string name="notificaciones_marcar_todas_leidas">Marcar todas como leídas</string>
     <string name="notificaciones_eliminar_todas">Eliminar todas</string>
 
@@ -149,8 +156,6 @@
     <string name="notificaciones_tipo_pedido_en_camino">Pedido en camino</string>
     <string name="notificaciones_tipo_pedido_entregado">Pedido entregado</string>
     <string name="notificaciones_tipo_pedido_fallido">Entrega fallida</string>
-    <string name="notificaciones_tipo_promocion">Promoción especial</string>
-    <string name="notificaciones_tipo_sistema">Notificación del sistema</string>
 
     <string name="notificaciones_tiempo_ahora">Ahora mismo</string>
     <string name="notificaciones_tiempo_minutos">Hace %1$d min</string>
@@ -167,9 +172,6 @@
     <string name="notificaciones_todas_marcadas_leidas">Todas las notificaciones marcadas como leídas</string>
     <string name="notificaciones_todas_eliminadas">Todas las notificaciones eliminadas</string>
     <string name="notificaciones_eliminada">Notificación eliminada</string>
-
-
-
 
 
     <!--  HISTORIAL DETALLE -->
@@ -202,5 +204,56 @@
     <string name="historial_detalle_fragement_califica_feedback">Palabras de la empresa</string>
     <string name="historial_detalle_fragement_califica_comme">¡Gracias por tu preferencia! Nos alegra que hayas disfrutado de nuestro servicio</string>
 
+
+
+    <!--Productos y Carro-->
+    <string name="all_categories">Todos</string>
+    <string name="nothing_products">Sin Productos</string>
+    <string name="not_found_products">No se encontraron productos</string>
+    <string name="image_product">Producto Imagen</string>
+    <string name="calification">Calificación</string>
+    <string name="last_units">¡Últimas unidades!</string>
+    <string name="delete_description">Eliminar</string>
+    <string name="decrease_unit">Disminuir</string>
+    <string name="increase_unit">Aumentar</string>
+    <string name="subTotal">Sub Total: </string>
+    <string name="title_cart">Mi carrito </string>
+    <string name="btn_empty">Vaciar</string>
+    <string name="txt_empty_car">Tu carrito está vacío</string>
+    <string name="txt_add_producto">Agrega productos para comenzar tu compra</string>
+    <string name="view_description">Ver Productos</string>
+    <string name="txt_total">Total: </string>
+    <string name="btn_process_sale">Procesar Compra</string>
+    <string name="txt_example_product">Producto de ejemplo</string>
+    <string name="txt_finish_sale">Finalizar Compra</string>
+    <string name="txt_summary_products">Resumen de Productos</string>
+    <string name="txt_method">Método de entrega</string>
+    <string name="option_sale_store">Retirar en tienda (Gratis)</string>
+    <string name="option_sale_delivery">Envío a domicilio</string>
+    <string name="txt_type_delivery">Tipo de Delivery</string>
+    <string name="option_bike">Servicio normal - Moto (Costo extra de S/ 10)</string>
+    <string name="option_car">Servicio urgente - Auto (Costo extra de S/ 15)</string>
+    <string name="txt_select_location">Selecciona tu ubicación en el mapa</string>
+    <string name="txt_location_delivery">Ubicación de entrega</string>
+    <string name="txt_my_location">Mi ubicación actual</string>
+    <string name="txt_specification_add">Especificacion adicionales</string>
+    <string name="txt_example_location">Ej: Casa azul, segundo piso...</string>
+    <string name="data_pay">Datos de pago</string>
+    <string name="month">Mes</string>
+    <string name="number_car">Número de tarjeta</string>
+    <string name="year">Año</string>
+    <string name="cvv">CVV</string>
+    <string name="cost_shipment">Costo de envío:</string>
+    <string name="btn_cancel">Cancelar</string>
+    <string name="confirm_sale">Confirmar Compra</string>
+    <string name="txt_category">Categoria</string>
+    <string name="txt_product">Nombre Producto</string>
+    <string name="fullscreen_map">Pantalla completa</string>
+    <string name="current_location">Ubicación actual</string>
+    <string name="select_location">Selecciona tu ubicación</string>
+    <string name="confirm_location">Confirmar ubicación</string>
+    <string name="location_selected">Ubicación seleccionada</string>
+    <string name="loading_direction">Cargando dirección...</string>
+    <string name="close">Cerrar</string>
 
 </resources>

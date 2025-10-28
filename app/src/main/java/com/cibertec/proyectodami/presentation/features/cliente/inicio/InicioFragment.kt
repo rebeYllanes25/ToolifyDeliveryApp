@@ -50,6 +50,7 @@ class InicioFragment : Fragment() {
         setupRecyclerView()
         observarPedidos()
         cargarDatosUsuario()
+
     }
 
     private fun cargarDatosUsuario() {

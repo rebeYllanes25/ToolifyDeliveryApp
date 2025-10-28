@@ -40,22 +40,14 @@ class ActivoRepartidorFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
+        // Adapter SIN callback
         adapter = ActivoPedidoAdapter(
             requireActivity(),
             mutableListOf()
-        ) { pedido ->
-            val idRepartidor = obtenerIdRepartidor()
-            viewModel.marcarEnCamino(pedido.idPedido, idRepartidor)
-
-            Toast.makeText(
-                requireContext(),
-                "Pedido marcado como En Camino",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+        )
 
         binding.recyclerViewActivo.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(requireContext())
             adapter = this@ActivoRepartidorFragment.adapter
             setHasFixedSize(true)
         }
@@ -64,13 +56,6 @@ class ActivoRepartidorFragment : Fragment() {
     private fun setupEmptyView() {
         binding.buttonView.setOnClickListener {
             navegarAPestanaDisponibles()
-        }
-    }
-
-    private fun obtenerIdRepartidor(): Int {
-        val userPreferences = UserPreferences(requireContext())
-        return runBlocking() {
-            userPreferences.obtenerIdUsuario()
         }
     }
 

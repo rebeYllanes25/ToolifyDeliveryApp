@@ -35,9 +35,15 @@
     <color name="verde">#4CAF50</color>
     <color name="gris_claro">#9C9C9C</color>
 
+    <color name="morado">#673AB7</color>
+    <color name="morado_claro">#C5B4E7</color>
+
     <color name="primary">#2962FF</color>
     <color name="primary_dark">#0039CB</color>
     <color name="primary_light">#768FFF</color>
+    <color name="celeste_claro">#8AC9F2</color>
+    <color name="celeste">#2196F3</color>
+
 
     <color name="dark_gray">#424242</color>
     <color name="medium_gray">#757575</color>

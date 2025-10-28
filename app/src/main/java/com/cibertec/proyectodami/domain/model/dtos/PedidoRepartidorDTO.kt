@@ -3,6 +3,7 @@ package com.cibertec.proyectodami.domain.model.dtos
 import java.time.LocalDateTime
 
 data class PedidoRepartidorDTO(
+    val idRepartidor: Int, //AGREGUE UN IDREPARTIDOR POR SIACASO
     val idPedido: Int,
     val numPedido: String,
     val nomCliente: String,

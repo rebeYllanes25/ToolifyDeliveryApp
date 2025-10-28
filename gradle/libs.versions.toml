@@ -19,6 +19,13 @@ legacySupportV4 = "1.0.0"
 play-services-maps = "18.2.0"
 play-services-location = "21.0.1"
 glide = "4.16.0"
+firebase-bom = "33.4.0"
+firebase-messaging = "24.0.0"
+firebase-analytics = "22.1.2"
+firebase-auth = "23.1.0"
+firebaseAppdistributionGradle = "5.1.1"
+
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -42,17 +49,29 @@ okhttp-logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-i
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version = "1.7.3" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version = "2.6.2" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version = "1.0.0" }
+
 glide = {group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler = { group = "com.github.bumptech.glide",name = "compiler",version.ref = "glide" }
+
+glide = { group = "com.github.bumptech.glide", name = "glide", version = "4.16.0" }
+glide-compiler = { group = "com.github.bumptech.glide", name = "compiler", version = "4.16.0" }
+
 
 zxing-core = {module = "com.google.zxing:core", version ="3.5.3"}
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "play-services-maps" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "play-services-location" }
 
+
 mlkit-barcode = { module = "com.google.mlkit:barcode-scanning", version = "17.2.0" }
 camera-camera2 = { module = "androidx.camera:camera-camera2", version = "1.3.0" }
 camera-lifecycle = { module = "androidx.camera:camera-lifecycle", version = "1.3.0" }
 camera-view = { module = "androidx.camera:camera-view", version = "1.3.0" }
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-messaging-ktx = { module = "com.google.firebase:firebase-messaging-ktx", version.ref = "firebase-messaging" }
+firebase-analytics-ktx = { module = "com.google.firebase:firebase-analytics-ktx", version.ref = "firebase-analytics" }
+firebase-auth-ktx = { module = "com.google.firebase:firebase-auth-ktx", version.ref = "firebase-auth" }
+firebase-appdistribution-gradle = { group = "com.google.firebase", name = "firebase-appdistribution-gradle", version.ref = "firebaseAppdistributionGradle" }
 
 
 [plugins]
