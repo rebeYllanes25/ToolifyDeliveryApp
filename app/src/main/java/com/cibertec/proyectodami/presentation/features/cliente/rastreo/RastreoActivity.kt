@@ -81,26 +81,18 @@ class RastreoActivity : AppCompatActivity() {
         }
 
 
-        //ACCIONES PARA LLAMAR/ENVIAR AL REPARTIDOR
         llamarTelefonoRepartidor()
         enviarMensajeRepartidorBtn()
 
-        //DATOS DE LA VISTA INICIALES
         cargarDatosVista()
         cargarRecycleView()
         generarcionDeQr()
 
-        /*
-        inicializarEstados()
-        simularCambiosEstado()
-        */
-
-        //RECARGAR EL ESTADO DEL API
         recargarDatosPedido()
 
         binding.btnReloadPage.setOnClickListener {
             verificacionCompletada = false;
-            Toast.makeText(this, "ACTUALIZANDO PAGINA", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Actualizando la vista", Toast.LENGTH_SHORT).show()
             recargarDatosPedido()
         }
 
@@ -273,6 +265,11 @@ class RastreoActivity : AppCompatActivity() {
                 val responseCalificacion = pedidosClienteApi.verificarCalificacion(pedidoIdInt)
 
                 withContext(Dispatchers.Main){
+
+                    idRepartidor = datosPedido.idRepartidor
+                    nombreRepartidor = datosPedido.nomRepartidor
+                    apePaternoRepartidor = datosPedido.apePaternoRepartidor
+                    telefonoRepartidor = datosPedido.telefonoRepartidor
 
                     estado = datosPedido.estado
                     Log.d("RELOAD", "✅ Estado actualizado: $estado")

@@ -10,7 +10,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.cibertec.proyectodami.LoginActivity
+import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.data.api.PedidosCliente
 import com.cibertec.proyectodami.data.api.UserAuth
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
@@ -116,6 +119,15 @@ class PerfilFragment : Fragment() {
         binding.tvDistritoCliente.text  = perfil.distrito
         binding.tvTelefonoCliente.text  = perfil.telefono
         binding.tvUnidoDesde.text       = perfil.fechaRegistro
+
+        Glide.with(requireContext())
+            .load(perfil.imagenUsuario)
+            .centerCrop()
+            .placeholder(R.drawable.ic_launcher_background)
+            .error(R.drawable.ic_launcher_background)
+            .diskCacheStrategy(DiskCacheStrategy.ALL)
+            .into(binding.imgCliente)
+
 
         //DATOS DE PEDIDO
         binding.tvProductoMasCompradoCliente.text = perfil.productoMasComprado ?: "No hay informacion"
