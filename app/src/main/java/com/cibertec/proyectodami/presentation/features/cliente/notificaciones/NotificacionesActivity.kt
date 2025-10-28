@@ -40,8 +40,8 @@ class NotificacionesActivity : AppCompatActivity() {
     private fun setupRecycler() {
         adapter = NotificacionesAdapter(
             notificaciones = mutableListOf(),
-            onNotificacionClick = { notificacion ->
-                abrirDetallePedido(notificacion.idPedido)
+            onNotificacionClick = {
+                irAInicio()
             },
             onMarcarLeida = { notificacion ->
                 marcarComoLeida(notificacion.id)
@@ -120,9 +120,10 @@ class NotificacionesActivity : AppCompatActivity() {
         }
     }
 
-    private fun abrirDetallePedido(pedidoId: Int) {
+    private fun irAInicio() {
         val intent = Intent(this, ClienteMainActivity::class.java)
-        intent.putExtra("pedidoId", pedidoId)
+        intent.putExtra("abrirFragment", "inicio")
         startActivity(intent)
+        finish()
     }
 }

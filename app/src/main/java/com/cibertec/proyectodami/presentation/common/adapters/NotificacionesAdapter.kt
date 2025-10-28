@@ -60,7 +60,7 @@ class NotificacionesAdapter(
             holder.tvTitulo.setTypeface(null, Typeface.NORMAL)
             holder.tvMensaje.setTypeface(null, Typeface.NORMAL)
             holder.cardNotificacion.setCardBackgroundColor(
-                ContextCompat.getColor(context, R.color.gris_claro)
+                ContextCompat.getColor(context, R.color.light_gray)
             )
         }
 
