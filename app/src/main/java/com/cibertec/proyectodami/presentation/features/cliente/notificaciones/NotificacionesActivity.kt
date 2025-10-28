@@ -124,6 +124,5 @@ class NotificacionesActivity : AppCompatActivity() {
         val intent = Intent(this, ClienteMainActivity::class.java)
         intent.putExtra("abrirFragment", "inicio")
         startActivity(intent)
-        finish()
     }
 }

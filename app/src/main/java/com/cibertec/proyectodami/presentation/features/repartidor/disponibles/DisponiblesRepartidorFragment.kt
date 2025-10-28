@@ -15,21 +15,26 @@ import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.databinding.ButtonOptionsBinding
 import com.cibertec.proyectodami.databinding.FragmentDisponiblesRepartidorBinding
+import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
 import com.cibertec.proyectodami.listener.OptionsMenuListener
 import com.cibertec.proyectodami.presentation.common.adapters.DisponiblesPedidoAdapter
 import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
 import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
     private var _binding: FragmentDisponiblesRepartidorBinding? = null
     private val binding get() = _binding!!
+
     private val userPreferences: UserPreferences by lazy {
         UserPreferences(requireContext().applicationContext)
     }
+
     private val viewModel: DisponiblesViewModel by viewModels()
     private lateinit var adapter: DisponiblesPedidoAdapter
+    private var idRepartidor: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +43,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
         val pedidoApi = RetrofitInstance.create(userPreferences).create(PedidosRepartidor::class.java)
         PedidoRepartidorRepository.init(pedidoApi, userPreferences)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,7 +52,6 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
         _binding = FragmentDisponiblesRepartidorBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -62,46 +67,58 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
     }
 
     private fun setupRecyclerView() {
-        adapter = DisponiblesPedidoAdapter(mutableListOf()) { pedido ->
-            if (PedidoRepartidorRepository.tienePedidoActivo()) {
-                Toast.makeText(
-                    context,
-                    "Ya tienes un pedido activo. Complétalo primero.",
-                    Toast.LENGTH_LONG
-                ).show()
-                return@DisponiblesPedidoAdapter
+        // Inicializar el adaptador inmediatamente
+        adapter = DisponiblesPedidoAdapter(
+            items = mutableListOf(),
+            onAceptarClick = { pedido ->
+                handleAceptarPedido(pedido)
             }
-
-            lifecycleScope.launch {
-                userPreferences.idUsuario.collect { idRepartidor ->
-                    if (idRepartidor != -1) {
-                        viewModel.aceptarPedido(pedido, idRepartidor)
-                        Toast.makeText(
-                            context,
-                            "Aceptando pedido #${pedido.numPedido}...",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            context,
-                            "No se pudo obtener el ID del repartidor.",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                }
-            }
-        }
+        )
 
         binding.recyclerViewPedidos.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = this@DisponiblesRepartidorFragment.adapter
             setHasFixedSize(true)
         }
+
+        // Obtener el ID del repartidor (solo el primer valor)
+        lifecycleScope.launch {
+            userPreferences.idUsuario.first().let { id ->
+                if (id != -1) {
+                    idRepartidor = id
+                } else {
+                    Toast.makeText(
+                        context,
+                        "No se pudo obtener el ID del repartidor.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
 
+    private fun handleAceptarPedido(pedido: PedidoRepartidorDTO) {
+        // Verificar si hay pedido activo
+        if (PedidoRepartidorRepository.tienePedidoActivo()) {
+            Toast.makeText(
+                context,
+                "Ya tienes un pedido activo. Complétalo primero.",
+                Toast.LENGTH_LONG
+            ).show()
+            return
+        }
+
+        // Bloquear UI inmediatamente para evitar doble clic
+        adapter.bloquearPedidos()
+        binding.recyclerViewPedidos.alpha = 0.5f
+
+        // Llamar al ViewModel para procesar la aceptación
+        viewModel.aceptarPedido(pedido, idRepartidor)
+    }
 
     private fun observeViewModel() {
         viewModel.pedidosDisponibles.observe(viewLifecycleOwner) { pedidos ->
+            Log.d("DisponiblesFragment", "Pedidos recibidos: ${pedidos.size}")
             adapter.addAll(pedidos)
 
             binding.recyclerViewPedidos.visibility =
@@ -109,7 +126,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
             binding.emptyView.visibility =
                 if (pedidos.isEmpty()) View.VISIBLE else View.GONE
 
-            // NUEVO: Verificar bloqueo después de cargar datos
+            // Verificar bloqueo después de cargar datos
             if (PedidoRepartidorRepository.tienePedidoActivo()) {
                 adapter.bloquearPedidos()
                 binding.recyclerViewPedidos.alpha = 0.5f
@@ -121,6 +138,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
                 if (isLoading) View.VISIBLE else View.GONE
         }
 
+
         viewModel.navegarAActivos.observe(viewLifecycleOwner) { navegar ->
             if (navegar) {
                 Toast.makeText(
@@ -129,14 +147,13 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
                     Toast.LENGTH_SHORT
                 ).show()
 
-                viewModel.cargarPedidosDisponibles()
-
+                // Navegar a la pestaña de activos
                 navegarAPestanaActivos()
 
+                // Notificar al ViewModel que la navegación se completó
                 viewModel.navegacionCompletada()
             }
         }
-
 
         PedidoRepartidorRepository.pedidoActivo.observe(viewLifecycleOwner) { pedidoActivo ->
             if (pedidoActivo != null) {
@@ -144,7 +161,6 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
                 binding.recyclerViewPedidos.alpha = 0.5f
                 mostrarMensajePedidoActivo()
             } else {
-                // No hay pedido activo, desbloquear
                 adapter.desbloquearPedidos()
                 binding.recyclerViewPedidos.alpha = 1f
             }
@@ -186,7 +202,6 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
         mainActivity?.mainBinding?.tabLayout?.getTabAt(1)?.select()
     }
 
-    // NUEVO: Verificar si hay pedido activo y aplicar bloqueo
     private fun verificarPedidoActivo() {
         if (PedidoRepartidorRepository.tienePedidoActivo()) {
             adapter.bloquearPedidos()
@@ -199,9 +214,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
         }
     }
 
-    // NUEVO: Mostrar mensaje cuando hay pedido activo
     private fun mostrarMensajePedidoActivo() {
-        // Solo mostrar si el fragmento está visible
         if (isResumed) {
             Toast.makeText(
                 context,

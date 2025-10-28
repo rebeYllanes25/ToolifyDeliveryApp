@@ -2,10 +2,15 @@ package com.cibertec.proyectodami.presentation.common.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import com.cibertec.proyectodami.databinding.ItemPedidoRepartidorBinding
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
+import kotlinx.coroutines.launch
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.roundToInt
@@ -17,6 +22,7 @@ class DisponiblesPedidoAdapter(
     private val items: MutableList<PedidoRepartidorDTO>,
     private val onAceptarClick: (PedidoRepartidorDTO) -> Unit
 ) : RecyclerView.Adapter<DisponiblesPedidoAdapter.VH>() {
+
     private val RADIO_TIERRA_KM = 6371.0
     private val VELOCIDAD_PROMEDIO_KMH = 20.0
     private var bloqueado = false
@@ -64,8 +70,10 @@ class DisponiblesPedidoAdapter(
 
         val tiempoFormateado = tiempoEstimadoMinutos.toString()
         b.tvTiempo.text = ctx.getString(R.string.time_label, tiempoFormateado)
+
         b.btnAceptarPedido.isEnabled = !bloqueado
 
+        // Click simplificado: solo notifica al Fragment a través del callback
         b.btnAceptarPedido.setOnClickListener {
             if (!bloqueado) {
                 onAceptarClick(pedido)
@@ -99,7 +107,7 @@ class DisponiblesPedidoAdapter(
         notifyDataSetChanged()
     }
 
-    fun calcularDistancia(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    private fun calcularDistancia(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
 

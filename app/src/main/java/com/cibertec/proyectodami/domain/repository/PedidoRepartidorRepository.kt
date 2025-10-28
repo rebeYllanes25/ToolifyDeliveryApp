@@ -52,6 +52,7 @@ object PedidoRepartidorRepository {
         _pedidosDisponibles.value = pedidos
     }
 
+
     suspend fun cargarPedidosDisponibles() {
         try {
             val pedidos = pedidoApi.obtenerPedidosAceptados()
@@ -107,6 +108,38 @@ object PedidoRepartidorRepository {
     }
 
     // ✨ ACTUALIZADA: Limpiar pedido activo
+    suspend fun marcarPedidoCerca(idPedido: Int) {
+        try {
+            val pedidoActualizado = pedidoApi.cercaPedido(idPedido)
+
+            // Actualizar el pedido activo con el nuevo estado
+            _pedidoActivo.postValue(pedidoActualizado)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+    suspend fun entregarPedido(idPedido: Int, codigoQR: String, idRepartidor: Int) {
+        try {
+            val pedidoEntregado = pedidoApi.entregadoPedido(
+                idPedido = idPedido,
+                codigoQr = codigoQR,
+                idRepartidor = idRepartidor
+            )
+
+            // Actualizamos el pedido activo con el estado de entrega
+            _pedidoActivo.postValue(pedidoEntregado)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            throw e
+        }
+    }
+
+
+
     fun completarPedido() {
         _pedidoActivo.value = null
 

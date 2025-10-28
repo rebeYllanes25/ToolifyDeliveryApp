@@ -62,6 +62,9 @@ class ActivoPedidoAdapter(
             intent.putExtra("TOTAL", pedido.total)
             intent.putExtra("LATITUD", pedido.latitud)
             intent.putExtra("LONGITUD", pedido.longitud)
+            intent.putExtra("ESPECIFICACIONES", pedido.especificaciones)
+            intent.putExtra("ESTADO", pedido.estado)
+            intent.putExtra("REPARTIDOR", pedido.idRepartidor)
             ctx.startActivity(intent)
         }
 
