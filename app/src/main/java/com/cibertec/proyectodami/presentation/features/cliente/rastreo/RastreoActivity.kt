@@ -2,7 +2,9 @@ package com.cibertec.proyectodami.presentation.features.cliente.rastreo
 
 import android.Manifest
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
+import android.animation.ArgbEvaluator
+import android.animation.ValueAnimator
+import android.widget.TextView
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
@@ -20,7 +22,7 @@ import android.telephony.SmsManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import android.util.Log
-import android.view.LayoutInflater
+import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,6 +41,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
+
 class RastreoActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityRastreoBinding
@@ -54,6 +58,7 @@ class RastreoActivity : AppCompatActivity() {
     private var total: Double = 0.0
     private var direccion: String? = null
     private var stringqr:String? = null
+    private var idRepartidor:Int = 0;
 
     private lateinit var productosAdapter : ProductoPedidoAdapter
 
@@ -119,6 +124,7 @@ class RastreoActivity : AppCompatActivity() {
         stringqr = intent.getStringExtra("QR_VERIFICATE_PEDIDO")
         val productosJson = intent.getStringExtra("PRODUCTOS")
         total = intent.getDoubleExtra("TOTAL",0.0)
+        idRepartidor = intent.getIntExtra("ID_REPARTIDOR",0)
 
         productos = if (!productosJson.isNullOrEmpty()) {
             Gson().fromJson(productosJson, Array<ProductoPedidoDTO>::class.java).toList()
@@ -126,9 +132,7 @@ class RastreoActivity : AppCompatActivity() {
             emptyList()
         }
     }
-
-
-
+    
     private fun actualizarEstadoApi(){
         val estadoIndex = when(estado){
             "PE" -> 0
@@ -194,30 +198,6 @@ class RastreoActivity : AppCompatActivity() {
             Handler(Looper.getMainLooper()).postDelayed({
                 abrirCalificacion()
             }, 500)
-        }
-    }
-
-    private fun verificarEstadoCalificacion(){
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                Log.d("CALIFICACION", "🔍 Verificando calificación para pedido #$pedidoIdInt")
-                val response = this@RastreoActivity.pedidosClienteApi.verificarCalificacion(pedidoIdInt)
-
-                    withContext(Dispatchers.Main){
-                        if(response.isSuccessful){
-                            yaCalificado = response.body()?.get("yaCalificado") ?: false
-                            verificacionCompletada = true;
-                            Log.d("CALIFICACION", "✅ Pedido #$pedidoId ya calificado: $yaCalificado")
-                        }else{
-                            Log.e("CALIFICACION","ERROR : ${response.code()}")
-                        }
-                    }
-            }catch (e:Exception)
-            {
-                    withContext(Dispatchers.Main){
-                       Log.e("CALIFICACION", "ERROR AL VERIFICAR EL PEDIDO ${pedidoIdInt}, error: ${e.message}")
-                    }
-            }
         }
     }
 
@@ -324,11 +304,27 @@ class RastreoActivity : AppCompatActivity() {
         val propina = calcularPropina(total,10.1)
 
         val totalPagar:Double = (subTotal.toDouble() + costoEnvio) + propina
-        binding.tvNameRepartidor.text =  (nombreRepartidor + " " +  apePaternoRepartidor) ?: "Repartidor"
-        binding.tvTiempoCalculate.text = "$tiempoEntrega min"
-        binding.tvDistanciaRepartidor.text = "A 2.5 km de distancia"
-        binding.tvNumberCalificacion.text = "4.8"
-        binding.tvNumEntregas.text = "(120 entregas)"
+
+        if (idRepartidor == 0 || nombreRepartidor.isNullOrEmpty()){
+            Log.d("SIN_REPARTIDOR", "MOSTRANDO CARD SIN REPARTIDOR")
+            binding.cdSinRepartidor.visibility = View.VISIBLE
+            binding.cdRepartidor.visibility = View.GONE
+
+            binding.tvTituloSinRepartidor.startBlinking()
+
+        }else{
+            Log.d("CON_REPARTIDOR", "MOSTRANDO CARD CON REPARTIDOR ASIGNADO")
+            binding.cdSinRepartidor.visibility = View.GONE
+            binding.cdRepartidor.visibility = View.VISIBLE
+
+            binding.tvNameRepartidor.text =  (nombreRepartidor + " " +  apePaternoRepartidor) ?: "Repartidor"
+            binding.tvTiempoCalculate.text = "$tiempoEntrega min"
+            binding.tvDistanciaRepartidor.text = "A 2.5 km de distancia"
+            binding.tvNumberCalificacion.text = "4.8"
+            binding.tvNumEntregas.text = "(120 entregas)"
+        }
+
+
 
         binding.tvSubtotal.text = getString(R.string.seguimiento_fmt_subtotal,subTotal.toDouble())
         binding.tvCosteEnvio.text = getString(R.string.seguimiento_fmt_coste, costoEnvio)
@@ -449,34 +445,12 @@ class RastreoActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    private fun simularCambiosEstado() {
-        val handler = Handler(Looper.getMainLooper())
+    fun TextView.startBlinking(){
+        val animator = ObjectAnimator.ofFloat(this,"alpha",0f,1f)
+        animator.duration = 600
+        animator.repeatMode = ValueAnimator.REVERSE
+        animator.repeatCount = ValueAnimator.INFINITE
+        animator.start()
 
-        handler.postDelayed({ actualizarEstado(0) }, 500)
-
-        handler.postDelayed({ actualizarEstado(1) }, 3000)
-
-        handler.postDelayed({ actualizarEstado(2) }, 6000)
-
-        handler.postDelayed({ actualizarEstado(3) }, 9000)
-
-        handler.postDelayed({ actualizarEstado(4) }, 12000)
     }
-    private fun animarEstadoActual(imageView: ImageView) {
-
-        val scaleX = ObjectAnimator.ofFloat(imageView, "scaleX", 1f, 1.4f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(imageView, "scaleY", 1f, 1.4f, 1f)
-
-        val rotation = ObjectAnimator.ofFloat(imageView, "rotation", 0f, 360f)
-
-        scaleX.duration = 600
-        scaleY.duration = 600
-        rotation.duration = 800
-
-        scaleX.start()
-        scaleY.start()
-        rotation.start()
-    }
-*/
 }

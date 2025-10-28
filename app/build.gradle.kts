@@ -109,15 +109,16 @@ dependencies {
     implementation(libs.firebase.appdistribution.gradle)
     kapt(libs.glide.compiler)
     implementation(libs.zxing.core)
+    implementation(libs.glide)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.messaging.ktx)
     implementation(libs.firebase.analytics.ktx)
     implementation(libs.firebase.auth.ktx)
 
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    annotationProcessor(libs.glide.compiler)
 
 }

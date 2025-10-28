@@ -168,8 +168,8 @@ class ClienteMainActivity : AppCompatActivity() {
     }
 
     private fun resetearApartado(apartado: LinearLayout) {
-        val imageView = apartado.getChildAt(0) as ImageView
-        val textView = apartado.getChildAt(1) as TextView
+            val imageView = apartado.getChildAt(0) as ImageView
+            val textView = apartado.getChildAt(1) as TextView
 
         imageView.setColorFilter(
             ContextCompat.getColor(this, R.color.color_subtitulos),
