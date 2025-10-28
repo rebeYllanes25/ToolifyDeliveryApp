@@ -18,6 +18,7 @@ import com.cibertec.proyectodami.data.api.UserAuth
 import com.cibertec.proyectodami.data.dataStore.UserPreferences
 import com.cibertec.proyectodami.data.remote.RetrofitInstance
 import com.cibertec.proyectodami.databinding.ActivityPerfilBinding
+import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,13 +55,32 @@ class PerfilActivity : AppCompatActivity() {
             openImagePicker()
         }
 
+        // En tu PerfilActivity
         binding.btnCerrarSesion.setOnClickListener {
             lifecycleScope.launch {
-                userPreferences.limpiarDatos()
-                val intent = Intent(this@PerfilActivity, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
+                try {
+                    // Verificar si hay pedido activo
+                    val idPedidoActivo = userPreferences.obtenerIdPedidoActivo()
+
+                    if (idPedidoActivo != null) {
+                        PedidoRepartidorRepository.completarPedido()
+                        userPreferences.limpiarPedidoActivo()
+                    }
+
+                    userPreferences.limpiarDatos()
+
+                    val intent = Intent(this@PerfilActivity, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+
+                } catch (e: Exception) {
+                    Toast.makeText(
+                        this@PerfilActivity,
+                        "Error al cerrar sesión",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

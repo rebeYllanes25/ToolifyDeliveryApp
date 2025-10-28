@@ -64,6 +64,7 @@ class DisponiblesRepartidorFragment : Fragment(), OptionsMenuListener {
         binding.recyclerViewPedidos.postDelayed({
             verificarPedidoActivo()
         }, 100)
+        viewModel.cargarPedidosDisponibles()
     }
 
     private fun setupRecyclerView() {

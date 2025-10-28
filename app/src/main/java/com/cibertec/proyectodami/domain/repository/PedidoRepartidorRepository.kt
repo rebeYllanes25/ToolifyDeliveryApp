@@ -27,7 +27,6 @@ object PedidoRepartidorRepository {
         pedidoApi = api
         userPreferences = preferences
 
-        // Cargar pedido activo al inicializar
         cargarPedidoActivoDesdePreferences()
     }
 
@@ -38,7 +37,10 @@ object PedidoRepartidorRepository {
                     try {
                         val pedido = gson.fromJson(json, PedidoRepartidorDTO::class.java)
                         withContext(Dispatchers.Main) {
-                            _pedidoActivo.value = pedido
+                            // Solo mostrar en Activo si está en estado ACEPTADO
+                            if (pedido.estado == "AS" || pedido.estado == "CR") {
+                                _pedidoActivo.value = pedido
+                            }
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
@@ -51,7 +53,6 @@ object PedidoRepartidorRepository {
     fun setPedidosDisponibles(pedidos: List<PedidoRepartidorDTO>) {
         _pedidosDisponibles.value = pedidos
     }
-
 
     suspend fun cargarPedidosDisponibles() {
         try {
@@ -75,7 +76,6 @@ object PedidoRepartidorRepository {
             val pedidoActualizado = pedidoApi.caminoPedido(pedido, idRepartidor)
             _pedidoActivo.postValue(pedidoActualizado)
 
-            // ✨ GUARDAR EN DATASTORE
             guardarPedidoActivoEnPreferences(pedidoActualizado)
 
         } catch (e: Exception) {
@@ -84,13 +84,11 @@ object PedidoRepartidorRepository {
         }
     }
 
-    // ✨ NUEVA: Establecer pedido activo y guardarlo
     fun setPedidoActivo(pedido: PedidoRepartidorDTO) {
         _pedidoActivo.value = pedido
         guardarPedidoActivoEnPreferences(pedido)
     }
 
-    // ✨ NUEVA: Guardar en DataStore
     private fun guardarPedidoActivoEnPreferences(pedido: PedidoRepartidorDTO) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -107,12 +105,10 @@ object PedidoRepartidorRepository {
         }
     }
 
-    // ✨ ACTUALIZADA: Limpiar pedido activo
     suspend fun marcarPedidoCerca(idPedido: Int) {
         try {
             val pedidoActualizado = pedidoApi.cercaPedido(idPedido)
 
-            // Actualizar el pedido activo con el nuevo estado
             _pedidoActivo.postValue(pedidoActualizado)
 
         } catch (e: Exception) {
@@ -129,7 +125,6 @@ object PedidoRepartidorRepository {
                 idRepartidor = idRepartidor
             )
 
-            // Actualizamos el pedido activo con el estado de entrega
             _pedidoActivo.postValue(pedidoEntregado)
 
         } catch (e: Exception) {
@@ -138,12 +133,17 @@ object PedidoRepartidorRepository {
         }
     }
 
+    fun iniciarEntrega() {
+        _pedidoActivo.postValue(null)
 
+        CoroutineScope(Dispatchers.IO).launch {
+            userPreferences.limpiarPedidoActivo()
+        }
+    }
 
     fun completarPedido() {
         _pedidoActivo.value = null
 
-        // Limpiar de DataStore
         CoroutineScope(Dispatchers.IO).launch {
             userPreferences.limpiarPedidoActivo()
         }

@@ -23,9 +23,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
+import com.cibertec.proyectodami.data.dataStore.UserPreferences
 
 import com.cibertec.proyectodami.databinding.ActivityEscanerBinding
 import com.cibertec.proyectodami.domain.repository.PedidoRepartidorRepository
+import com.cibertec.proyectodami.presentation.features.repartidor.RepartidorMainActivity
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
 import com.google.mlkit.vision.barcode.common.Barcode
@@ -135,44 +137,48 @@ class EscanerActivity : AppCompatActivity() {
 
             Toast.makeText(this, "QR Detectado: $qrCode", Toast.LENGTH_SHORT).show()
 
-            // Llamar a la API para confirmar entrega
             entregarPedido(qrCode)
         }
     }
 
     private fun entregarPedido(codigoQR: String) {
-        // Obtener idRepartidor desde SharedPreferences (guardado al iniciar sesión)
-        val prefs = getSharedPreferences("appPrefs", Context.MODE_PRIVATE)
-        val idRepartidor = prefs.getInt("idRepartidor", 0) // 0 si no existe, deberías manejarlo
-
-        if (idRepartidor == 0) {
-            Toast.makeText(this, "Error: no se encontró ID de repartidor", Toast.LENGTH_LONG).show()
-            qrCodeScanned = false
-            animarLineaEscaneo()
-            return
-        }
-
         lifecycleScope.launch {
             try {
+                val userPrefs = UserPreferences(this@EscanerActivity)
+                val idRepartidor = userPrefs.obtenerIdUsuario()
+
+                if (idRepartidor <= 0) {
+                    Toast.makeText(
+                        this@EscanerActivity,
+                        "Error: no se encontró ID de repartidor",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    qrCodeScanned = false
+                    animarLineaEscaneo()
+                    return@launch
+                }
+
                 PedidoRepartidorRepository.entregarPedido(
                     idPedido = idPedido,
                     codigoQR = codigoQR,
                     idRepartidor = idRepartidor
                 )
 
+                PedidoRepartidorRepository.iniciarEntrega()
+
                 Toast.makeText(
                     this@EscanerActivity,
-                    "Pedido entregado correctamente",
+                    "Pedido entregado. Puedes aceptar nuevos pedidos",
                     Toast.LENGTH_LONG
                 ).show()
 
-                val resultIntent = Intent().apply {
-                    putExtra("QR_CODE", codigoQR)
-                    putExtra("SCAN_SUCCESS", true)
+                val intent = Intent(this@EscanerActivity, RepartidorMainActivity::class.java).apply {
+                    putExtra("CAMBIAR_A_DISPONIBLES", true)
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                 }
-                setResult(RESULT_OK, resultIntent)
 
                 Handler(Looper.getMainLooper()).postDelayed({
+                    startActivity(intent)
                     finish()
                 }, 1500)
 

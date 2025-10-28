@@ -32,6 +32,8 @@ import com.cibertec.proyectodami.domain.model.entities.Venta
 import com.cibertec.proyectodami.presentation.common.adapters.CarroResumenAdapter
 import com.cibertec.proyectodami.presentation.features.cliente.carro.CarroRepository
 import com.cibertec.proyectodami.presentation.features.cliente.historial.HistorialFragment
+import com.cibertec.proyectodami.presentation.features.cliente.inicio.InicioFragment
+import com.cibertec.proyectodami.presentation.features.cliente.inicio.detallepedido.DetallePedidoFragment
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -565,7 +567,7 @@ class FinalizarFragment : Fragment(), OnMapReadyCallback {
                     Toast.makeText(requireContext(), response.mensaje, Toast.LENGTH_LONG).show()
                     CarroRepository.limpiarCarrito()
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.contenedorFragmento, HistorialFragment())
+                        .replace(R.id.contenedorFragmento, InicioFragment())
                         .addToBackStack(null)
                         .commit()
                 } else {

@@ -59,6 +59,18 @@ class RepartidorMainActivity : AppCompatActivity() {
         setupOptionsButton()
     }
 
+    // ✨ NUEVO: Detectar cuando vuelves de otra actividad
+    override fun onResume() {
+        super.onResume()
+
+        // Verificar si debe cambiar a Disponibles
+        val cambiarADisponibles = intent.getBooleanExtra("CAMBIAR_A_DISPONIBLES", false)
+        if (cambiarADisponibles) {
+            binding.tabLayout.getTabAt(0)?.select()
+            intent.removeExtra("CAMBIAR_A_DISPONIBLES") // Limpiar el flag
+        }
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putInt(KEY_CURRENT_TAB, binding.tabLayout.selectedTabPosition)

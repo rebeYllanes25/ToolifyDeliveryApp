@@ -32,7 +32,6 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.firebase.appdistribution.gradle.ApiService
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -42,7 +41,6 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
     private var googleMap: GoogleMap? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<*>
-    private lateinit var apiService: ApiService
 
     //Datos del pedido
     private var pedidoId: Int = 0
@@ -418,19 +416,19 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+
     private fun marcarLlegada() {
-
         val intent = Intent(this, EscanerActivity::class.java)
-
         intent.putExtra("idPedido", pedidoId)
         intent.putExtra("idRepartidor", repartidorId)
 
         startActivity(intent)
 
+        finish()
 
         Toast.makeText(
             this,
-            "confirmar llegada",
+            "Confirmar llegada",
             Toast.LENGTH_SHORT
         ).show()
     }

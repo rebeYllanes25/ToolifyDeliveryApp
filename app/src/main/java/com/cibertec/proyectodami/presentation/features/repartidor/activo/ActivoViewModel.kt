@@ -18,27 +18,16 @@ class ActivoViewModel : ViewModel() {
     private val _pedidoCompletado = MutableLiveData<Boolean>()
     val pedidoCompletado: LiveData<Boolean> = _pedidoCompletado
 
+    private val _pedidoEnCamino = MutableLiveData<Boolean>()
+    val pedidoEnCamino: LiveData<Boolean> = _pedidoEnCamino
+
     private val _error = MutableLiveData<String?>()
     val error: LiveData<String?> = _error
 
-
-    fun completarPedido() {
-        viewModelScope.launch {
-            _loading.value = true
-
-            delay(1000) // Simular llamada a API
-
-            // TODO: Llamar a la API para completar el pedido
-            // api.completarPedido(pedidoActivo.value?.nroPedido)
-
-            PedidoRepartidorRepository.completarPedido()
-
-            _loading.value = false
-            _pedidoCompletado.value = true
-        }
-    }
-
     fun navegarADisponibles() {
         _pedidoCompletado.value = false
+        _pedidoEnCamino.value = false
     }
+
+
 }

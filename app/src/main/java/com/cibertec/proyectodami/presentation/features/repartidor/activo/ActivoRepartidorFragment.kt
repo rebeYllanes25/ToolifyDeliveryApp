@@ -62,12 +62,10 @@ class ActivoRepartidorFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.pedidoActivo.observe(viewLifecycleOwner) { pedido ->
             if (pedido != null) {
-                // Mostrar el pedido activo
                 adapter.setData(pedido)
                 binding.recyclerViewActivo.visibility = View.VISIBLE
                 binding.emptyView.visibility = View.GONE
             } else {
-                // Mostrar vista vacía
                 adapter.clear()
                 binding.recyclerViewActivo.visibility = View.GONE
                 binding.emptyView.visibility = View.VISIBLE
@@ -89,11 +87,21 @@ class ActivoRepartidorFragment : Fragment() {
             if (completado) {
                 Toast.makeText(
                     requireContext(),
-                    "Pedido completado exitosamente",
+                    "Pedido entregado exitosamente",
                     Toast.LENGTH_SHORT
                 ).show()
+                navegarAPestanaDisponibles()
+                viewModel.navegarADisponibles()
+            }
+        }
 
-                // Navegar a disponibles
+        viewModel.pedidoEnCamino.observe(viewLifecycleOwner) { enCamino ->
+            if (enCamino) {
+                Toast.makeText(
+                    requireContext(),
+                    "Pedido en camino. Ya puedes aceptar nuevos pedidos",
+                    Toast.LENGTH_LONG
+                ).show()
                 navegarAPestanaDisponibles()
                 viewModel.navegarADisponibles()
             }
