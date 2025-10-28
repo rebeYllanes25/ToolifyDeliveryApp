@@ -1,6 +1,7 @@
 package com.cibertec.proyectodami.data.api
 
 import com.cibertec.proyectodami.domain.model.dtos.CalificacionDTO
+import com.cibertec.proyectodami.domain.model.dtos.ComentarioPuntuacionDTO
 import com.cibertec.proyectodami.domain.model.dtos.PedidoClienteDTO
 import com.cibertec.proyectodami.domain.model.dtos.PerfilDetalleComprasDto
 import com.cibertec.proyectodami.domain.model.dtos.requests.CalificarRequest
@@ -51,5 +52,10 @@ interface PedidosCliente {
     suspend fun verificarCalificacion(
         @Path("idPedido") idPedido: Int
     ): Response<Map<String, Boolean>>
+
+    @GET ("pedido/calificacion/{idPedido}")
+    suspend fun buscarCalificacion(
+        @Path("idPedido") idPedido:Int
+    ): Response<ComentarioPuntuacionDTO>
 
 }

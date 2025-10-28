@@ -168,6 +168,12 @@
     <string name="notificaciones_todas_eliminadas">Todas las notificaciones eliminadas</string>
     <string name="notificaciones_eliminada">Notificación eliminada</string>
 
+
+
+
+
+    <!--  HISTORIAL DETALLE -->
+
     <string name="historial_detalle_titulo_pedido">Pedido N°: </string>
     <string name="historial_detalle_titulo_detalle">Detalle Compras  </string>
     <string name="historial_detalle_titulo_calificacion">Calificacion Pedido</string>
@@ -188,6 +194,13 @@
     <string name="historial_detalle_fragment_titulo_especificaciones">Especificaciones:  </string>
     <string name="historial_detalle_fragment_titulo_movilidad">Movilidad:  </string>
 
+    <string name="historial_detalle_fragment_titulo_pedido">Productos comprados:</string>
+
+    <string name="historial_detalle_fragement_califica_titulo">Tu ranking de este pedido</string>
+    <string name="historial_detalle_fragement_califica_comentario">Tu comentario para este pedido</string>
+
+    <string name="historial_detalle_fragement_califica_feedback">Palabras de la empresa</string>
+    <string name="historial_detalle_fragement_califica_comme">¡Gracias por tu preferencia! Nos alegra que hayas disfrutado de nuestro servicio</string>
 
 
 </resources>

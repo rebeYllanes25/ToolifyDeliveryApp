@@ -10,8 +10,6 @@ import androidx.fragment.app.Fragment
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.databinding.ActivityDetalleHistorialBinding
 import com.cibertec.proyectodami.domain.model.dtos.ProductoPedidoDTO
-import com.cibertec.proyectodami.domain.repository.PedidoClienteRepository
-import com.cibertec.proyectodami.presentation.common.adapters.ProductoPedidoAdapter
 import com.cibertec.proyectodami.presentation.features.cliente.historial.detalleHistorial.Fragments.CalificacionFragment
 import com.google.gson.Gson
 import com.cibertec.proyectodami.presentation.features.cliente.historial.detalleHistorial.Fragments.DetalleHistorialFragment
@@ -21,28 +19,18 @@ class DetalleHistorialActivity : AppCompatActivity() {
     private lateinit var binding: ActivityDetalleHistorialBinding
     private var apartadoActual: ApartadoTypeDT = ApartadoTypeDT.DETALLE
 
-    lateinit var pedidoRepository: PedidoClienteRepository
-
 
     private var pedidoIdInt: Int = 0;
     private var pedidoId:String? = null;
     private var estado:String? = null;
     private var nombreRepartidor:String? = null
     private var apePaternoRepartidor:String? = null
-    private var tiempoEntrega: Int  = 0;
+    private var telefonoRepartidor:String? = null
     private var productos: List<ProductoPedidoDTO>? = null
     private var total: Double = 0.0
+    private var movilidad:String? = null
     private var direccion: String? = null
-    private var stringqr:String? = null
-    private var idRepartidor:Int = 0;
-    //agregar
     private var fecha:String? = null;
-    private var idCliente:Int = 0;
-
-    private lateinit var productosAdapter : ProductoPedidoAdapter
-
-    private var yaCalificado: Boolean = false;
-    private var verificacionCompletada: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +41,6 @@ class DetalleHistorialActivity : AppCompatActivity() {
 
         obtenerDatosIntent()
         setUpListeners()
-
 
         if (savedInstanceState == null) {
             cargarFragment(DetalleHistorialFragment(), ApartadoTypeDT.DETALLE)
@@ -66,16 +53,17 @@ class DetalleHistorialActivity : AppCompatActivity() {
 
     private fun obtenerDatosIntent(){
 
-        pedidoId = intent.getStringExtra("PEDIDO_ID")
-        pedidoIdInt = intent.getIntExtra("PEDIDO_ID_INT",0)
-        estado = intent.getStringExtra("ESTADO")
-        nombreRepartidor = intent.getStringExtra("REPARTIDOR")
-        apePaternoRepartidor = intent.getStringExtra("APE_PATERNO")
-        tiempoEntrega = intent.getIntExtra("TIEMPO_ENTREGA",0)
-        stringqr = intent.getStringExtra("QR_VERIFICATE_PEDIDO")
+        pedidoIdInt = intent.getIntExtra("ID_PEDIDO",0)
+        pedidoId = intent.getStringExtra("NUM_PEDIDO")
+        estado = intent.getStringExtra("ESTADO_PEDIDO")
+        total = intent.getDoubleExtra("TOTAL_PEDIDO",0.0)
+        fecha = intent.getStringExtra("FECHA_PEDIDO")
+        nombreRepartidor = intent.getStringExtra("NOMBRE_REPARTIDOR")
+        apePaternoRepartidor = intent.getStringExtra("APE_PAT_REPARTIDOR")
+        telefonoRepartidor = intent.getStringExtra("TELEFONO_REPARTIDOR")
+        movilidad = intent.getStringExtra("TIPO_ENVIO")
+        direccion = intent.getStringExtra("DIRECCION_PEDIDO")
         val productosJson = intent.getStringExtra("PRODUCTOS")
-        total = intent.getDoubleExtra("TOTAL",0.0)
-        idRepartidor = intent.getIntExtra("ID_REPARTIDOR",0)
 
         productos = if (!productosJson.isNullOrEmpty()) {
             Gson().fromJson(productosJson, Array<ProductoPedidoDTO>::class.java).toList()
@@ -87,13 +75,17 @@ class DetalleHistorialActivity : AppCompatActivity() {
     private fun cargarFragment(fragment: Fragment, tipo: ApartadoTypeDT) {
 
         val bundle = Bundle().apply{
+
             putInt("ID_PEDIDO",pedidoIdInt)
             putString("NUM_PEDIDO", pedidoId)
             putString("ESTADO_PEDIDO", estado)
             putDouble("TOTAL_PEDIDO", total)
             putString("FECHA_PEDIDO",fecha)
-            putInt("ID_CLIENTE", idCliente)
-            idRepartidor?.let { putInt("ID_REPARTIDOR", it) }
+            putString("NOMBRE_REPARTIDOR",nombreRepartidor)
+            putString("APE_PAT_REPARTIDOR",apePaternoRepartidor)
+            putString("TELEFONO_REPARTIDOR",telefonoRepartidor)
+            putString("TIPO_ENVIO",movilidad)
+            putString("DIRECCION_PEDIDO",direccion)
         }
         fragment.arguments = bundle
 
@@ -104,6 +96,11 @@ class DetalleHistorialActivity : AppCompatActivity() {
 
         actualizarEstiloApartados(tipo)
         apartadoActual = tipo
+    }
+
+     fun actualizarApartados(apartadoSeleccionado: ApartadoTypeDT){
+       actualizarEstiloApartados(apartadoSeleccionado)
+
     }
 
     private fun actualizarEstiloApartados(apartadoSeleccionado: ApartadoTypeDT) {

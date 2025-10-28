@@ -125,7 +125,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/black"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
@@ -208,7 +207,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -248,7 +246,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -306,7 +303,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/black"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
@@ -348,7 +344,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -389,7 +384,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/black"
                                     android:textSize="14sp" />
                             </LinearLayout>
@@ -429,7 +423,6 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="28dp"
                                     android:layout_marginTop="4dp"
-                                    android:text="TextView"
                                     android:textColor="@color/color_principal"
                                     android:textSize="16sp"
                                     android:textStyle="bold" />
@@ -631,7 +624,6 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Título del Card -->
                     <LinearLayout
                         android:id="@+id/divContenedorTituloRepartidro"
                         android:layout_width="match_parent"
@@ -661,7 +653,6 @@
                             android:textStyle="bold" />
                     </LinearLayout>
 
-                    <!-- Divisor -->
                     <View
                         android:id="@+id/view3"
                         android:layout_width="match_parent"
@@ -669,7 +660,6 @@
                         android:layout_marginBottom="16dp"
                         android:background="@color/gris_claro" />
 
-                    <!-- Contenedor de dos columnas -->
                     <LinearLayout
                         android:id="@+id/divSeparadorRepartidor"
                         android:layout_width="match_parent"
@@ -677,7 +667,6 @@
                         android:baselineAligned="false"
                         android:orientation="horizontal">
 
-                        <!-- Columna Izquierda -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -685,7 +674,6 @@
                             android:orientation="vertical"
                             android:paddingEnd="8dp">
 
-                            <!-- Nombre Completo -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -727,7 +715,6 @@
                                     android:textStyle="bold" />
                             </LinearLayout>
 
-                            <!-- Teléfono -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -769,7 +756,6 @@
                             </LinearLayout>
                         </LinearLayout>
 
-                        <!-- Separador Vertical -->
                         <View
                             android:id="@+id/view4"
                             android:layout_width="1dp"
@@ -778,7 +764,6 @@
                             android:layout_marginEnd="8dp"
                             android:background="@color/gris_claro" />
 
-                        <!-- Columna Derecha -->
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -786,7 +771,6 @@
                             android:orientation="vertical"
                             android:paddingStart="8dp">
 
-                            <!-- Especificaciones -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -827,7 +811,6 @@
                                     android:textSize="14sp" />
                             </LinearLayout>
 
-                            <!-- Movilidad -->
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -872,9 +855,51 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <androidx.recyclerview.widget.RecyclerView
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cdContedorProductosDetalle"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageView31"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/ic_home" />
+
+                        <TextView
+                            android:id="@+id/textView21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/historial_detalle_fragment_titulo_pedido" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvProductosDetalles"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="5dp" />
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

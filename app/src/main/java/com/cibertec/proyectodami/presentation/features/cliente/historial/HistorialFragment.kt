@@ -52,8 +52,7 @@ class HistorialFragment : Fragment() {
         adapter = HistorialPedidoAdapter(
             pedidos = emptyList(),
             onDetalleClick = { pedido ->
-                // Ejemplo:
-                // findNavController().navigate(R.id.action_historialFragment_to_detalleFragment, bundleOf("pedido" to pedido))
+
             }
         )
         binding.recyclerViewPedidosHistorial.layoutManager = LinearLayoutManager(requireContext())
@@ -121,9 +120,12 @@ class HistorialFragment : Fragment() {
             putExtra("ESTADO_PEDIDO", pedido.estado)
             putExtra("TOTAL_PEDIDO", pedido.total)
             putExtra("FECHA_PEDIDO", pedido.fecha)
+            putExtra("DIRECCION_PEDIDO",pedido.direccionEntrega)
+            putExtra("NOMBRE_REPARTIDOR",pedido.nomRepartidor)
+            putExtra("APE_PAT_REPARTIDOR",pedido.apePaternoRepartidor)
+            putExtra("TIPO_ENVIO",pedido.movilidad)
+            putExtra("TELEFONO_REPARTIDOR",pedido.telefonoRepartidor)
 
-            putExtra("ID_CLIENTE", pedido.idCliente)
-            putExtra("ID_REPARTIDOR", pedido.idRepartidor)
         }
         startActivity(intent)
     }

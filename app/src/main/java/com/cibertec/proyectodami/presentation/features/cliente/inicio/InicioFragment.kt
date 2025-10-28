@@ -45,14 +45,10 @@ class InicioFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d(TAG, "📱 Fragment creado")
+        Log.d(TAG, " Fragment creado")
 
         setupRecyclerView()
-
-        // PRIMERO configurar el observer
         observarPedidos()
-
-        // LUEGO cargar los datos
         cargarDatosUsuario()
     }
 
@@ -76,7 +72,7 @@ class InicioFragment : Fragment() {
     private fun observarPedidos() {
 
         viewModel.pedidosEnCamino.observe(viewLifecycleOwner) { pedidos ->
-            Log.d(TAG, "📦 DATOS RECIBIDOS EN FRAGMENT")
+            Log.d(TAG, "DATOS RECIBIDOS EN FRAGMENT")
             Log.d(TAG, "Pedidos: ${pedidos?.size ?: 0}")
             pedidos?.forEach { pedido ->
                 Log.d(TAG, "  - Pedido #${pedido.numPedido}")
