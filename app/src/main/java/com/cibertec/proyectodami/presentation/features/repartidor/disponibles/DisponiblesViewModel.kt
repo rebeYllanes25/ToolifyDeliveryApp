@@ -21,6 +21,9 @@ class DisponiblesViewModel : ViewModel() {
 
     private val _pedidoAceptado = MutableLiveData<Boolean>()
 
+    private val _error = MutableLiveData<String?>()
+    val error: LiveData<String?> = _error
+
     init {
         cargarPedidosDisponibles()
     }
@@ -28,10 +31,12 @@ class DisponiblesViewModel : ViewModel() {
     fun cargarPedidosDisponibles() {
         viewModelScope.launch {
             _loading.value = true
+            _error.value = null
             try {
                 PedidoRepartidorRepository.cargarPedidosDisponibles()
             } catch (e: Exception) {
                 e.printStackTrace()
+                _error.value = "Error al cargar pedidos: ${e.message}"
             } finally {
                 _loading.value = false
             }
@@ -52,12 +57,17 @@ class DisponiblesViewModel : ViewModel() {
         viewModelScope.launch {
             _loading.value = true
             _pedidoAceptado.value = true
+            _error.value = null
 
             try {
                 PedidoRepartidorRepository.caminoPedido(pedido.idPedido, idRepartidor)
+
+                PedidoRepartidorRepository.cargarPedidosDisponibles()
+
                 _navegarAActivos.value = true
             } catch (e: Exception) {
                 e.printStackTrace()
+                _error.value = "Error al aceptar pedido: ${e.message}"
             } finally {
                 _loading.value = false
                 _pedidoAceptado.value = false

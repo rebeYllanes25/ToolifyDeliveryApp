@@ -20,11 +20,9 @@ import kotlin.math.sqrt
 
 class DisponiblesPedidoAdapter(
     private val items: MutableList<PedidoRepartidorDTO>,
-    private val onAceptarClick: (PedidoRepartidorDTO) -> Unit,
-    private val lifecycleOwner: LifecycleOwner, // <-- agregamos
-    private val idRepartidor: Int,
+    private val onAceptarClick: (PedidoRepartidorDTO) -> Unit
+) : RecyclerView.Adapter<DisponiblesPedidoAdapter.VH>() {
 
-    ) : RecyclerView.Adapter<DisponiblesPedidoAdapter.VH>() {
     private val RADIO_TIERRA_KM = 6371.0
     private val VELOCIDAD_PROMEDIO_KMH = 20.0
     private var bloqueado = false
@@ -72,30 +70,13 @@ class DisponiblesPedidoAdapter(
 
         val tiempoFormateado = tiempoEstimadoMinutos.toString()
         b.tvTiempo.text = ctx.getString(R.string.time_label, tiempoFormateado)
+
         b.btnAceptarPedido.isEnabled = !bloqueado
 
-
-
-       b.btnAceptarPedido.setOnClickListener {
+        // Click simplificado: solo notifica al Fragment a través del callback
+        b.btnAceptarPedido.setOnClickListener {
             if (!bloqueado) {
-                bloqueado = true
-                b.btnAceptarPedido.isEnabled = false
-
-                // Usamos lifecycleScope del Activity/Fragment
-                lifecycleOwner.lifecycleScope.launch {
-                    try {
-                        // Llamada a tu repository para asignar el pedido al repartidor
-                        PedidoRepartidorRepository.asignarRepartidor(pedido.idPedido, pedido.idRepartidor)
-
-                        // Notificar al Activity/Fragment si quieres actualizar UI
-                        onAceptarClick(pedido)
-
-                    } catch (e: Exception) {
-                        Toast.makeText(ctx, "Error al aceptar pedido: ${e.message}", Toast.LENGTH_LONG).show()
-                        bloqueado = false
-                        b.btnAceptarPedido.isEnabled = true
-                    }
-                }
+                onAceptarClick(pedido)
             }
         }
     }
@@ -126,7 +107,7 @@ class DisponiblesPedidoAdapter(
         notifyDataSetChanged()
     }
 
-    fun calcularDistancia(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
+    private fun calcularDistancia(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val dLat = Math.toRadians(lat2 - lat1)
         val dLon = Math.toRadians(lon2 - lon1)
 

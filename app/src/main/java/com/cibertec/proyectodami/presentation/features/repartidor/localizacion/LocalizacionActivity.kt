@@ -112,19 +112,6 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         setupBottomSheet()
     }
 
-    private fun obtenerDatosPedido(){
-
-        pedidoId = intent.getIntExtra("PEDIDO_ID", 0)
-        repartidorId = intent.getIntExtra("REAPRTIDOR",0)
-        direccion = intent.getStringExtra("DIRECCION")?: ""
-        nombre = intent.getStringExtra("NOMBRE")?:""
-        total = intent.getDoubleExtra("TOTAL", 0.0)
-        latitud = intent.getDoubleExtra("LATITUD", -12.0464)
-        longitud = intent.getDoubleExtra("LONGITUD", -77.0428)
-        especificaciones = intent.getStringExtra("ESPECIFICACIONES")?:""
-        estadoPedido = intent.getStringExtra("ESTADO")?:""
-
-    }
     private fun setupUI() {
         //header
         binding.tvNombreCliente.text = nombre
@@ -211,11 +198,15 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun obtenerUbicacionActual() {
+        Log.d("LocalizacionActivity", "🔍 Intentando obtener ubicación actual...")
+
         fusedLocationClient.getCurrentLocation(
             Priority.PRIORITY_HIGH_ACCURACY,
             null
         ).addOnSuccessListener { location ->
             if (location != null) {
+                Log.d("LocalizacionActivity", "✅ Ubicación obtenida: Lat=${location.latitude}, Lng=${location.longitude}")
+
                 val miUbicacion = LatLng(location.latitude, location.longitude)
 
                 // Centrar entre mi ubicación y la del cliente
@@ -226,14 +217,22 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
 
                 googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
 
+                // IMPORTANTE: Llamar a calcular distancia con la ubicación obtenida
                 calcularDistancia(location)
             } else {
+                Log.e("LocalizacionActivity", "❌ Location es null")
                 Toast.makeText(this, "No se pudo obtener tu ubicación actual", Toast.LENGTH_SHORT).show()
             }
+        }.addOnFailureListener { e ->
+            Log.e("LocalizacionActivity", "❌ Error al obtener ubicación: ${e.message}")
+            Toast.makeText(this, "Error obteniendo ubicación: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun mostrarRutaEnMapa() {
+        Log.d("LocalizacionActivity", "🗺️ Mostrando ruta en mapa...")
+        Log.d("LocalizacionActivity", "📍 Destino: Lat=$latitud, Lng=$longitud")
+
         // Marker del cliente
         val destinoLatLng = LatLng(latitud, longitud)
         googleMap?.addMarker(
@@ -254,14 +253,17 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
                 Priority.PRIORITY_HIGH_ACCURACY, null
             ).addOnSuccessListener { location ->
                 if(location != null){
+                    Log.d("LocalizacionActivity", "✅ Ubicación para ruta obtenida: Lat=${location.latitude}, Lng=${location.longitude}")
+
                     val origenLatLng = LatLng(location.latitude, location.longitude)
 
-
-
                     val directionsHelper = DirectionHelper(this)
-                    directionsHelper.obtenerRuta( origenLatLng,
+                    directionsHelper.obtenerRuta(
+                        origenLatLng,
                         destinoLatLng,
                         onSuccess = { puntos ->
+                            Log.d("LocalizacionActivity", "✅ Ruta obtenida con ${puntos.size} puntos")
+
                             // Dibujar la ruta real
                             val polylineOptions = PolylineOptions()
                                 .addAll(puntos)
@@ -272,7 +274,7 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
                             googleMap?.addPolyline(polylineOptions)
                         },
                         onError = { error ->
-                            Log.e("LocalizacionActivity", "Error obteniendo ruta: $error")
+                            Log.e("LocalizacionActivity", "❌ Error obteniendo ruta: $error")
                             Toast.makeText(this, "Error al obtener la ruta", Toast.LENGTH_SHORT).show()
 
                             // Fallback: dibujar línea recta
@@ -287,18 +289,27 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
                         }
                     )
 
+                    // IMPORTANTE: Calcular distancia también aquí
+                    calcularDistancia(location)
                 }
                 else {
-                Toast.makeText(this, "No se puede obtener tu ubicación",
-                    Toast.LENGTH_SHORT).show()
-                 }
+                    Log.e("LocalizacionActivity", "❌ Location es null en mostrarRutaEnMapa")
+                    Toast.makeText(this, "No se puede obtener tu ubicación", Toast.LENGTH_SHORT).show()
+                }
             }.addOnFailureListener { e ->
-                Toast.makeText(this, "Error al obtener unicación: ${e.message}", Toast.LENGTH_SHORT).show()
+                Log.e("LocalizacionActivity", "❌ Error al obtener ubicación: ${e.message}")
+                Toast.makeText(this, "Error al obtener ubicación: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        } else {
+            Log.w("LocalizacionActivity", "⚠️ Sin permisos de ubicación")
         }
     }
 
     private fun calcularDistancia(miUbicacion: Location) {
+        Log.d("LocalizacionActivity", "📏 Calculando distancia...")
+        Log.d("LocalizacionActivity", "📍 Mi ubicación: Lat=${miUbicacion.latitude}, Lng=${miUbicacion.longitude}")
+        Log.d("LocalizacionActivity", "📍 Destino: Lat=$latitud, Lng=$longitud")
+
         val destino = Location("").apply {
             latitude = latitud
             longitude = longitud
@@ -307,13 +318,38 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
         val distanciaMetros = miUbicacion.distanceTo(destino)
         val distanciaKm = distanciaMetros / 1000
 
+        Log.d("LocalizacionActivity", "📏 Distancia calculada: ${distanciaMetros}m = ${distanciaKm}km")
 
         binding.distancia.text = String.format("Llegada (%.2f km)", distanciaKm)
 
-        val tiempoEstimadoHoras = distanciaKm / 60
+        // CORRECCIÓN: velocidad promedio de 20 km/h (no 60)
+        val tiempoEstimadoHoras = distanciaKm / 20  // Cambiado de 60 a 20
         val tiempoEstimadoMinutos = (tiempoEstimadoHoras * 60).roundToInt()
 
-         binding.tvTiempo.text = String.format("%d min", tiempoEstimadoMinutos)
+        Log.d("LocalizacionActivity", "⏱️ Tiempo estimado: ${tiempoEstimadoMinutos} minutos")
+
+        binding.tvTiempo.text = String.format("%d min", tiempoEstimadoMinutos)
+    }
+
+    private fun obtenerDatosPedido(){
+        pedidoId = intent.getIntExtra("PEDIDO_ID", 0)
+        repartidorId = intent.getIntExtra("REAPRTIDOR",0)
+        direccion = intent.getStringExtra("DIRECCION")?: ""
+        nombre = intent.getStringExtra("NOMBRE")?:""
+        total = intent.getDoubleExtra("TOTAL", 0.0)
+        latitud = intent.getDoubleExtra("LATITUD", -12.0464)
+        longitud = intent.getDoubleExtra("LONGITUD", -77.0428)
+        especificaciones = intent.getStringExtra("ESPECIFICACIONES")?:""
+        estadoPedido = intent.getStringExtra("ESTADO")?:""
+
+        Log.d("LocalizacionActivity", "📦 Datos del pedido recibidos:")
+        Log.d("LocalizacionActivity", "   - Pedido ID: $pedidoId")
+        Log.d("LocalizacionActivity", "   - Repartidor ID: $repartidorId")
+        Log.d("LocalizacionActivity", "   - Cliente: $nombre")
+        Log.d("LocalizacionActivity", "   - Dirección: $direccion")
+        Log.d("LocalizacionActivity", "   - Destino: Lat=$latitud, Lng=$longitud")
+        Log.d("LocalizacionActivity", "   - Total: S/$total")
+        Log.d("LocalizacionActivity", "   - Estado: $estadoPedido")
     }
 
     private fun centrarEnUbicacionActual() {

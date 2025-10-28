@@ -80,13 +80,18 @@ class HistorialPedidoAdapter(
             )
             "AS" -> EstadoInfo(
                 texto = "Asignado",
-                colorTexto = R.color.color_principal,
-                colorFondo = R.color.color_fondo
+                colorTexto = R.color.celeste,
+                colorFondo = R.color.celeste_claro
             )
             "EC" -> EstadoInfo(
                 texto = "En camino",
                 colorTexto = R.color.color_amarillo,
                 colorFondo = R.color.amarillo_light
+            )
+            "CR" -> EstadoInfo(
+                texto = "Cerca",
+                colorTexto = R.color.morado,
+                colorFondo = R.color.morado_claro
             )
             "EN" -> EstadoInfo(
                 texto = "Entregado",

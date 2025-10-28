@@ -52,24 +52,6 @@ object PedidoRepartidorRepository {
         _pedidosDisponibles.value = pedidos
     }
 
-    suspend fun asignarRepartidor(idPedido: Int, idRepartidor: Int) {
-        try {
-            // Llamamos al endpoint que asigna el repartidor al pedido
-            val pedidoAsignado = pedidoApi.asignarRepartidor(idPedido, idRepartidor)
-
-            // Actualizamos el pedido activo
-            _pedidoActivo.postValue(pedidoAsignado)
-
-            // También podrías refrescar la lista de pedidos disponibles
-            cargarPedidosDisponibles()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw e
-        }
-    }
-
-
 
     suspend fun cargarPedidosDisponibles() {
         try {
