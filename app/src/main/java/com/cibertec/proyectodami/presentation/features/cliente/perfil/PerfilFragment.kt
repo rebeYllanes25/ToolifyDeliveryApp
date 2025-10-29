@@ -2,6 +2,7 @@ package com.cibertec.proyectodami.presentation.features.cliente.perfil
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -12,6 +13,8 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.cibertec.proyectodami.LoginActivity
 import com.cibertec.proyectodami.R
 import com.cibertec.proyectodami.data.api.PedidosCliente
@@ -24,6 +27,7 @@ import com.cibertec.proyectodami.domain.util.FcmTokenHelper
 import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
+import javax.sql.DataSource
 
 
 class PerfilFragment : Fragment() {
@@ -98,19 +102,6 @@ class PerfilFragment : Fragment() {
     }
 
     private fun actualizaPerfil(perfil:PerfilDetalleComprasDto){
-        Log.d(TAG, "NOMBRES COMPLETOS #${perfil.nombresCompletos}")
-        Log.d(TAG, "CORREO #${perfil.correo}")
-        Log.d(TAG, "DOCUMENTO #${perfil.nroDoc}")
-        Log.d(TAG, "DIRECCION #${perfil.direccion}")
-        Log.d(TAG, "DISTRITO #${perfil.distrito}")
-        Log.d(TAG, "TELEFONO #${perfil.telefono}")
-        Log.d(TAG, "FECHA REGISTRO #${perfil.fechaRegistro}")
-        Log.d(TAG, "productoMasComprado #${perfil.productoMasComprado}")
-        Log.d(TAG, "fechaMayorCompras #${perfil.fechaMayorCompras}")
-        Log.d(TAG, "totalDeProductosComprados #${perfil.totalDeProductosComprados}")
-        Log.d(TAG, "gastoTotal #${perfil.gastoTotal}")
-        Log.d(TAG, "categoriaMasComprada #${perfil.categoriaMasComprada}")
-        Log.d(TAG, "totalVentas #${perfil.totalVentas}")
         //DATOS PERSONALES
         binding.tvNombresCompletos.text = perfil.nombresCompletos
         binding.tvCorreoCliente.text     = perfil.correo
