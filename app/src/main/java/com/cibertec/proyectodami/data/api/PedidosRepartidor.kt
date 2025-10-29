@@ -1,6 +1,7 @@
 package com.cibertec.proyectodami.data.api
 
 import com.cibertec.proyectodami.domain.model.dtos.PedidoRepartidorDTO
+import com.cibertec.proyectodami.domain.model.dtos.responses.EstadisticaRepartidorDTO
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -38,4 +39,9 @@ interface PedidosRepartidor {
         @Query("codigoQR") codigoQr: String,
         @Query("idRepartidor") idRepartidor: Int
         ): PedidoRepartidorDTO
+
+    @GET("repartidor/estadisticas/{idRepartidor}")
+    suspend fun obtenerEstadisticasRepartidor(
+        @Path("idRepartidor") idRepartidor: Int
+    ): EstadisticaRepartidorDTO
 }

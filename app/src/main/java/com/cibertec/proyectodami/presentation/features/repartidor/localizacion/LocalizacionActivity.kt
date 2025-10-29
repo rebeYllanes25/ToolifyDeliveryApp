@@ -196,14 +196,14 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission")
     private fun obtenerUbicacionActual() {
-        Log.d("LocalizacionActivity", "🔍 Intentando obtener ubicación actual...")
+        Log.d("LocalizacionActivity", "Intentando obtener ubicación actual...")
 
         fusedLocationClient.getCurrentLocation(
             Priority.PRIORITY_HIGH_ACCURACY,
             null
         ).addOnSuccessListener { location ->
             if (location != null) {
-                Log.d("LocalizacionActivity", "✅ Ubicación obtenida: Lat=${location.latitude}, Lng=${location.longitude}")
+                Log.d("LocalizacionActivity", "Ubicación obtenida: Lat=${location.latitude}, Lng=${location.longitude}")
 
                 val miUbicacion = LatLng(location.latitude, location.longitude)
 
@@ -215,21 +215,21 @@ class LocalizacionActivity: AppCompatActivity(), OnMapReadyCallback {
 
                 googleMap?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 150))
 
-                // IMPORTANTE: Llamar a calcular distancia con la ubicación obtenida
+
                 calcularDistancia(location)
             } else {
-                Log.e("LocalizacionActivity", "❌ Location es null")
+                Log.e("LocalizacionActivity", "Location es null")
                 Toast.makeText(this, "No se pudo obtener tu ubicación actual", Toast.LENGTH_SHORT).show()
             }
         }.addOnFailureListener { e ->
-            Log.e("LocalizacionActivity", "❌ Error al obtener ubicación: ${e.message}")
+            Log.e("LocalizacionActivity", "Error al obtener ubicación: ${e.message}")
             Toast.makeText(this, "Error obteniendo ubicación: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun mostrarRutaEnMapa() {
-        Log.d("LocalizacionActivity", "🗺️ Mostrando ruta en mapa...")
-        Log.d("LocalizacionActivity", "📍 Destino: Lat=$latitud, Lng=$longitud")
+        Log.d("LocalizacionActivity", "Mostrando ruta en mapa...")
+        Log.d("LocalizacionActivity", "Destino: Lat=$latitud, Lng=$longitud")
 
         // Marker del cliente
         val destinoLatLng = LatLng(latitud, longitud)
