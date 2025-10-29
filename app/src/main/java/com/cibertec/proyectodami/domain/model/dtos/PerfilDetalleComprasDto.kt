@@ -2,6 +2,7 @@ package com.cibertec.proyectodami.domain.model.dtos
 
 data class PerfilDetalleComprasDto(
     val idUser:Int,
+    val imagenUsuario:String,
     val nombresCompletos:String,
     val correo:String,
     val nroDoc:String,

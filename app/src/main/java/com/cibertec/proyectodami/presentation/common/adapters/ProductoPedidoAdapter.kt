@@ -24,6 +24,7 @@ class ProductoPedidoAdapter(
                     "Producto: ${producto.nombreProducto}, Cantidad: ${producto.cantidad}, Subtotal: ${producto.subTotal}"
                 )
                 tvNombreProducto.text = producto.nombreProducto
+                imgProducts
                 tvDescripcion.text = producto.descripcionProducto
                 tvCantidadTotal.text = itemView.context.getString(
                     R.string.seguimiento_card_cantidad,
@@ -33,6 +34,14 @@ class ProductoPedidoAdapter(
                     R.string.seguimiento_card_precio_total,
                     producto.subTotal.toDouble()
                 )
+
+                Glide.with(itemView.context)
+                    .load(producto.imagen)
+                    .centerCrop()
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(R.drawable.ic_launcher_background)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(imgProducts)
             }
         }
     }
